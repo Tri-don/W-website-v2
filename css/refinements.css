@@ -88,3 +88,23 @@
 .ws-services .ws-app .ws-app-art .ws-art{width:148%;height:120%;left:50%;right:auto;top:auto;bottom:-20%;translate:-50% 0;object-position:center}
 
 .wi-telecom .wi-photo{object-position:65% center}
+
+/* Font-independent icons and centered mobile navigation controls. */
+.ui-arrow-icon{display:inline-block;vertical-align:middle;width:20px;height:20px;min-width:20px;flex-shrink:0;overflow:visible}
+.nv-contact>span,.nv-explore>span,.button>span,.text-link>span,.ws-link>span,.wf-contact>span{display:inline-flex;align-items:center;justify-content:center;line-height:1}
+.wb-arrow .ui-arrow-icon,.circle-arrow .ui-arrow-icon{width:22px;height:22px}
+.nv-close-icon{display:none}
+@media(max-width:840px){
+ .nv-mobile-toggle{width:44px;height:44px;min-height:44px;flex:0 0 44px;padding:0;margin:0;display:grid;place-items:center;gap:0;border:1px solid var(--line);border-radius:50%;background:transparent;color:var(--text);line-height:1;touch-action:manipulation;-webkit-appearance:none;appearance:none}
+ .nv-mobile-toggle svg{width:24px;height:24px;grid-area:1/1;pointer-events:none}
+ .nv-mobile-toggle[aria-expanded=true]{border-color:#b6a0ed65;background:#b6a0ed0a;color:var(--accent)}
+ .nv-mobile-toggle[aria-expanded=true] .nv-menu-icon{display:none}
+ .nv-mobile-toggle[aria-expanded=true] .nv-close-icon{display:block}
+ .nv-bar{align-items:center;gap:12px}
+ .nv-contact{min-height:44px;align-items:center;gap:9px}
+ .nv-contact>span{width:36px;height:36px;flex:0 0 36px}
+ .nv-contact .ui-arrow-icon{width:18px;height:18px;min-width:18px}
+ .nv-navigation{padding-bottom:max(28px,env(safe-area-inset-bottom));-webkit-overflow-scrolling:touch}
+ .nv-navigation a,.nv-navigation button{touch-action:manipulation}
+}
+@media(max-width:375px){.nv-brand img{width:100px}.nv-bar{gap:9px}.nv-contact{font-size:12px;gap:7px}}
