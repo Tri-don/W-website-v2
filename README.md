@@ -1,48 +1,28 @@
-# Wissen Technology — Enterprise Website (V2)
+# Wissen — Mark6
 
-A human-crafted, premium digital experience redesigned for **[Wissen Technology](https://wissen.com/)**, drawing inspiration from modern award-winning studio aesthetics.
+Static website. No npm install or build step is required.
 
----
+## Upload to Git
 
-## Highlights
+Upload the contents of this folder to your repository root, keeping `index.html`, `css/`, `js/`, and `assets/` together. Do not upload the enclosing folder as an extra directory.
 
-- **Aesthetic:** Warm obsidian palette (`#090a0d`), refined editorial typography (**Plus Jakarta Sans** + **Newsreader Serif**), and subtle film grain texture.
-- **Enterprise Categories Preserved:** Complete original sitemap and mega-menu navigation (*Industries, Services, Products, Insights, Careers, Contact, About Us*).
-- **Interactive Storytelling:**
-  - Widescreen framed hero video with 3-pillar focus switcher (*Enterprise Data, Cloud Architecture, InterviewNinja AI*).
-  - Quiet credibility bar showcasing CMMI Level 3, ISO 27001, ISO 9001, SOC 2, and Great Place to Work®.
-  - Asymmetric capabilities matrix detailing core engineering offerings.
-  - In-house innovation spotlight on **InterviewNinja** and **Docxtractor**.
-  - Interactive sector switcher with domain video reels (*Banking, Telecom, Healthcare, Retail, Manufacturing, Energy*).
-  - Executive perspectives by CEO Raghu Pareddy and leadership team.
-  - Life at Wissen photo mosaic (*Work | Play | Learn*).
-  - Real-time global office clocks in the footer (*New York, London, Bengaluru, Singapore*).
+## Preview
 
----
+Open `index.html` directly in Chrome or Edge, or run `python -m http.server 8000` from this folder and open http://localhost:8000.
 
-## Project Structure
+## Hosting
 
-```
-├── index.html          # Main homepage
-├── css/
-│   └── style.css       # Design tokens, responsive typography, and layout rules
-├── js/
-│   └── main.js         # Interactive pillars, video controls, tickers, and drawer
-├── images/             # Brand logos, leadership portraits, and diagram assets
-├── videos/             # Enterprise video reels and poster frames
-└── README.md
-```
+Deploy the repository as a static website. The publish directory is the repository root; no build command is needed. Relative asset paths also support hosting under a repository subpath.
 
----
+For GitHub Pages, select the branch and its root folder in Settings → Pages. `.nojekyll` preserves the plain static output.
 
-## Local Development
+Configure your hosting provider to compress HTML, CSS and JavaScript, and cache fingerprinted files under `assets/`. The asset filenames are content hashes: use a new filename if you change an asset. No provider-specific cache configuration is assumed.
 
-Open `index.html` directly in your browser or run a lightweight local server:
+## Contents
 
-```bash
-# Python
-python -m http.server 8080
+- `index.html`: page markup
+- `css/styles.css`: styles and font declarations
+- `js/`: page interactions
+- `assets/images/`, `assets/fonts/`, `assets/videos/`: separate, deduplicated media
 
-# Node
-npx serve .
-```
+The lower page images and background video load on demand. The autoplay hero video still needs its own media download. External destinations, including Google Maps, require an internet connection. This is a homepage; service/product destinations link to the existing Wissen website.
