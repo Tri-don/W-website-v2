@@ -1,0 +1,37 @@
+.wf{position:relative;overflow:hidden;border-top:1px solid var(--line);padding-top:64px}
+.wf-wrap{width:88%;max-width:1267px;margin:0 auto}
+.wf-top{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1.45fr);gap:90px;padding-bottom:64px}
+.wf-brand img{width:166px;height:auto;display:block}.wf-social{display:flex;gap:12px;margin:28px 0}
+.wf-social a{width:40px;height:40px;border:1px solid #5b575f;border-radius:50%;display:grid;place-items:center;color:#c3bfc9;transition:color .2s,border-color .2s,background .2s}
+.wf-social svg{width:17px;height:17px}.wf-social a:hover{color:var(--accent);border-color:var(--accent);background:#b6a0ed0a}
+.wf-location{margin:0;color:var(--muted);font-size:16px;line-height:1.8;max-width:28ch}
+.wf-contact{display:inline-flex;align-items:center;gap:16px;margin-top:18px;font-size:16px;border-bottom:1px solid #615966;padding-bottom:6px;transition:color .2s}
+.wf-contact:hover{color:var(--accent)}
+.wf-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:32px}
+.wf-column{display:flex;flex-direction:column;align-items:flex-start;gap:16px;min-width:0}
+.wf-column h2{font-family:var(--sans);font-size:12px;font-weight:500;line-height:1.5;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:0 0 8px}
+.wf-column a{font-size:16px;line-height:1.65;transition:color .2s}
+.wf-column a:hover{color:var(--accent)}
+.wf-divider{position:relative;display:flex;align-items:center;gap:24px}.wf-divider:before{content:'';height:1px;flex:1;background:#49414f}
+.wf-cta{display:inline-flex;align-items:center;gap:28px;flex-shrink:0;padding:14px 22px;background:#e9e4f3;color:#17121f;border-radius:3px;font-size:16px;min-height:52px;transition:background .2s}
+.wf-cta:hover{background:var(--accent)}.wf-cta span{font-size:20px}
+.wf-middle{display:flex;justify-content:space-between;align-items:flex-start;gap:48px;padding-top:30px}
+.wf-note{max-width:38ch;font-size:16px;line-height:1.8;color:var(--muted);margin:0}
+.wf-legal{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:24px 36px;padding-top:5px}.wf-legal a{font-size:14px;line-height:1.7;color:#c4bfc9;transition:color .2s}.wf-legal a:hover{color:var(--accent)}
+.wf-wordmark{font-family:var(--display);font-weight:500;font-size:clamp(140px,22vw,360px);letter-spacing:-.07em;line-height:.86;white-space:nowrap;margin-top:42px;margin-left:-.08em;color:#4b4752;user-select:none;padding-bottom:0}
+.wf-wordmark span{color:#62536f}
+.wf-bottom{border-top:1px solid var(--line);padding:22px 0 24px;display:flex;justify-content:space-between;gap:24px;color:var(--muted);font-size:13px;line-height:1.7}
+.wf-bottom p{margin:0}.wf-signature{letter-spacing:1px;font-size:11px;text-transform:uppercase}
+@media(min-width:1800px){.wf-wordmark{margin-left:calc((100vw - 1650px)/2 - 90px)}}
+@media(max-width:1000px){.wf-top{gap:45px;grid-template-columns:.85fr 1.5fr}.wf-columns{gap:22px}.wf-column a{font-size:15px}.wf-top{padding-bottom:50px}}
+@media(max-width:760px){.wf{padding-top:44px}.wf-top{grid-template-columns:1fr;gap:40px;padding-bottom:40px}.wf-columns{gap:24px}.wf-location{max-width:100%}.wf-social{margin:22px 0}.wf-middle{flex-direction:column;gap:24px}.wf-legal{justify-content:flex-start;gap:20px}.wf-wordmark{font-size:34vw;margin-top:36px;line-height:.9}.wf-bottom{flex-direction:column;gap:10px;padding-top:20px}.wf-cta{font-size:15px;gap:18px;padding:13px 18px}.wf-column a{font-size:15px}.wf-column h2{font-size:11px;letter-spacing:1.2px}}
+@media(max-width:430px){.wf-columns{grid-template-columns:repeat(2,minmax(0,1fr));gap:32px 24px}.wf-column:last-child{grid-column:1/-1;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px 24px}.wf-column:last-child h2{grid-column:1/-1}.wf-column{gap:14px}}
+@media(prefers-reduced-motion:reduce){.wf *{transition:none!important}}
+
+
+.wf-wordmark{margin-left:0;overflow:hidden}
+.wf-wordmark-track{display:flex;width:max-content;animation:wfWordmarkScroll 42s linear infinite;will-change:transform}
+.wf-wordmark-group{flex:none;white-space:nowrap;padding-bottom:.06em}
+.wf-wordmark .wf-separator{color:#4b4752}
+@keyframes wfWordmarkScroll{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.wf-wordmark-track{animation:none;will-change:auto}}

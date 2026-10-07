@@ -1,0 +1,1 @@
+document.getElementById("wf-year").textContent=new Date().getFullYear();

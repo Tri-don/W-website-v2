@@ -1,0 +1,3 @@
+Map land geometry: Natural Earth 1:110m land data (public domain).
+Source: https://github.com/nvkelso/natural-earth-vector/blob/master/geojson/ne_110m_land.geojson
+Land and markers use the same longitude/latitude projection. City markers represent city centres, not individual office entrances.

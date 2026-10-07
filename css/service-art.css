@@ -1,0 +1,13 @@
+/* Supplied service artwork: alpha-backed assets, no screen blend or fading masks. */
+.ws-services .ws-card{background:var(--panel,#111113);border-color:var(--line,#26252b)}
+.ws-services .ws-card:hover{background:var(--panel,#111113)}
+.ws-services .ws-card .ws-art{mix-blend-mode:normal;mask-image:none;opacity:1;object-fit:contain;object-position:center;transform-origin:center;filter:none}
+.ws-services .ws-app .ws-art{width:148%;height:92%;left:-24%;right:auto;bottom:-115px}
+.ws-services .ws-cloud .ws-art{width:95%;height:300%;right:-28%;left:auto;top:-95%;bottom:auto}
+.ws-services .ws-ai .ws-art{width:88%;height:285%;right:-22%;left:auto;top:-75%;bottom:auto}
+.ws-services .ws-automation .ws-art{width:72%;height:108%;right:-13%;left:auto;bottom:-40px;top:auto}
+.ws-services .ws-data .ws-art{width:145%;height:175%;right:-40%;left:auto;bottom:-120px;top:auto}
+.ws-services .ws-support .ws-art{width:84%;height:118%;right:-22%;left:auto;bottom:-55px;top:auto}
+.ws-services .ws-copy{z-index:1}.ws-services .ws-copy p{color:var(--muted)}.ws-services .ws-link{color:var(--text);border-color:var(--muted)}
+.ws-services .ws-card:hover .ws-art{transform:scale(1.035)}
+@media(max-width:760px){.ws-services .ws-app .ws-art{height:90%;width:145%;left:-22%;bottom:-90px}.ws-services .ws-cloud .ws-art{width:120%;height:180%;right:-30%;top:auto;bottom:-115px}.ws-services .ws-ai .ws-art{width:117%;height:175%;right:-30%;top:auto;bottom:-130px}.ws-services .ws-automation .ws-art{width:79%;height:100%;right:-16%;bottom:-32px}.ws-services .ws-data .ws-art{width:145%;height:160%;right:-40%;bottom:-110px}.ws-services .ws-support .ws-art{width:83%;height:105%;right:-20%;bottom:-40px}.ws-services .ws-copy p{max-width:180px}}

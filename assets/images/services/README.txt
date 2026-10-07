@@ -1,0 +1,1 @@
+These transparent SVG assets preserve the supplied PNG artwork. A luminance alpha filter removes the near-black backing at render time, including inner gaps. Original PNGs are untouched in Services images. The SVG files are independent cacheable assets and work over light or dark surfaces. Do not apply screen blending or the old image masks.
