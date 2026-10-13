@@ -1,30 +1,21 @@
-# Wissen Technology — Mark6 v4
+# Wissen Technology — Dark website
 
-The latest static homepage, including the purple interactive brain hero, corrected case-study scrolling, certification descriptions, service artwork placement, landscape telecom image, and V-shaped blog mask.
+Static website ready for manual Git upload. No build step or npm installation is required.
 
-## Upload to Git
+## Pages
 
-Extract the ZIP and upload its contents to your repository root. Keep index.html, css/, js/, and assets/ together. No installation or build command is required.
+- `index.html` — Home
+- `Industries-BFSI.html` — Banking, financial services and fintech
+- `Services-Ai-ML.html` — AI, machine learning and IoT
 
-## Preview
+## Shared files
 
-Open index.html in a browser. For a local HTTP preview, run the following from this folder if Python is installed:
+- `css/master.css` — all shared and page-specific CSS
+- `js/master.js` — all shared and page-specific JavaScript
+- `assets/` — external images, fonts, videos and any other local media
 
-    python -m http.server 8000
+Upload the contents of this folder to the root of your Git repository, preserving the folders and filename capitalization. The site can be served by any static web host; GitHub Pages can serve it from the repository root. The Home page is `index.html`.
 
-Then open http://localhost:8000.
+Open `index.html` to review locally. The first-visit loader runs once per browser tab session when the pages are served together from the same origin. Primary navigation connects the three pages. Links to services and pages outside this three-page scope continue to their existing destinations.
 
-## Hosting
-
-Publish the repository root with a static hosting service. The entry page is index.html. Relative asset paths support deployment in a repository subdirectory.
-
-## Files
-
-- index.html: complete homepage
-- css/: styles
-- js/: interactions
-- assets/: images, fonts, videos, and supporting media
-- MAP-NOTICE.txt: map data attribution
-- .nojekyll: plain static output marker
-
-Navigation to service pages, products, articles, and contact destinations uses external links. These destinations require an internet connection. This package includes the homepage; it does not include a CMS or backend.
+The source pages are separate HTML files; assets remain external. Inline SVG icon markup is retained. Browser tests were skipped at the user's request.

@@ -1,15 +1,4 @@
-# OS Files
 .DS_Store
 Thumbs.db
-desktop.ini
-
-# Editor Files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Node / Scratch
-node_modules/
-npm-debug.log
-scratch/
+Desktop.ini
+*.log
