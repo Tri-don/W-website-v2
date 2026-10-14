@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 (()=>{
 function startPage(){
 const page=document.documentElement.dataset.sitePage;
-if(page!=="bfsi"){
+if(page!=="bfsi" && page!=="capital-markets"){
 document.documentElement.classList.add('js');
 (function(){
 function initialize(){
@@ -615,12 +615,38 @@ addEventListener('scroll',schedule,{passive:true});addEventListener('resize',mea
 
 })();
 }
-if(page==="ai"){
+if(page==="capital-markets"){
+(()=>{
+ const motion=matchMedia('(prefers-reduced-motion: reduce)');
+ document.querySelector('#wf-year').textContent=new Date().getFullYear();
+ if('IntersectionObserver' in window&&!motion.matches){
+  const targets=[];
+  const register=(selector,direction='bottom',stagger=0)=>document.querySelectorAll(selector).forEach((el,i)=>{
+   el.classList.add('bf-enter');el.dataset.entrance=direction;
+   el.style.setProperty('--bf-enter-x',direction==='left'?'-36px':direction==='right'?'36px':'0px');
+   el.style.setProperty('--bf-enter-y',direction==='bottom'?'30px':'0px');
+   el.style.setProperty('--bf-enter-delay',Math.min(i*stagger,240)+'ms');targets.push(el);
+  });
+  register('.cm-hero-inner','bottom');register('.cm-overview .ai-overview-copy','left');register('.cm-overview .ai-overview-body','right');register('.ws-heading','bottom');register('.ws-cell','bottom',85);register('.ss-heading','bottom');register('.bh-footer p','bottom',100);register('.bh-action','right');
+  register('.bs-statement','bottom');register('.bs-metric--left','left');register('.bs-intro,.bs-metric--center','bottom',100);register('.bs-metric--right','right');
+  register('.be-heading','bottom');register('.be-card','bottom',85);register('.be-image','right');
+  register('.wb-heading>div:first-child','left');register('.wb-intro','right');register('.wb-card','bottom',100);
+  register('.bf-cta h2,.bf-cta p,.bf-cta-actions','bottom',100);
+  register('.wf-info','left');register('.wf-column','bottom',85);register('.wf-middle,.wf-bottom','bottom');
+  const observer=new IntersectionObserver(entries=>entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('bf-in-view');observer.unobserve(e.target)}}),{threshold:.08,rootMargin:'0px 0px -24px 0px'});
+  targets.forEach(el=>observer.observe(el));
+  // Keyboard navigation and restored anchors should never land on hidden content.
+  document.addEventListener('focusin',e=>{const el=e.target.closest('.bf-enter');if(el){el.classList.add('bf-in-view');observer.unobserve(el)}});
+  motion.addEventListener('change',e=>{if(e.matches){observer.disconnect();targets.forEach(el=>el.classList.add('bf-in-view'))}});
+ }
+})();
+}
+if(page==="ai" || page==="capital-markets"){
 (function(){
 /* exports/mark7/js/ai-ml-v2.js */
 
 (()=>{
- const timeline=document.querySelector('.aj-timeline');
+ const timeline=document.querySelector('.aj-timeline');if(!timeline)return;
  const rows=[...timeline.querySelectorAll('.aj-row')];
  const dots=rows.map(row=>row.querySelector('.aj-dot'));
  const motion=matchMedia('(prefers-reduced-motion: reduce)');
@@ -714,7 +740,7 @@ if(page==="ai"){
 /* exports/mark7/js/ai-ml-v2-hero.js */
 
 (()=>{
- const videos=[...document.querySelectorAll('.ah-video')],hero=document.querySelector('.ah-hero'),motion=matchMedia('(prefers-reduced-motion: reduce)');
+ const videos=[...document.querySelectorAll('.ah-video')],hero=document.querySelector('.ah-hero'),motion=matchMedia('(prefers-reduced-motion: reduce)');if(!hero || videos.length<2)return;
  let active=0,visible=true,fading=false,frame=0,swaps=0;
  const fade=.75;
  videos.forEach((v,i)=>{v.muted=true;v.loop=false;v.style.zIndex=i===0?'1':'0';v.style.opacity=i===0?'1':'0';});
