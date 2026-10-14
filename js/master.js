@@ -808,3 +808,56 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initializeEntrances,{once:true});
   else initializeEntrances();
 })();
+
+/* Success stories slider: initialize only on pages containing the section. */
+(() => {
+ function initializeSuccessStudies(){
+ const section=document.querySelector('.ss-studies');
+ if(!section||section.dataset.sliderReady)return;
+ section.dataset.sliderReady='true';
+ const viewport=section.querySelector('.ss-viewport');
+ const cards=[...section.querySelectorAll('.ss-card')];
+ const previous=section.querySelector('.ss-previous'),next=section.querySelector('.ss-next');
+ const status=section.querySelector('.ss-status');
+ const reduced=matchMedia('(prefers-reduced-motion:reduce)');
+ let positions=[],current=0,scrollFrame=0,lastWidth=0;
+ function render(index){
+  const changed=index!==current;current=index;
+  previous.disabled=index===0;next.disabled=index===cards.length-1;
+  if(changed||!status.textContent)status.textContent='Success story '+(index+1)+' of '+cards.length+': '+cards[index].querySelector('h3').textContent;
+ }
+ function goTo(index){
+  index=Math.max(0,Math.min(cards.length-1,index));
+  viewport.scrollTo({left:positions[index]||0,behavior:reduced.matches?'instant':'smooth'});
+ }
+ function layout(){
+  const index=current,first=cards[0].offsetLeft;
+  const maxScroll=Math.max(0,viewport.scrollWidth-viewport.clientWidth);
+  positions=cards.map(card=>Math.min(maxScroll,Math.max(0,card.offsetLeft-first)));
+  positions[positions.length-1]=maxScroll;
+  lastWidth=viewport.clientWidth;
+  viewport.scrollTo({left:positions[index],behavior:'instant'});sync();
+ }
+ function sync(){
+  scrollFrame=0;let closest=0;
+  const maxScroll=Math.max(0,viewport.scrollWidth-viewport.clientWidth);
+  const left=Math.max(0,Math.min(maxScroll,viewport.scrollLeft));
+  if(maxScroll>0 && left>=maxScroll-2)closest=cards.length-1;
+  else positions.forEach((position,i)=>{if(Math.abs(left-position)<Math.abs(left-positions[closest]))closest=i;});
+  render(closest);
+ }
+ previous.addEventListener('click',()=>goTo(current-1));next.addEventListener('click',()=>goTo(current+1));
+ viewport.addEventListener('scroll',()=>{if(!scrollFrame)scrollFrame=requestAnimationFrame(sync);},{passive:true});
+ viewport.addEventListener('keydown',event=>{
+  if(event.altKey||event.ctrlKey||event.metaKey)return;
+  if(event.key==='ArrowRight'){event.preventDefault();goTo(current+1);}
+  else if(event.key==='ArrowLeft'){event.preventDefault();goTo(current-1);}
+  else if(event.key==='Home'){event.preventDefault();goTo(0);}
+  else if(event.key==='End'){event.preventDefault();goTo(cards.length-1);}
+ });
+ new ResizeObserver(()=>{if(viewport.clientWidth!==lastWidth)layout();}).observe(viewport);
+ document.fonts.ready.then(layout);layout();
+
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initializeSuccessStudies,{once:true});else initializeSuccessStudies();
+})();
