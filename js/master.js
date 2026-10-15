@@ -179,7 +179,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 (()=>{
 function startPage(){
 const page=document.documentElement.dataset.sitePage;
-if(page!=="bfsi" && page!=="capital-markets"){
+const domainPage=page==="capital-markets" || document.documentElement.hasAttribute("data-domain-page");
+if(page!=="bfsi" && !domainPage){
 document.documentElement.classList.add('js');
 (function(){
 function initialize(){
@@ -615,7 +616,7 @@ addEventListener('scroll',schedule,{passive:true});addEventListener('resize',mea
 
 })();
 }
-if(page==="capital-markets"){
+if(domainPage){
 (()=>{
  const motion=matchMedia('(prefers-reduced-motion: reduce)');
  document.querySelector('#wf-year').textContent=new Date().getFullYear();
@@ -641,7 +642,7 @@ if(page==="capital-markets"){
  }
 })();
 }
-if(page==="ai" || page==="capital-markets"){
+if(page==="ai" || domainPage){
 (function(){
 /* exports/mark7/js/ai-ml-v2.js */
 
@@ -850,7 +851,7 @@ if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",
  function render(index){
   const changed=index!==current;current=index;
   previous.disabled=index===0;next.disabled=index===cards.length-1;
-  if(changed||!status.textContent)status.textContent='Success story '+(index+1)+' of '+cards.length+': '+cards[index].querySelector('h3').textContent;
+  if(changed||!status.textContent)status.textContent=(section.querySelector('.cm-application-note')?'Application ':'Success story ')+(index+1)+' of '+cards.length+': '+cards[index].querySelector('h3').textContent;
  }
  function goTo(index){
   index=Math.max(0,Math.min(cards.length-1,index));

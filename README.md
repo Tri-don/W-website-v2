@@ -19,3 +19,8 @@ Upload the contents of this folder to the root of your Git repository, preservin
 Open `index.html` to review locally. The first-visit loader runs once per browser tab session when the pages are served together from the same origin. Primary navigation connects the three pages. Links to services and pages outside this three-page scope continue to their existing destinations.
 
 The source pages are separate HTML files; assets remain external. Inline SVG icon markup is retained. Browser tests were skipped at the user's request.
+
+Additional BFSI domain pages:
+- `Responsible-Privacy-Preserving-Financial-AI.html`
+- `Risk-Regulatory-Compliance-Engineering.html`
+- `Wealth-Asset-Management-Data-Infrastructure.html`
