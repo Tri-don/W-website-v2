@@ -1275,3 +1275,99 @@ html[data-domain-page] .cm-application-note{margin-top:30px;color:var(--muted);f
 html[data-domain-page] .cm-hero-description{max-width:900px}
 html[data-domain-page] .cm-services-reused .ws-copy{width:80%;max-width:480px}
 @media(max-width:640px){html[data-domain-page] .cm-hero-compact h1{font-size:34px}html[data-domain-page] .cm-services-reused .ws-copy{width:88%}}
+
+/* AI/ML Services v2: reserve space for the next section in the first viewport. */
+html[data-site-page="ai"] body.ai-compact-hero-page .ah-hero {
+  height:clamp(480px,72svh,820px);
+  min-height:0;
+  max-height:none;
+  padding-top:calc(var(--nav-space) + 20px);
+  padding-bottom:30px;
+}
+html[data-site-page="ai"] body.ai-compact-hero-page .ah-header {
+  padding-block:20px 28px;
+}
+@media (max-width:500px) {
+  html[data-site-page="ai"] body.ai-compact-hero-page .ah-hero {
+    height:auto;
+    min-height:560px;
+    padding-top:calc(var(--nav-space) + 16px);
+    padding-bottom:26px;
+  }
+  html[data-site-page="ai"] body.ai-compact-hero-page .ah-header {
+    padding-block:18px 24px;
+  }
+}
+/* BFSI v2: side-by-side introduction followed by a separate hero visual. */
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-hero {
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+  gap:60px;
+  height:auto;
+  min-height:0;
+  max-height:none;
+  padding-top:calc(var(--bh-navbar-space) + 36px);
+  padding-bottom:0;
+}
+.bfsi-split-hero-page .bfsi-hero-top {
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+  align-items:center;
+  gap:clamp(40px,6vw,100px);
+  width:100%;
+}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-header {margin:0;max-width:none}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-breadcrumb {justify-content:flex-start;margin-bottom:22px}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-title {
+  text-align:left;
+  white-space:normal;
+  font-size:clamp(44px,5.1vw,76px);
+  line-height:1.08;
+  letter-spacing:-3px;
+}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-title em {display:inline;font-size:1em;letter-spacing:inherit}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-footer {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:12px;
+  margin:0;
+  padding:0;
+  border:0;
+  max-width:490px;
+}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-footer p {
+  margin:0;
+  max-width:none;
+  font-size:16px;
+  line-height:1.65;
+  letter-spacing:0;
+}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-action {align-self:flex-start;margin:12px 0 0;display:inline-flex;align-items:center;justify-content:space-between}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-film {
+  position:relative;
+  inset:auto;
+  z-index:0;
+  flex:none;
+  width:100%;
+  height:clamp(360px,54svh,660px);
+  aspect-ratio:auto;
+  margin:0;
+}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-film video {object-position:center;filter:saturate(.65) hue-rotate(20deg) brightness(.95)}
+html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-film:after {
+  background:linear-gradient(180deg,#08080926,transparent 18%,transparent 82%,#08080980);
+}
+@media (max-width:840px) {
+  html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-hero {gap:40px;padding-top:calc(var(--bh-navbar-space) + 28px)}
+  .bfsi-split-hero-page .bfsi-hero-top {grid-template-columns:1fr;gap:26px}
+  html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-title {font-size:clamp(42px,7vw,60px);letter-spacing:-2px}
+  html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-footer {max-width:620px}
+  html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-film {height:clamp(290px,48svh,480px)}
+}
+@media (max-width:500px) {
+  html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-breadcrumb {flex-wrap:wrap;font-size:10px;gap:7px;margin-bottom:18px}
+  html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-breadcrumb span {font-size:10px}
+  html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-footer p {font-size:15px}
+}
