@@ -488,14 +488,13 @@
 .wg-detail{height:350px;min-height:350px;display:grid;grid-template-rows:22px 72px 28px 146px 32px;padding-top:20px;padding-bottom:20px}
 .wg-detail-kicker,.wg-region,.wg-detail-footer,.wg-office-list,.wg-detail-copy{margin-top:0!important;margin-bottom:0!important}
 .wg-detail h3,.wg-region,.wg-detail-copy{animation:none}
-.wg-details-
 .wg-office-label{margin-bottom:10px!important}
 .wg-cities{display:flex;flex-direction:column;align-items:flex-start;gap:5px;margin:0}
 .wg-city-link{display:inline-flex;align-items:center;gap:8px;min-height:23px;color:#d0c8da;text-decoration:none;font-size:14px;line-height:1.5;border-bottom:1px solid transparent;transition:color .2s,border-color .2s}
 .wg-city-link svg{width:12px;height:12px;flex:none;fill:none;stroke:currentColor;stroke-width:1.25;opacity:.65;transition:opacity .2s}
 .wg-city-link:hover{color:#e4d6f8;border-color:#7b6498}.wg-city-link:hover svg{opacity:1}
 .wg-city-link:focus-visible{outline:2px solid var(--wg-accent);outline-offset:4px}
-@media(max-width:760px){.wg-detail{height:325px;min-height:325px;grid-template-rows:20px 66px 27px 143px;padding:23px 0}.wg-details-.wg-city-link{font-size:14px;min-height:23px}}
+@media(max-width:760px){.wg-detail{height:325px;min-height:325px;grid-template-rows:20px 66px 27px 143px;padding:23px 0}.wg-city-link{font-size:14px;min-height:23px}}
 
 
 /* v2: transform the world, keep pins and tooltip text at a readable size. */
@@ -1370,4 +1369,922 @@ html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-film:after {
   html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-breadcrumb {flex-wrap:wrap;font-size:10px;gap:7px;margin-bottom:18px}
   html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-breadcrumb span {font-size:10px}
   html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-footer p {font-size:15px}
+}
+
+
+/* Responsive V2 — shared by every page in this independent copy.
+   Keep content bounded on 1600–2560px screens; adapt continuously between sizes. */
+:root{--site-max:1440px;--site-gutter:clamp(20px,5vw,72px);--site-section:clamp(64px,6vw,110px)}
+html body :is(main,footer){min-width:0}
+html body :is(.hero-copy,.ah-header,.ah-footer,.bfsi-hero-top,.bh-footer,.ai-overview-copy,.ai-overview-body,.be-card,.as-copy,.ss-copy,.wf-column,.wb-card)>*{max-width:100%}
+html body :is(.heading-row,.hero-actions,.ah-footer,.bh-footer,.ss-footer,.wf-bottom){min-width:0}
+html body :is(.hero-actions,.bf-cta-actions,.m6-cta-actions){flex-wrap:wrap}
+html body :is(.ui-button,.ui-text,.ui-tertiary){max-width:100%;overflow-wrap:anywhere}
+html body :is(.ai-overview,.cm-overview,.cm-expertise-shell,.be-layout,.be-cards,.wb-grid,.wf-top)>*{min-width:0}
+html body :is(.be-card h3,.as-copy h3,.ss-copy h3,.wb-card h3,.cm-hero-compact h1){overflow-wrap:anywhere}
+html body .nv-dropdown{max-height:calc(100svh - 98px);overflow-y:auto;overscroll-behavior:contain}
+html body .nv-scrolled .nv-dropdown{max-height:calc(100svh - 74px)}
+html body .nv-item>span{min-width:0}
+html body .nv-item :is(strong,small){overflow-wrap:anywhere}
+html body .wb-card{height:auto;min-height:510px}
+html body .cm-feature-insight{height:auto;min-height:360px}
+html body .cm-feature-insight .wb-photo-frame{min-width:0}
+html body .ss-copy{overflow-wrap:anywhere}
+/* A bounded hero visual stays beside its copy on wide monitors. */
+@media(min-width:1001px){
+ html body .hero{height:auto;min-height:min(900px,100svh);padding-top:clamp(140px,17svh,190px);padding-bottom:90px}
+ html body .hero-copy{width:62%;max-width:790px}
+ html body .hero h1{font-size:clamp(60px,5.4vw,88px);letter-spacing:-.055em}
+ html body .hero-art{width:clamp(500px,44vw,690px);height:auto;aspect-ratio:1;right:max(-30px,calc((100% - var(--site-max))/2 - 30px));top:50%;bottom:auto;margin:0;translate:0 -50%}
+ html body .hero-description{max-width:560px}
+ html body .ah-title{font-size:clamp(52px,4.5vw,76px);letter-spacing:-.045em}
+ html[data-site-page="ai"] body.ai-compact-hero-page .ah-hero{height:auto;min-height:clamp(520px,74svh,820px);grid-template-rows:1fr auto;row-gap:30px}
+ html[data-site-page="ai"] .as-card{height:clamp(400px,54svh,560px);min-height:400px}
+ html[data-site-page="ai"] .as-copy{padding:clamp(28px,2.5vw,42px)}
+}
+/* Short laptop windows need room for content as well as sticky headings. */
+@media(min-width:1001px) and (max-height:800px){
+ html[data-site-page="ai"] .as-card{height:auto;min-height:370px}
+ html body .hero{min-height:700px;padding-top:140px;padding-bottom:80px}
+ html body .ss-card-link{min-height:390px}
+}
+@media(min-width:841px) and (max-width:1280px){
+ html body .nv-bar{gap:18px}
+ html body .nv-navigation{gap:16px}
+ html body .nv-contact{gap:12px}
+ html body .nv-brand img{width:128px}
+ html body .ai-overview{gap:40px;grid-template-columns:minmax(0,1.05fr) minmax(0,.85fr)}
+ html body .cm-overview{gap:40px;grid-template-columns:repeat(2,minmax(0,1fr))}
+ html body .wf-top{gap:40px}
+ html body .ss-copy{padding:28px}
+}
+/* Tablet layouts include 720px; content determines height instead of clipping. */
+@media(max-width:1000px){
+ html body .heading-row{flex-wrap:wrap;align-items:flex-start;gap:24px}
+ html body .heading-row>p{max-width:580px}
+ html body .wb-heading{flex-wrap:wrap;gap:24px}
+ html body .ws-wide .ws-copy{max-width:75%}
+ html body .cm-overview{grid-template-columns:1fr;gap:28px}
+ html body .cm-overview .ai-overview-body{padding-top:0}
+ html body .cm-feature-insight{grid-template-columns:1fr;gap:28px}
+ html body .cm-feature-insight .wb-photo-frame{min-height:260px}
+ html body .cm-services-reused .ws-copy{width:88%;max-width:none}
+ html body .cm-services-reused .ws-grid{grid-template-rows:none;grid-auto-rows:minmax(390px,auto)}
+ html body .cm-services-reused .ws-cell{height:auto}
+ html body .cm-services-reused .ws-card{height:100%;min-height:390px}
+}
+@media(max-width:840px){
+ html body .nv-dropdown,html body .nv-scrolled .nv-dropdown{max-height:none;overflow:visible}
+ html body .nv-navigation{top:82px;max-height:calc(100svh - 82px);padding-inline:var(--site-gutter)}
+ html body .hero{height:auto;min-height:0;max-height:none;padding-top:138px;padding-bottom:390px;align-items:flex-start}
+ html body .hero-copy{width:100%;max-width:100%}
+ html body .hero h1{font-size:clamp(44px,8.5vw,68px);line-height:1.08;letter-spacing:-.05em}
+ html body .hero h1 em{letter-spacing:inherit}
+ html body .hero-description{max-width:560px;font-size:17px}
+ html body .hero-art{width:min(460px,88vw);height:auto;aspect-ratio:1;top:auto;bottom:-35px;right:50%;margin:0;translate:50% 0}
+ html body .hero-actions{gap:18px}
+ html body .ah-title{font-size:clamp(38px,6.8vw,57px);letter-spacing:-.04em;line-height:1.12}
+ html[data-site-page="ai"] body.ai-compact-hero-page .ah-hero{height:auto;min-height:620px;max-height:none;row-gap:40px;padding-top:112px;padding-bottom:32px}
+ html body .ah-footer{align-items:flex-start;flex-direction:column;gap:22px}
+ html body .ah-breadcrumb,html body .bh-breadcrumb{flex-wrap:wrap;max-width:100%}
+ html body .ai-overview{grid-template-columns:1fr;min-height:0;gap:32px}
+ html body .wf-top{grid-template-columns:1fr;gap:36px}
+ html body .wb-grid{grid-template-columns:1fr;gap:22px}
+ html body .wb-card{min-height:480px}
+ html body .wb-card h3{font-size:26px}
+ html body .cm-services-reused .ws-grid{grid-template-columns:1fr;grid-auto-rows:minmax(350px,auto)}
+ html body .cm-services-reused .ws-card{min-height:350px}
+ html body .cm-hero-compact{height:auto;min-height:380px;max-height:none}
+ html body .cm-hero-inner{padding-block:48px}
+ html body .cm-hero-compact h1{font-size:clamp(34px,5.8vw,46px);letter-spacing:-.035em}
+ html body .cm-hero-compact h1 br{display:none}
+ html body .cm-hero-description{max-width:58ch;font-size:16px}
+ html body .ss-card-link{height:auto;min-height:560px}
+ html body .ss-footer{flex-wrap:wrap;gap:18px}
+}
+@media(max-width:600px){
+ html body .hero{padding-top:126px;padding-bottom:340px}
+ html body .hero-art{width:min(390px,94vw);bottom:-30px}
+ html body .hero-description{font-size:16px}
+ html body .hero-actions{align-items:flex-start;gap:16px}
+ html body .hero-actions .ui-button{min-height:50px}
+ html body .ws-wide .ws-copy{max-width:100%}
+ html body .ws-cell{height:auto;min-height:350px}
+ html body .ws-card{min-height:350px;height:100%}
+ html body .ws-copy{padding:26px}
+ html body .ws-copy p{max-width:34ch}
+ html body .be-cards{grid-template-columns:1fr}
+ html body .cm-feature-insight{padding:24px}
+ html body .cm-feature-insight .wb-photo-frame{min-height:210px}
+ html body .cm-services-reused .ws-copy{width:100%;padding:26px}
+ html body .ss-copy{padding:26px}
+ html body .ss-copy h3{font-size:25px}
+ html body .wf-bottom{flex-wrap:wrap;gap:20px}
+ html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-title{font-size:clamp(38px,9vw,50px);letter-spacing:-.04em}
+ html[data-site-page="ai"] body.ai-compact-hero-page .ah-hero{min-height:600px}
+}
+@media(min-width:1921px){
+ html body .hero-grid{inset-inline:max(var(--site-gutter),calc((100% - var(--site-max))/2 + var(--site-gutter)))}
+ html body #difference .wd-stage-number{font-size: min(44vw,850px);right:max(-2vw,calc((100% - var(--site-max))/2 - 100px));bottom:-100px}
+}
+
+
+/* BFSI success stories: reserve room for the heading, controls and fixed navbar.
+   Use the available CSS viewport height, including Windows display scaling. */
+@media(min-width:600px){
+ html[data-site-page="bfsi"] body .ss-studies{
+  padding-block:clamp(16px,2.2svh,28px);
+  scroll-margin-top:98px;
+ }
+ html[data-site-page="bfsi"] body .ss-heading{margin-bottom:clamp(24px,3.6svh,40px)}
+ html[data-site-page="bfsi"] body .ss-eyebrow{margin-bottom:8px}
+ html[data-site-page="bfsi"] body .ss-heading h2{font-size:clamp(32.3px,3.82vw,55.25px);line-height:1.13;letter-spacing:-.04em}
+ html[data-site-page="bfsi"] body .ss-card-link{
+  grid-template-columns:36% minmax(0,1fr);
+  grid-template-rows:auto;
+  height:clamp(270px,calc(100svh - 350px),460px);
+  min-height:0;
+ }
+ html[data-site-page="bfsi"] body .ss-copy{padding:clamp(18px,2.8svh,30px)}
+ html[data-site-page="bfsi"] body .ss-card-top{margin-bottom:clamp(12px,2svh,20px)}
+ html[data-site-page="bfsi"] body .ss-copy h3{font-size:clamp(23px,3.6svh,30px);line-height:1.22;margin-bottom:14px;letter-spacing:-.035em}
+ html[data-site-page="bfsi"] body .ss-results{padding-top:clamp(12px,2svh,20px)}
+ html[data-site-page="bfsi"] body .ss-metrics{gap:18px}
+ html[data-site-page="bfsi"] body .ss-metrics>div{gap:7px}
+ html[data-site-page="bfsi"] body .ss-metrics dd{font-size:clamp(32px,5.4svh,48px);letter-spacing:-1.5px}
+ html[data-site-page="bfsi"] body .ss-metrics dt{font-size:12px;line-height:1.5}
+ html[data-site-page="bfsi"] body .ss-outcome{font-size:clamp(14px,2.3svh,17px);line-height:1.5}
+ html[data-site-page="bfsi"] body .ss-footer{margin-top:clamp(24px,3.6svh,40px);flex-wrap:nowrap}
+ html[data-site-page="bfsi"] body .ss-footer .ui-button{min-height:48px;padding-block:12px}
+}
+@media(min-width:600px) and (max-width:840px){
+ html[data-site-page="bfsi"] body .ss-studies{--ss-card-width:calc(100vw - 2 * var(--ss-gutter));scroll-margin-top:90px}
+ html[data-site-page="bfsi"] body .ss-card-link{grid-template-columns:30% minmax(0,1fr)}
+ html[data-site-page="bfsi"] body .ss-sector{left:16px;right:12px;bottom:20px;font-size:11px}
+}
+/* Narrow phones keep the title and navigation together before the taller card. */
+@media(max-width:599px){
+ html[data-site-page="bfsi"] body .ss-studies{display:flex;flex-direction:column;padding-block:28px}
+ html[data-site-page="bfsi"] body .ss-heading{order:0;width:100%;margin-bottom:20px}
+ html[data-site-page="bfsi"] body .ss-footer{order:1;width:100%;margin-top:0;margin-bottom:22px;flex-wrap:nowrap}
+ html[data-site-page="bfsi"] body .ss-viewport{order:2;width:100%}
+ html[data-site-page="bfsi"] body .ss-status{order:3}
+}
+
+
+/* Compact content sections share a viewport-height-aware rhythm.
+   No fixed section height, clipping, scroll snapping or text scaling: longer
+   content and intentional scroll sequences retain their natural document flow. */
+html[data-site-page="bfsi"] body .be-layout{grid-template-columns:minmax(0,1fr);gap:0}
+html[data-site-page="bfsi"] body .be-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+html[data-site-page="bfsi"] body .be-card{min-height:0;margin:0;padding:clamp(22px,3svh,32px)}
+html[data-site-page="bfsi"] body .be-icon{margin-bottom:18px;width:30px;height:30px;flex-shrink:0}
+html[data-site-page="bfsi"] body .be-card h3{margin-bottom:14px}
+html[data-site-page="bfsi"] body .be-card .be-learn-more{padding-top:18px}
+html[data-site-page="bfsi"] body .be-heading{margin-bottom:clamp(26px,4svh,44px)}
+@media(max-width:599px){
+ html[data-site-page="bfsi"] body .be-cards{grid-template-columns:1fr}
+ html[data-site-page="bfsi"] body .ss-heading{margin-bottom:28px}
+ html[data-site-page="bfsi"] body .ss-footer{margin-bottom:30px}
+}
+@media(min-width:1001px){
+ html body main>.viewport-section:not(.ss-studies){padding-block:clamp(28px,4.5svh,64px)}
+ html body .viewport-section :is(.section-heading,.wb-heading,.wi-heading,.rai-heading,.wg-heading){margin-bottom:clamp(24px,3.6svh,44px)}
+ html body .viewport-section :is(.section-heading,.wb-heading,.wi-heading,.rai-heading,.wg-heading,.be-heading) h2{font-size:clamp(32.3px,3.82vw,55.25px);line-height:1.13;letter-spacing:-.035em}
+ html body .viewport-section :is(.eyebrow,.wb-eyebrow,.wi-eyebrow){margin-bottom:clamp(14px,2svh,24px)}
+ html body .viewport-section.wb-blog .wb-grid{align-items:stretch}
+ html body .viewport-section.wb-blog .wb-card:not(.cm-feature-insight){height:auto;min-height:clamp(330px,calc(100svh - 310px),510px)}
+ html body .viewport-section.wb-blog .wb-feature-photo{height:clamp(190px,calc(62svh - 180px),330px)}
+ html body .viewport-section.wb-blog .wb-card h3{font-size:clamp(21px,3svh,26px)}
+ html body .viewport-section.wb-blog .wb-card-top{margin-bottom:12px}
+ html body .viewport-section.cm-insights-reused .cm-feature-insight{min-height:300px;padding:26px;gap:28px}
+ html body .viewport-section.cm-insights-reused .cm-feature-insight .wb-photo-frame{min-height:230px}
+ html body .viewport-section .wg-map{height:clamp(260px,40svh,440px)}
+ html body .viewport-section .wg-panel-top{padding-top:20px}
+ html body .viewport-section .wg-detail{padding-block:20px}
+ html body .viewport-section .rai-diagram{padding-top:24px}
+ html body .viewport-section .rai-diagram-head{margin-bottom:20px}
+}
+/* Use the same success-story height budget on the financial-domain pages.
+   A natural minimum protects the denser text and extra links on those cards. */
+@media(min-width:841px){
+ html body.cm-page .ss-studies{padding-block:clamp(20px,3svh,40px);scroll-margin-top:98px}
+ html body.cm-page .ss-studies .ss-heading{margin-bottom:clamp(24px,3.6svh,40px)}
+ html body.cm-page .ss-studies .ss-heading h2{font-size:clamp(32.3px,3.82vw,55.25px);line-height:1.13}
+ html body.cm-page .ss-studies .ss-eyebrow{margin-bottom:10px}
+ html body.cm-page .ss-card-link{height:auto;min-height:clamp(330px,calc(100svh - 360px),440px)}
+ html body.cm-page .ss-copy{padding:clamp(22px,3svh,32px)}
+ html body.cm-page .ss-copy h3{font-size:clamp(23px,3.5svh,30px);margin-bottom:16px}
+ html body.cm-page .ss-card-top{margin-bottom:16px}
+ html body.cm-page .ss-results{padding-top:16px}
+ html body.cm-page .ss-footer{margin-top:clamp(24px,3.6svh,40px)}
+}
+@media(min-width:1001px) and (max-height:800px){
+ html body main>.viewport-section:not(.ss-studies){padding-block:clamp(24px,4svh,32px)}
+ html body .viewport-section .ai-overview-lead{margin-top:20px}
+ html body .viewport-section.cm-overview{padding-top:32px!important;padding-bottom:32px!important}
+ html body .viewport-section.cm-overview .ai-overview-body{padding-top:20px}
+ html body .viewport-section.cm-expertise-split .be-card{padding:22px}
+ html body .viewport-section.cm-expertise-split .be-icon{margin-bottom:16px}
+ html body .viewport-section.cm-expertise-split .be-card h3{margin-bottom:12px}
+ html body .viewport-section.cm-expertise-split .be-card p{line-height:1.6}
+ html body .viewport-section.cm-expertise-split .cm-expertise-shell{gap:36px}
+ html[data-site-page="bfsi"] body .be-card{padding:20px 24px}
+ html[data-site-page="bfsi"] body .be-cards{gap:16px}
+ html[data-site-page="bfsi"] body .be-card p{line-height:1.6}
+ html[data-site-page="bfsi"] body .be-heading>p{margin-top:18px}
+}
+/* Stacked tablet/mobile content is allowed to grow instead of hiding copy. */
+@media(max-width:1000px){
+ html body main>.viewport-section:not(.ss-studies){padding-block:clamp(36px,5svh,64px)}
+}
+
+
+/* Short, wide viewports include desktop windows at increased browser zoom.
+   Do not infer zoom or disable it: adapt to the actual available layout area. */
+@media(min-width:700px) and (max-width:1100px) and (max-height:700px){
+ html body main>.viewport-section:not(.ss-studies){padding-block:clamp(22px,4svh,32px)}
+ html body .viewport-section :is(.section-heading,.wb-heading,.wi-heading,.rai-heading,.wg-heading){margin-bottom:24px}
+ html body .viewport-section :is(.eyebrow,.wb-eyebrow,.wi-eyebrow){margin-bottom:14px}
+ html body .ai-overview,html body .cm-overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px;min-height:0}
+ html body .cm-overview{padding-top:28px!important;padding-bottom:28px!important}
+ html body .ai-overview-body,html body .cm-overview .ai-overview-body{padding-top:0}
+ html body .cm-feature-insight{grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:24px;padding:24px;min-height:0}
+ html body .cm-feature-insight .wb-photo-frame{min-height:220px}
+ html body .wb-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+ html body .wb-card:not(.cm-feature-insight){height: auto;min-height:340px}
+ html body .wb-standard{padding:18px}
+ html body .wb-card h3{font-size:22px}
+ html body .wb-feature-photo{height:185px}
+ html body .wb-feature-copy{padding:12px 18px 24px}
+ html body .wb-card-top{flex-wrap:wrap;gap:8px}
+ html body .wb-photo-frame{margin-top:20px;min-height:130px}
+ html body .wb-heading{flex-direction:row;align-items:flex-end;gap:24px}
+ html body .wb-intro{flex-shrink:1}
+ html body .ss-card-link{grid-template-columns:32% minmax(0,1fr);grid-template-rows:auto;height:auto;min-height:300px}
+ html body.cm-page .ss-card-link{min-height:300px}
+ html body .ss-copy{padding:22px}
+ html body .ss-card-top{margin-bottom:12px}
+ html body .ss-copy h3{font-size:24px;margin-bottom:14px}
+ html body .ss-results{padding-top:14px}
+ html body .ss-metrics dd{font-size:34px}
+ html body .ss-footer{flex-wrap:nowrap}
+ html body .hero{padding-top:116px;padding-bottom:64px;min-height:0;display:flex;flex-direction:row;align-items:center}
+ html body .hero-copy{max-width:68%;width:68%}
+ html body .hero h1{font-size:clamp(44px,6.3vw,65px)}
+ html body .hero-art{width:48vw;height:auto;aspect-ratio:1;right:-8vw;top:50%;bottom:auto;translate:0 -50%}
+ html body .hero-description{font-size:16px}
+ html body .hero-actions{gap:16px;margin-top:24px}
+ html[data-site-page="ai"] body.ai-compact-hero-page .ah-hero{height:auto;min-height:0;padding-top:112px;padding-bottom:28px;row-gap:28px}
+ html body .ah-header{padding-block:12px 20px}
+ html body .ah-footer{flex-direction:row;align-items:center;gap:24px}
+ html body .ah-footer>p{min-width:0;flex:1}
+ html body .ah-footer .ui-button{flex-shrink:0}
+ html[data-site-page="bfsi"] body.bfsi-split-hero-page .bfsi-hero-top{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:28px}
+ html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-hero{gap:32px}
+ html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-film{height:clamp(200px,46svh,330px)}
+ html body .cm-hero-compact{height:auto;min-height:0;max-height:none}
+ html body .cm-hero-inner{padding-block:30px}
+ html body .wf-top{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:30px}
+}
+/* The original accordion becomes a long vertical list below 760px.
+   Retain an inspectable horizontal row in short desktop/tablet windows. */
+@media(min-width:700px) and (max-width:760px) and (max-height:700px){
+ html body .wi-accordion{flex-direction:row;overflow-x:auto;gap:12px;scroll-snap-type:x proximity}
+ html body .wi-card{flex:0 0 80%;width:80%;height:350px;scroll-snap-align:start}
+}
+
+
+/* Compact controls for short desktop windows, including increased browser zoom.
+   Retain readable labels; reduce the surrounding space rather than scaling text. */
+@media(min-width:700px) and (max-height:750px){
+ html body :is(.ui-button,.button,.ip-button),
+ html[data-site-page="bfsi"] body .ss-footer .ui-button,
+ html body .hero-actions .ui-button,
+ html body .cm-final-reused .ui-button{
+  min-height:42px;height:auto;padding:10px 17px;gap:14px;
+  font-size:14px;line-height:1.4;
+ }
+ html body :is(.ui-button,.button,.ip-button) svg{width:17px;height:17px;flex-shrink:0}
+ html body :is(.ui-text,.ui-tertiary){font-size:14px;gap:12px;padding-block:8px;min-height:36px}
+ html body :is(.ui-text,.ui-tertiary) svg{width:17px;height:17px}
+ html[data-site-page="bfsi"] body.bfsi-split-hero-page .bh-action{width:auto;max-width:100%;min-height:42px;padding:10px 17px;gap:14px}
+ html body .bf-cta-actions .ui-button{width:auto;max-width:100%}
+ html body .ss-arrow{width:36px;height:36px}
+ html body .ss-arrow svg{width:16px;height:16px}
+}
+
+
+/* BFSI abstract geometry: extend the $9.3M card's concentric-ring motif.
+   Decorations stay inside each card and never intercept its links. */
+html[data-site-page="bfsi"] body :is(.bs-tile,.be-card){position:relative;isolation:isolate;overflow:hidden}
+html[data-site-page="bfsi"] body .bs-tile::before{
+ content:'';position:absolute;z-index:-1;pointer-events:none;
+ width:200px;height:200px;right:-95px;top:95px;
+ border:1px solid #b6a0ed18;border-radius:50%;
+ background:transparent;box-shadow:0 0 0 35px #b6a0ed07,0 0 0 70px #b6a0ed04;
+ transform:none;transition:transform .8s cubic-bezier(.2,.65,.25,1),border-color .5s;
+}
+html[data-site-page="bfsi"] body .bs-metric--center::before{width:150px;height:150px;right:-70px;top:-12px}
+html[data-site-page="bfsi"] body .bs-intro::before{width:160px;height:160px;right:-95px;top:auto;bottom:-100px}
+html[data-site-page="bfsi"] body .be-card::before,
+html[data-site-page="bfsi"] body .be-card::after{
+ content:'';position:absolute;z-index:-1;pointer-events:none;border-radius:50%;
+ transition:transform .8s cubic-bezier(.2,.65,.25,1),opacity .5s,border-color .5s;
+}
+html[data-site-page="bfsi"] body .be-card::before{
+ width:190px;height:190px;right:-105px;top:-60px;
+ border:1px solid #b6a0ed22;
+ box-shadow:0 0 0 30px #b6a0ed09,0 0 0 60px #b6a0ed05;
+}
+html[data-site-page="bfsi"] body .be-card::after{
+ width:110px;height:110px;right:-35px;top:0;
+ border:1px solid #b6a0ed17;opacity:.7;
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(even)::before{top:auto;bottom:-100px;right:-65px}
+html[data-site-page="bfsi"] body .be-card:nth-child(even)::after{top:auto;bottom:-20px;right:15px}
+@media(hover:hover) and (pointer:fine){
+ html[data-site-page="bfsi"] body .bs-tile:hover::before{transform:translate(-12px,-8px) scale(1.06);border-color:#b6a0ed40}
+ html[data-site-page="bfsi"] body .be-card:hover::before{transform:translate(-12px,8px) scale(1.08);border-color:#b6a0ed44}
+ html[data-site-page="bfsi"] body .be-card:hover::after{transform:translate(-18px,-8px) scale(1.12);opacity:1}
+ html[data-site-page="bfsi"] body .be-card:nth-child(even):hover::before{transform:translate(-12px,-8px) scale(1.08)}
+}
+html[data-site-page="bfsi"] body .be-card:focus-within::before{transform:translate(-12px,8px) scale(1.08);border-color:#b6a0ed44}
+html[data-site-page="bfsi"] body .be-card:focus-within::after{transform:translate(-18px,-8px) scale(1.12);opacity:1}
+@media(prefers-reduced-motion:reduce){
+ html[data-site-page="bfsi"] body :is(.bs-tile,.be-card)::before,
+ html[data-site-page="bfsi"] body .be-card::after{transition:none!important;transform:none!important}
+}
+html[data-site-page="bfsi"] body.motion-paused :is(.bs-tile,.be-card)::before,
+html[data-site-page="bfsi"] body.motion-paused .be-card::after{transition:none!important;transform:none!important}
+
+
+/* Varied geometry in the same restrained outline style.
+   The original $9.3M card retains its concentric circles. */
+html[data-site-page="bfsi"] body .bs-metric--center::before{
+ width:150px;height:150px;right:-45px;top:15px;border-radius:3px;
+ box-shadow:22px 22px 0 #b6a0ed07,44px 44px 0 #b6a0ed04;
+ rotate:28deg;
+}
+html[data-site-page="bfsi"] body .bs-metric--right::before{
+ width:210px;height:185px;right:-95px;top:110px;border:0;border-radius:0;
+ background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 200' fill='none' stroke='%23b6a0ed'%3E%3Cpath opacity='.17' d='M60 14H160L210 100L160 186H60L10 100Z'/%3E%3Cpath opacity='.1' d='M74 38H146L182 100L146 162H74L38 100Z'/%3E%3Cpath opacity='.07' d='M88 62H132L154 100L132 138H88L66 100Z'/%3E%3C/svg%3E");
+ box-shadow:none;rotate:-18deg;
+}
+html[data-site-page="bfsi"] body .bs-intro::before{
+ width:180px;height:160px;right:-55px;bottom:-70px;border:0;border-radius:0;
+ background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 180' fill='none' stroke='%23b6a0ed'%3E%3Cpath opacity='.15' d='M100 10L190 170H10Z'/%3E%3Cpath opacity='.09' d='M100 40L164 155H36Z'/%3E%3C/svg%3E");
+ box-shadow:none;rotate:18deg;
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(1)::before{
+ border-radius:3px;rotate:30deg;box-shadow:24px 24px 0 #b6a0ed08,48px 48px 0 #b6a0ed04;
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(1)::after{border-radius:2px;rotate:30deg}
+html[data-site-page="bfsi"] body .be-card:nth-child(2)::before{
+ width:220px;height:200px;bottom:-95px;right:-65px;border:0;border-radius:0;
+ background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 200' fill='none' stroke='%23b6a0ed'%3E%3Cpath opacity='.2' d='M60 14H160L210 100L160 186H60L10 100Z'/%3E%3Cpath opacity='.12' d='M74 38H146L182 100L146 162H74L38 100Z'/%3E%3Cpath opacity='.07' d='M88 62H132L154 100L132 138H88L66 100Z'/%3E%3C/svg%3E");
+ box-shadow:none;rotate:12deg;
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(2)::after{width:85px;height:85px;border-radius:2px;rotate:45deg;right:15px;bottom:-20px}
+html[data-site-page="bfsi"] body .be-card:nth-child(3)::before{
+ width:220px;height:195px;right:-100px;top:-55px;border:0;border-radius:0;
+ background:center/contain no-repeat url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 200' fill='none' stroke='%23b6a0ed'%3E%3Cpath opacity='.2' d='M110 12L212 188H8Z'/%3E%3Cpath opacity='.12' d='M110 46L184 174H36Z'/%3E%3Cpath opacity='.07' d='M110 80L156 160H64Z'/%3E%3C/svg%3E");
+ box-shadow:none;rotate:-28deg;
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(3)::after{width:90px;height:90px;border-radius:2px;rotate:-28deg;right:-35px;top:5px}
+html[data-site-page="bfsi"] body .be-card:nth-child(4)::before{
+ width:180px;height:180px;right:-65px;bottom:-95px;border-radius:2px;
+ box-shadow:24px -24px 0 #b6a0ed07,48px -48px 0 #b6a0ed04;
+ rotate:-25deg;transform:skew(-12deg);
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(4)::after{border-radius:2px;rotate:-25deg;transform:skew(-12deg)}
+@media(hover:hover) and (pointer:fine){
+ html[data-site-page="bfsi"] body .be-card:nth-child(4):hover::before{transform:skew(-12deg) translate(-12px,-8px) scale(1.08)}
+ html[data-site-page="bfsi"] body .be-card:nth-child(4):hover::after{transform:skew(-12deg) translate(-18px,-8px) scale(1.12)}
+}
+
+
+/* Match the original circles: broad solid tonal bands, not nested wireframes. */
+html[data-site-page="bfsi"] body :is(.bs-intro,.bs-metric--center,.bs-metric--right,.be-card)::before{
+ width:260px;height:260px;border:0;border-radius:0;box-shadow:none;
+ background-repeat:no-repeat;background-position:center;background-size:contain;
+}
+html[data-site-page="bfsi"] body .bs-intro::before{background-image:url('../assets/images/abstract-bands-triangle.svg')}
+html[data-site-page="bfsi"] body .bs-metric--center::before{background-image:url('../assets/images/abstract-bands-square.svg');right:-100px;top:-55px}
+html[data-site-page="bfsi"] body .bs-metric--right::before{background-image:url('../assets/images/abstract-bands-hexagon.svg')}
+html[data-site-page="bfsi"] body .be-card:nth-child(1)::before{background-image:url('../assets/images/abstract-bands-square.svg');right:-110px;top:-85px}
+html[data-site-page="bfsi"] body .be-card:nth-child(2)::before{background-image:url('../assets/images/abstract-bands-hexagon.svg')}
+html[data-site-page="bfsi"] body .be-card:nth-child(3)::before{background-image:url('../assets/images/abstract-bands-triangle.svg')}
+html[data-site-page="bfsi"] body .be-card:nth-child(4)::before{background-image:url('../assets/images/abstract-bands-angled.svg');transform:none}
+html[data-site-page="bfsi"] body .be-card::after{content:none}
+@media(hover:hover) and (pointer:fine){
+ html[data-site-page="bfsi"] body .be-card:nth-child(4):hover::before{transform:translate(-12px,-8px) scale(1.08)}
+}
+
+
+/* Overview metric geometry stays static, including on pointer hover. */
+html[data-site-page="bfsi"] body .bs-grid .bs-tile::before,
+html[data-site-page="bfsi"] body .bs-grid .bs-tile:hover::before{
+ transition:none;animation:none;transform:none;
+}
+/* Deliberately varied placements, sized from each expertise card's width.
+   Container units track the card itself rather than the browser width. */
+html[data-site-page="bfsi"] body .be-card{container-type:inline-size}
+html[data-site-page="bfsi"] body .be-card::before{
+ width:clamp(160px,48cqw,300px);height:auto;aspect-ratio:1;
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(1)::before{
+ left:auto;right:-12%;top:-26%;bottom:auto;rotate:30deg;
+ width:clamp(170px,52cqw,310px);
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(2)::before{
+ left:-17%;right:auto;top:auto;bottom:-34%;rotate:-16deg;
+ width:clamp(180px,56cqw,330px);
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(3)::before{
+ left:auto;right:-9%;top:auto;bottom:-27%;rotate:22deg;
+ width:clamp(170px,50cqw,300px);
+}
+html[data-site-page="bfsi"] body .be-card:nth-child(4)::before{
+ left:10%;right:auto;top:-42%;bottom:auto;rotate:-32deg;
+ width:clamp(160px,46cqw,280px);
+}
+
+
+/* BFSI impact cards: give photography more space and tighten the copy column. */
+html[data-site-page="bfsi"] body .ss-read-more{
+ display:inline-flex;align-items:center;align-self:flex-start;gap:12px;
+ margin-top:18px;padding-bottom:5px;border-bottom:1px solid #605767;
+ font-size:14px;line-height:1.4;color:var(--text);
+}
+html[data-site-page="bfsi"] body .ss-read-more svg{width:18px;height:18px;flex-shrink:0}
+html[data-site-page="bfsi"] body .ss-card-link:hover .ss-read-more{color:var(--accent);border-color:var(--accent)}
+@media(min-width:841px){
+ html[data-site-page="bfsi"] body .ss-card-link{
+  grid-template-columns:46% minmax(0,1fr);height:auto;
+  min-height:clamp(320px,calc(100svh - 350px),460px);
+ }
+ html[data-site-page="bfsi"] body .ss-copy{padding:clamp(20px,2.8svh,30px)}
+}
+@media(min-width:600px) and (max-width:840px){
+ html[data-site-page="bfsi"] body .ss-card-link{
+  grid-template-columns:40% minmax(0,1fr);height:auto;
+  min-height:clamp(320px,calc(100svh - 350px),460px);
+ }
+}
+
+
+/* One section rhythm, based on the BFSI overview-to-expertise boundary.
+   Each adjacent section contributes half of the reference gap. */
+:root{--section-edge:calc((76px + clamp(28px,4.5svh,64px))/2)}
+@media(min-width:1001px) and (max-height:800px){
+ :root{--section-edge:calc((76px + clamp(24px,4svh,32px))/2)}
+}
+@media(max-width:1000px){
+ :root{--section-edge:calc((60px + clamp(36px,5svh,64px))/2)}
+}
+html body main>:is(.viewport-section,.ws-services,.wp,.statement,.ai-impact):not(.ss-studies){
+ padding-top:var(--section-edge)!important;
+ padding-bottom:var(--section-edge)!important;
+}
+html body main>.ss-studies{
+ padding-top:var(--section-edge);
+ padding-bottom:var(--section-edge);
+}
+html[data-site-page="bfsi"] body main>.ss-studies,
+html body.cm-page main>.ss-studies{
+ padding-top:var(--section-edge);
+ padding-bottom:var(--section-edge);
+}
+html[data-site-page="bfsi"] body .bs-shift .bs-stage{
+ padding-top:var(--section-edge);padding-bottom:var(--section-edge);
+}
+html body main>.m6-cases:not(.is-scroll-driven){
+ padding-top:var(--section-edge);padding-bottom:var(--section-edge);
+}
+/* Preserve the scroll distance and sticky-stage spacing of .as-section,
+   .aj-section, .wd-difference and scroll-driven success-story sections. */
+
+
+/* BFSI closing CTA follows this page's responsive heading/button scale. */
+html[data-site-page="bfsi"] body .m6-cta h2{
+ max-width:none;width:100%;margin:0 auto 24px;
+ font-size:clamp(32.3px,3.82vw,55.25px);line-height:1.13;letter-spacing:-.04em;
+}
+html[data-site-page="bfsi"] body .m6-cta .bfsi-cta-title-line{display:block;white-space:nowrap}
+html[data-site-page="bfsi"] body .m6-cta h2 em{display:block;margin-top:4px;white-space:normal}
+html[data-site-page="bfsi"] body .m6-cta-description{max-width:56ch;font-size:17px;line-height:1.65;margin-bottom:26px}
+html[data-site-page="bfsi"] body .m6-cta-actions{gap:14px}
+html[data-site-page="bfsi"] body .m6-cta-actions .ui-button{
+ min-height:50px;height:auto;padding:13px 20px;font-size:14px;line-height:1.4;gap:16px;
+}
+@media(min-width:700px) and (max-height:750px){
+ html[data-site-page="bfsi"] body .m6-cta h2{margin-bottom:18px}
+ html[data-site-page="bfsi"] body .m6-cta-description{font-size:16px;margin-bottom:22px}
+ html[data-site-page="bfsi"] body .m6-cta-actions .ui-button{min-height:42px;padding:10px 17px;gap:14px}
+}
+@media(max-width:599px){
+ html[data-site-page="bfsi"] body .m6-cta h2{font-size:clamp(25px,7.2vw,40px)}
+ html[data-site-page="bfsi"] body .m6-cta-description{font-size:16px}
+ html[data-site-page="bfsi"] body .m6-cta-actions .ui-button{min-height:46px;padding:11px 16px}
+}
+
+
+/* Balance the BFSI CTA around its content, with no outer child margins. */
+html[data-site-page="bfsi"] body main>.m6-cta{
+ padding-block:var(--section-edge)!important;
+ display:grid;align-items:center;min-height:0;height:auto;
+}
+html[data-site-page="bfsi"] body .m6-cta>.wrap{
+ display:flex;flex-direction:column;align-items:center;gap:24px;
+ margin-block:0;padding-block:0;
+}
+html[data-site-page="bfsi"] body .m6-cta>.wrap>:is(h2,.m6-cta-description,.m6-cta-actions){margin-block:0}
+html[data-site-page="bfsi"] body .m6-cta-actions{width:100%}
+@media(min-width:700px) and (max-height:750px){
+ html[data-site-page="bfsi"] body .m6-cta>.wrap{gap:20px}
+}
+
+
+/* Optical balance: add more breathing room beneath the closing CTA buttons. */
+html[data-site-page="bfsi"] body main>.m6-cta{
+ padding-bottom:calc(var(--section-edge) + 32px)!important;
+}
+
+
+/* More breathing room after the hero; preserve the following section gap. */
+html[data-site-page="bfsi"] body .bs-shift .bs-stage{
+ padding-top:calc(var(--section-edge) + 40px);
+}
+html[data-site-page="bfsi"] body .bs-statement .bs-statement-line{display:block}
+@media(min-width:900px){
+ html[data-site-page="bfsi"] body .bs-statement .bs-statement-line{white-space:nowrap}
+}
+@media(max-width:599px){
+ html[data-site-page="bfsi"] body .bs-shift .bs-stage{padding-top:calc(var(--section-edge) + 24px)}
+}
+
+
+/* Let the statement wrap naturally within a narrower centered measure. */
+html[data-site-page="bfsi"] body .bs-statement{
+ width:100%;max-width:70%;margin-inline:auto;text-wrap:pretty;
+}
+@media(max-width:840px){
+ html[data-site-page="bfsi"] body .bs-statement{max-width:85%}
+}
+@media(max-width:599px){
+ html[data-site-page="bfsi"] body .bs-statement{max-width:100%}
+}
+
+
+/* Shared inner-page polish: homepage labels and scroll systems are preserved. */
+html body.content-page .viewport-section :is(.ai-overview-copy,.be-heading,.wb-heading,.ws-heading,.ss-heading) h2{
+ font-size:clamp(32.3px,3.82vw,55.25px);line-height:1.13;letter-spacing:-.04em;
+}
+html body.content-page .m6-cta h2{
+ width:100%;max-width:26ch;margin:0 auto 24px;
+ font-size:clamp(32.3px,3.82vw,55.25px);line-height:1.13;letter-spacing:-.04em;
+}
+html body.content-page main>.m6-cta{
+ padding-top:var(--section-edge)!important;
+ padding-bottom:calc(var(--section-edge) + 32px)!important;
+ min-height:0;height:auto;display:grid;align-items:center;
+}
+html body.content-page .m6-cta>.wrap{
+ display:flex;flex-direction:column;align-items:center;gap:24px;
+ margin-block:0;padding-block:0;
+}
+html body.content-page .m6-cta>.wrap>:is(h2,.m6-cta-description,.m6-cta-actions){margin-block:0}
+html body.content-page .m6-cta-description{max-width:56ch;font-size:17px;line-height:1.65}
+html body.content-page .m6-cta-actions{width:100%;gap:14px}
+html body.content-page .m6-cta-actions .ui-button{
+ min-height:50px;height:auto;padding:13px 20px;font-size:14px;line-height:1.4;gap:16px;
+}
+@media(min-width:700px) and (max-height:750px){
+ html body.content-page .m6-cta>.wrap{gap:20px}
+ html body.content-page .m6-cta-description{font-size:16px}
+ html body.content-page .m6-cta-actions .ui-button{min-height:42px;padding:10px 17px;gap:14px}
+ html body.content-page :is(.cm-case-link,.as-link){font-size:14px;gap:12px}
+ html body.content-page :is(.cm-case-link,.as-link) svg{width:17px;height:17px;flex-shrink:0}
+}
+@media(max-width:599px){
+ html body.content-page .m6-cta h2{font-size:clamp(25px,7.2vw,40px)}
+ html body.content-page .m6-cta-description{font-size:16px}
+ html body.content-page .m6-cta-actions .ui-button{min-height:46px;padding:11px 16px}
+}
+
+
+/* Homepage refinements, retaining its section labels. */
+html body.home-page .rai-heading{flex-wrap:wrap;gap:24px}
+html body.home-page .rai-heading h2{max-width:100%;white-space:nowrap}
+html body.home-page .rai-intro{max-width:340px}
+html body.home-page .wi-card::after{
+ background:linear-gradient(180deg,#08080965 0%,#08080990 28%,#080809d9 62%,#080809fc 100%);
+}
+html body.home-page .wi-content p{color:#e0dae6}
+html body.home-page #case-studies.is-scroll-driven .m6-cases-stage{
+ justify-content:flex-start;padding-top:var(--section-edge);
+}
+/* Same responsive closing CTA as BFSI. */
+html body.home-page main>.m6-cta{
+ padding-top:var(--section-edge)!important;
+ padding-bottom:calc(var(--section-edge) + 32px)!important;
+ min-height:0;height:auto;display:grid;align-items:center;
+}
+html body.home-page .m6-cta>.wrap{
+ display:flex;flex-direction:column;align-items:center;gap:24px;
+ margin-block:0;padding-block:0;
+}
+html body.home-page .m6-cta h2{
+ width:100%;max-width:none;margin:0;
+ font-size:clamp(32.3px,3.82vw,55.25px);line-height:1.13;letter-spacing:-.04em;
+}
+html body.home-page .bfsi-cta-title-line{display:block;white-space:nowrap}
+html body.home-page .m6-cta h2 em{display:block;margin-top:4px;white-space:normal}
+html body.home-page .m6-cta-description{max-width:56ch;font-size:17px;line-height:1.65;margin:0}
+html body.home-page .m6-cta-actions{width:100%;margin:0;gap:14px}
+html body.home-page .m6-cta-actions .ui-button{min-height:50px;height:auto;padding:13px 20px;font-size:14px;line-height:1.4;gap:16px}
+@media(min-width:700px) and (max-height:750px){
+ html body.home-page .m6-cta>.wrap{gap:20px}
+ html body.home-page .m6-cta-description{font-size:16px}
+ html body.home-page .m6-cta-actions .ui-button{min-height:42px;padding:10px 17px;gap:14px}
+}
+@media(max-width:599px){
+ html body.home-page .rai-heading h2{font-size:clamp(24px,5.8vw,34px);letter-spacing:-.04em}
+ html body.home-page .m6-cta h2{font-size:clamp(25px,7.2vw,40px)}
+ html body.home-page .m6-cta-description{font-size:16px}
+ html body.home-page .m6-cta-actions .ui-button{min-height:46px;padding:11px 16px}
+}
+
+
+/* AI/ML overview and impact introduction share a top-aligned text baseline. */
+html[data-site-page="ai"] body .ai-overview{align-items:start}
+html[data-site-page="ai"] body .ai-overview-body{padding-top:0;align-self:start}
+html[data-site-page="ai"] body .ai-impact>.wrap.section{padding-block:0}
+html[data-site-page="ai"] body.ai-page-v2 .ai-impact-heading{
+ display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);
+ align-items:start;gap:clamp(28px,4vw,60px);
+}
+html[data-site-page="ai"] body .ai-impact-heading>div{min-width:0}
+html[data-site-page="ai"] body .ai-impact-heading h2{max-width:none;margin:0}
+html[data-site-page="ai"] body .ai-impact-intro{padding:0;margin:0;max-width:none}
+html[data-site-page="ai"] body .ai-impact-intro h3{margin-top:0}
+@media(max-width:699px){
+ html[data-site-page="ai"] body.ai-page-v2 .ai-impact-heading{grid-template-columns:1fr;gap:26px}
+}
+/* Match the BFSI solid tonal bands with distinct geometry on each impact card. */
+html[data-site-page="ai"] body .ai-impact-card{container-type:inline-size}
+html[data-site-page="ai"] body .ai-impact-card::before{
+ content:'';position:absolute;z-index:-1;pointer-events:none;
+ width:clamp(170px,52cqw,320px);height:auto;aspect-ratio:1;
+ border:0;border-radius:0;box-shadow:none;transform:none;animation:none;
+ background-position:center;background-size:contain;background-repeat:no-repeat;
+ mask-image:none;
+ transition:transform .8s cubic-bezier(.2,.65,.25,1);
+}
+html[data-site-page="ai"] body .ai-impact-card::after{content:none}
+html[data-site-page="ai"] body .ai-impact-card:nth-child(1)::before{
+ background-image:url('../assets/images/abstract-bands-square.svg');
+ right:-10%;top:-16%;bottom:auto;left:auto;rotate:28deg;
+}
+html[data-site-page="ai"] body .ai-impact-card:nth-child(2)::before{
+ background-image:url('../assets/images/abstract-bands-hexagon.svg');
+ left:-8%;top:-12%;right:auto;bottom:auto;rotate:-16deg;
+}
+html[data-site-page="ai"] body .ai-impact-card:nth-child(3)::before{
+ background-image:url('../assets/images/abstract-bands-triangle.svg');
+ right:-8%;top:-8%;bottom:auto;left:auto;rotate:-22deg;
+}
+html[data-site-page="ai"] body .ai-impact-card:nth-child(4)::before{
+ background-image:url('../assets/images/abstract-bands-angled.svg');
+ left:12%;top:-30%;right:auto;bottom:auto;rotate:22deg;
+}
+@media(hover:hover) and (pointer:fine){
+ html[data-site-page="ai"] body .ai-impact-card:hover::before{transform:translate(-12px,8px) scale(1.08)}
+ html[data-site-page="ai"] body .ai-impact-card:nth-child(even):hover::before{transform:translate(12px,8px) scale(1.08)}
+}
+@media(prefers-reduced-motion:reduce){
+ html[data-site-page="ai"] body .ai-impact-card::before{transition:none;transform:none!important}
+}
+html[data-site-page="ai"] body.motion-paused .ai-impact-card::before{transition:none;transform:none!important}
+
+
+/* AI/ML section boundaries use the same spacing token as BFSI. */
+html[data-site-page="ai"] body.ai-page-v2 main>.aj-section{
+ padding-top:var(--section-edge);padding-bottom:var(--section-edge);
+}
+html[data-site-page="ai"] body.ai-page-v2 main>.as-section{
+ padding-top:var(--section-edge);padding-bottom:0;
+}
+html[data-site-page="ai"] body .ai-impact>.wrap.section{padding-top:0;padding-bottom:0}
+html[data-site-page="ai"] body .m6-cases.is-scroll-driven .m6-cases-stage{
+ justify-content:flex-start;padding-top:var(--section-edge);
+}
+html[data-site-page="ai"] body .as-section.as-short .as-stack{padding-bottom:var(--section-edge)}
+
+
+/* Larger AI/ML impact geometry, consistently anchored to the right. */
+html[data-site-page="ai"] body .ai-impact-card:nth-child(n)::before{
+ width:clamp(280px,78cqw,480px);height:auto;aspect-ratio:1;
+ left:auto;right:-24%;top:-20%;bottom:auto;
+}
+html[data-site-page="ai"] body .ai-impact-card:nth-child(2)::before{top:-15%;rotate:-16deg}
+html[data-site-page="ai"] body .ai-impact-card:nth-child(3)::before{top:-18%;rotate:-22deg}
+html[data-site-page="ai"] body .ai-impact-card:nth-child(4)::before{top:-22%;rotate:22deg}
+@media(hover:hover) and (pointer:fine){
+ html[data-site-page="ai"] body .ai-impact-card:nth-child(n):hover::before{transform:translate(-12px,8px) scale(1.08)}
+}
+
+
+/* AI/ML reflow: prevent text and fixed card dimensions fighting at zoomed widths. */
+html[data-site-page="ai"] body :is(.ai-overview-copy,.ai-overview-body,.ai-impact-intro,.as-copy){min-width:0}
+html[data-site-page="ai"] body :is(.as-heading h2,.as-heading h2 em,.as-heading p){white-space:normal;max-width:100%;overflow-wrap:break-word}
+html[data-site-page="ai"] body .ai-subnav .wrap{min-width:0;overflow-x:auto;overscroll-behavior-x:contain}
+html[data-site-page="ai"] body .as-card{min-width:0}
+@media(min-width:700px) and (max-width:1100px){
+ html[data-site-page="ai"] body .ai-overview{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+ html[data-site-page="ai"] body .ai-impact-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+ html[data-site-page="ai"] body.ai-page-v2 .ai-impact-heading{grid-template-columns:repeat(2,minmax(0,1fr));gap:28px}
+ html[data-site-page="ai"] body .ai-impact-heading h2{font-size:clamp(30px,3.82vw,42px);line-height:1.16}
+ html[data-site-page="ai"] body .ai-impact-card{min-height:300px;padding:24px}
+ html[data-site-page="ai"] body .ai-impact-card h3{margin-top:100px;font-size:23px;line-height:1.25}
+ html[data-site-page="ai"] body .ai-impact-card>p{font-size:16px;line-height:1.65;margin-top:14px}
+ html[data-site-page="ai"] body .as-card{
+  display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);
+  height:auto;min-height:320px;
+ }
+ html[data-site-page="ai"] body .as-copy{height:auto;padding:26px;background:none;min-width:0}
+ html[data-site-page="ai"] body .as-copy h3{margin-bottom:16px}
+ html[data-site-page="ai"] body .as-copy p{font-size:16px;line-height:1.65}
+ html[data-site-page="ai"] body .as-copy .as-link{margin-top:24px;max-width:100%;white-space:normal}
+ html[data-site-page="ai"] body .as-art{position:relative;inset:auto;min-height:100%;min-width:0}
+ html[data-site-page="ai"] body .as-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+ html[data-site-page="ai"] body .as-art::after{background:linear-gradient(90deg,#121115,transparent 30%)}
+}
+@media(max-width:699px){
+ html[data-site-page="ai"] body .ai-overview{grid-template-columns:minmax(0,1fr)}
+ html[data-site-page="ai"] body .ai-impact-grid{grid-template-columns:minmax(0,1fr)}
+ html[data-site-page="ai"] body .as-card{height:auto;min-height:370px}
+ html[data-site-page="ai"] body .as-copy{height:auto;min-height:370px;padding:26px}
+ html[data-site-page="ai"] body .as-copy .as-link{margin-top:28px}
+}
+
+
+/* Fluid AI/ML copy: respond to layout width while respecting browser zoom. */
+html[data-site-page="ai"]{
+ --ai-body-size:clamp(.9375rem,calc(.75rem + .35vw),1.125rem);
+ --ai-copy-heading:clamp(1.25rem,calc(1rem + .6vw),1.55rem);
+ --ai-copy-gap:clamp(16px,2vw,28px);
+}
+html[data-site-page="ai"] body :is(.ai-overview-lead,.ai-overview-body p,.ai-impact-intro p,.ai-impact-card>p,.aj-copy p,.as-copy p,.m6-cta-description){
+ font-size:var(--ai-body-size);line-height:1.65;
+ width:100%;max-width:60ch;overflow-wrap:break-word;
+}
+html[data-site-page="ai"] body :is(.ai-overview-body h3,.ai-impact-intro h3,.ai-impact-card h3,.aj-copy h3,.as-copy h3){
+ font-size:var(--ai-copy-heading);line-height:1.3;overflow-wrap:break-word;
+}
+html[data-site-page="ai"] body .ai-overview-lead{margin-top:var(--ai-copy-gap)}
+html[data-site-page="ai"] body .ai-overview-body h3:not(:first-child){margin-top:var(--ai-copy-gap)}
+html[data-site-page="ai"] body .ai-impact-intro h3{margin-bottom:clamp(12px,1.4vw,18px)}
+html[data-site-page="ai"] body :is(.ai-overview-body,.ai-impact-intro){width:100%;max-width:none}
+html[data-site-page="ai"] body .ah-footer p{
+ font-size:clamp(1rem,calc(.8rem + .35vw),1.25rem);
+ max-width:48ch;width:auto;min-width:0;line-height:1.5;
+}
+
+
+/* Customer Engagement: circular bands with the same placement and hover motion. */
+html[data-site-page="ai"] body .ai-impact-card:nth-child(4)::before{
+ background-image:url('../assets/images/abstract-bands-circle.svg');rotate:0deg;
+}
+
+
+/* Homepage fluid typography: match the AI/ML copy behavior without hiding labels. */
+body.home-page{
+ --home-body-size:clamp(.9375rem,calc(.75rem + .35vw),1.125rem);
+ --home-card-title:clamp(1.25rem,calc(1rem + .6vw),1.65rem);
+ --home-copy-gap:clamp(16px,2vw,28px);
+}
+html body.home-page :is(.hero-description,.ws-intro,.ws-copy p,.wd-body,.rai-intro,.wi-subheading,.wi-lead,.wi-description,.body-copy,.wb-intro p,.wp-intro,.m6-cta-description,.wg-intro,.wg-detail-copy){
+ font-size:var(--home-body-size);line-height:1.65;overflow-wrap:break-word;
+}
+html body.home-page :is(.ws-copy h3,.wi-content h3,.wb-card h3,.m6-case h3,.solution-feature h3,.solution-mini h3){
+ font-size:var(--home-card-title);line-height:1.3;overflow-wrap:break-word;
+}
+html body.home-page :is(.hero-description,.wd-body,.body-copy,.m6-cta-description){max-width:58ch}
+html body.home-page :is(.ws-copy,.wi-content,.wb-card,.m6-case-body,.company-grid>* ,.wg-detail){min-width:0}
+html body.home-page :is(.ws-heading,.rai-heading,.wp-heading,.wg-heading,.heading-row){flex-wrap:wrap;gap:var(--home-copy-gap)}
+html body.home-page :is(.ws-heading h2,.rai-heading h2,.wp-heading h2,.wg-heading h2){max-width:100%}
+html body.home-page .hero-actions{flex-wrap:wrap}
+html body.home-page .hero-actions :is(.ui-button,.ui-text){max-width:100%;white-space:normal}
+html body.home-page .wi-content{max-width:calc(100% - 48px)}
+@media(min-width:700px) and (max-width:1100px){
+ html body.home-page .ws-grid{grid-template-rows:repeat(3,minmax(320px,auto))}
+ html body.home-page .ws-cell{height:auto;min-height:320px}
+ html body.home-page .ws-card{height:100%;min-height:320px}
+ html body.home-page .ws-copy{padding:24px}
+ html body.home-page .ws-wide .ws-copy{max-width:78%}
+ html body.home-page :is(.rai-intro,.wp-intro,.wg-intro){max-width:48ch}
+ html body.home-page .wg-detail{height:auto;min-height:0;grid-template-rows:auto}
+}
+@media(max-width:699px){
+ html body.home-page .ws-grid{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-auto-rows:auto}
+ html body.home-page .ws-cell{grid-area:auto;height:auto;min-height:320px}
+ html body.home-page .ws-card{height:100%;min-height:320px}
+ html body.home-page .ws-wide .ws-copy{max-width:100%}
+ html body.home-page .wg-detail{height:auto;min-height:0;grid-template-rows:auto}
+}
+
+
+/* Homepage industries: fit the heading and active industry within short windows. */
+@media(min-width:700px) and (max-height:900px){
+ html body.home-page main>#industries{padding-block:18px!important;scroll-margin-top:98px}
+ html body.home-page #industries .wi-heading{margin-bottom:18px}
+ html body.home-page #industries .wi-eyebrow{margin-bottom:10px}
+ html body.home-page #industries .wi-subheading{margin-top:12px}
+ html body.home-page #industries .wi-card{height:clamp(270px,calc(100svh - 330px),440px)}
+ html body.home-page #industries .wi-content{left:20px;bottom:20px;width:calc(100% - 40px);max-width:calc(100% - 40px)}
+ html body.home-page #industries .wi-content h3{margin-bottom:10px}
+ html body.home-page #industries .wi-description,
+ html body.home-page #industries .wi-lead{font-size:clamp(14px,1.2vw,16px);line-height:1.5}
+ html body.home-page #industries .wi-tags{margin-top:12px;gap:6px}
+ html body.home-page #industries .wi-tags li{padding:4px 8px}
+ html body.home-page #industries .wi-link{margin-top:12px;padding:9px 12px}
+}
+/* Very short zoomed windows put the heading beside an industry-card rail. */
+@media(min-width:700px) and (max-height:550px){
+ html body.home-page main>#industries{
+  display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.7fr);
+  gap:24px;align-items:center;
+ }
+ html body.home-page #industries .wi-heading{text-align:left;margin:0;min-width:0}
+ html body.home-page #industries .wi-eyebrow{justify-content:flex-start}
+ html body.home-page #industries .wi-heading h2{font-size:clamp(30px,3.2vw,42px)}
+ html body.home-page #industries .wi-heading h2 br{display:none}
+ html body.home-page #industries .wi-accordion{
+  width:100%;min-width:0;display:flex;flex-direction:row;overflow-x:auto;
+  gap:14px;scroll-snap-type:x mandatory;overscroll-behavior-x:contain;
+ }
+ html body.home-page #industries .wi-card{
+  flex:0 0 100%;width:100%;height:clamp(260px,calc(100svh - 140px),370px);
+  scroll-snap-align:start;
+ }
+ html body.home-page #industries .wi-content{
+  opacity:1;transform:none;transition:none;
+ }
+ html body.home-page #industries .wi-card{--wi-open:1}
+}
+
+
+/* Bring the homepage hero visual closer to its copy without moving the text. */
+@media(min-width:1001px){
+ html body.home-page .hero-art{right:max(20px,calc((100% - var(--site-max))/2 + 20px))}
+}
+@media(min-width:700px) and (max-width:1100px) and (max-height:700px){
+ html body.home-page .hero-art{right:-3vw}
+}
+@media(max-width:840px) and (min-height:701px){
+ html body.home-page .hero-art{bottom:-5px}
+}
+@media(max-width:699px){
+ html body.home-page .hero-art{bottom:0}
+}
+
+
+/* Global presence: one stable map frame and natural-height location details. */
+html body.home-page .wg-panel,
+html body.home-page .wg-main,
+html body.home-page .wg-map-area{min-width:0;max-width:100%}
+html body.home-page .wg-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,250px);min-height:0}
+html body.home-page .wg-map-area{display:block;padding:20px 12px 20px 20px;overflow:hidden}
+html body.home-page .wg-map{
+ width:100%;height:clamp(280px,28vw,400px);min-height:280px;
+ aspect-ratio:auto;margin:0;position:relative;overflow:hidden;
+}
+html body.home-page .wg-zoom-layer{width:100%;height:auto;aspect-ratio:1360/544}
+html body.home-page .wg-world{display:block;width:100%;height:auto;aspect-ratio:1360/544;max-width:none}
+html body.home-page .wg-detail{
+ display:flex;flex-direction:column;align-self:stretch;justify-content:center;
+ gap:14px;height:auto;min-height:0;grid-template-rows:none;
+ margin:20px 24px 20px 12px;padding:20px 0 20px 22px;
+}
+html body.home-page .wg-detail>:is(p,h3,div){margin-block:0!important;min-width:0}
+html body.home-page .wg-detail .wg-office-list{margin-top:0}
+html body.home-page .wg-detail :is(.wg-region,.wg-cities,.wg-detail-copy){overflow-wrap:anywhere}
+html body.home-page .wg-cities{gap:6px}
+html body.home-page .wg-locations{display:flex;flex-wrap:wrap;gap:8px;padding:18px 20px}
+html body.home-page .wg-country{max-width:100%;white-space:normal;min-width:0}
+html body.home-page .wg-bottom{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+@media(max-width:899px){
+ html body.home-page .wg-main{grid-template-columns:minmax(0,1fr)}
+ html body.home-page .wg-map-area{padding:16px 12px}
+ html body.home-page .wg-map{height:clamp(260px,43vw,360px);min-height:260px}
+ html body.home-page .wg-detail{
+  margin:0 20px;padding:22px 0;border-left:0;border-top:1px solid var(--wg-line);
+  display:flex;gap:12px;
+ }
+ html body.home-page .wg-detail::before{left:0;top:-1px;width:30px;height:1px}
+ html body.home-page .wg-detail-footer{display:block}
+ html body.home-page .wg-map-toolbar{left:10px;right:10px;gap:8px}
+ html body.home-page .wg-map-status{letter-spacing:.4px}
 }

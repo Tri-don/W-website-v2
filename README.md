@@ -24,3 +24,8 @@ Additional BFSI domain pages:
 - `Responsible-Privacy-Preserving-Financial-AI.html`
 - `Risk-Regulatory-Compliance-Engineering.html`
 - `Wealth-Asset-Management-Data-Infrastructure.html`
+
+
+## Responsive V2
+
+Responsive changes are applied directly to this independent copy in css/master.css. Layouts adapt continuously across the requested 720, 1280, 1440, 1600, 1920 and 2560px widths. Includes tablet stacking, flexible hero and card heights, constrained wide-screen content, and scrollable desktop dropdowns. All nine pages share these rules. Local HTML asset/link references were checked; browser and visual checks were skipped at the user's request and require manual review.
