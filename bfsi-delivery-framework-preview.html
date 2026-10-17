@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080809">
+<title>Delivery framework | Wissen Technology</title>
+<style>
+/* Standalone preview. All section styles are scoped for later integration. */
+html{color-scheme:dark}body{margin:0;background:#080809}
+.wdf{--bg:#080809;--panel:#111113;--text:#f3f1ee;--muted:#9a989f;--accent:#b6a0ed;--line:#26252b;background:var(--bg);color:var(--text);font-family:'DM Sans',Arial,sans-serif;-webkit-font-smoothing:antialiased;padding:clamp(64px,7.5vw,108px) 0;overflow:hidden}
+.wdf *{box-sizing:border-box}.wdf ::selection{background:var(--accent);color:var(--bg)}
+.wdf-inner{max-width:1440px;padding:0 6%;margin:auto}
+.wdf p,.wdf h2,.wdf h3{margin:0}
+.wdf-eyebrow{display:flex;align-items:center;gap:12px;font-size:12px;font-weight:550;letter-spacing:2px;line-height:1.6;text-transform:uppercase;margin-bottom:26px!important}
+.wdf-eyebrow::before{content:'';width:6px;height:6px;background:var(--accent);border-radius:50%;flex-shrink:0;box-shadow:0 0 14px #b6a0ed4b}
+.wdf h2{font-family:'Manrope',Arial,sans-serif;font-size:clamp(32.3px,3.82vw,55.25px);line-height:1.13;letter-spacing:-2.38px;font-weight:500;max-width:1050px}
+.wdf h2 em{font-family:Georgia,'Times New Roman',serif;font-weight:400;color:#c3b0ec}
+.wdf-subtitle{max-width:720px;margin-top:24px!important;color:var(--muted);font-size:16px;line-height:1.75}
+.wdf-flow{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px;list-style:none;margin:52px 0 0;padding:0}
+.wdf-stage{position:relative;min-width:0;padding-top:35px;display:flex}
+.wdf-stage::before{content:'';position:absolute;height:1px;top:6px;left:0;right:-16px;background:#544461}
+.wdf-stage:first-child::before{left:28px}.wdf-stage:last-child::before{right:calc(100% - 28px)}
+.wdf-stage::after{content:'';position:absolute;left:22px;top:1px;width:11px;height:11px;border-radius:50%;border:2px solid var(--accent);background:var(--bg);box-shadow:0 0 0 5px var(--bg);transition:background .3s,box-shadow .3s}
+.wdf-card{position:relative;width:100%;padding:26px 22px 30px;background:var(--panel);border:1px solid var(--line);border-radius:3px;overflow:hidden;transition:border-color .35s,background .35s,transform .35s}
+.wdf-card::after{content:'';position:absolute;bottom:0;left:0;height:2px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s}
+.wdf-number{display:block;font-family:'Manrope',Arial,sans-serif;font-weight:400;font-size:34px;line-height:1;letter-spacing:-1.5px;color:var(--accent);margin-bottom:32px}
+.wdf h3{font-family:'Manrope',Arial,sans-serif;font-size:18px;line-height:1.3;font-weight:500;letter-spacing:-.45px;min-height:47px;margin-bottom:14px}
+.wdf-card p{font-size:14px;line-height:1.75;color:var(--muted)}
+.wdf-stage:hover::after{background:var(--accent);box-shadow:0 0 0 5px var(--bg),0 0 20px #b6a0ed40}
+.wdf-stage:hover .wdf-card{border-color:#655575;background:#151219;transform:translateY(-4px)}
+.wdf-stage:hover .wdf-card::after{transform:scaleX(1)}
+.wdf-outcome{display:flex;align-items:center;gap:26px;margin-top:28px;padding:26px 30px;border:1px solid #39303f;border-left:2px solid var(--accent);border-radius:2px;background:linear-gradient(110deg,#b6a0ed0d,transparent 80%)}
+.wdf-outcome svg{width:27px;height:31px;flex-shrink:0;color:var(--accent)}
+.wdf-outcome p{font-family:'Manrope',Arial,sans-serif;font-weight:500;font-size:clamp(16px,1.5vw,20px);line-height:1.55;letter-spacing:-.3px}.wdf-outcome em{font-family:Georgia,'Times New Roman',serif;font-weight:400;color:#c3b0ec}
+@media(min-width:1500px){.wdf-card{padding:30px 26px 34px}}
+@media(max-width:1100px){.wdf-flow{gap:12px}.wdf-stage::before{right:-12px}.wdf-card{padding:24px 16px}.wdf h3{font-size:17px}.wdf-card p{font-size:13px}}
+@media(max-width:900px){.wdf-inner{padding:0 6%}.wdf-flow{grid-template-columns:1fr;gap:0;margin-top:36px;padding-left:28px}.wdf-stage{padding:0 0 16px 22px}.wdf-stage::before,.wdf-stage:first-child::before,.wdf-stage:last-child::before{left:-23px;right:auto;top:32px;bottom:-32px;height:auto;width:1px}.wdf-stage:last-child::before{display:none}.wdf-stage::after{left:-28px;top:28px}.wdf-card{padding:23px 24px;display:grid;grid-template-columns:45px 1fr;gap:8px 22px}.wdf-number{grid-row:1 / 3;font-size:30px;margin:0}.wdf h3{min-height:0;margin:0;font-size:20px}.wdf-card p{font-size:15px;grid-column:2}.wdf-outcome{margin-top:16px}.wdf-stage:hover .wdf-card{transform:translateX(3px)}}
+@media(max-width:520px){.wdf h2{font-size:34px;letter-spacing:-1.35px}.wdf h2 br{display:none}.wdf-eyebrow{font-size:10px;letter-spacing:1.4px;margin-bottom:22px!important}.wdf-subtitle{font-size:15px;margin-top:20px!important}.wdf-card{grid-template-columns:30px 1fr;padding:22px 18px;column-gap:16px}.wdf-number{font-size:25px}.wdf h3{font-size:18px}.wdf-card p{font-size:14px}.wdf-outcome{padding:22px 20px;gap:16px;align-items:flex-start}.wdf-outcome svg{width:22px;height:26px}}
+@media(prefers-reduced-motion:reduce){.wdf *,.wdf *::before,.wdf *::after{transition:none!important;transform:none!important}.wdf-card::after{display:none}}
+</style>
+</head>
+<body>
+<main>
+<section class="wdf" aria-labelledby="wdf-heading">
+ <div class="wdf-inner">
+  <header>
+   <p class="wdf-eyebrow">BFSI &amp; Fintech · Delivery framework</p>
+   <h2 id="wdf-heading">From Requirement to <em>Run.</em><br> Delivery Built for Regulated Finance.</h2>
+   <p class="wdf-subtitle">A structured, compliance-aware approach that takes financial institutions and fintechs from strategy to production, and keeps systems performing after go-live.</p>
+  </header>
+  <ol class="wdf-flow" aria-label="Five stages of delivery">
+   <li class="wdf-stage"><article class="wdf-card"><span class="wdf-number" aria-hidden="true">01</span><h3>Discover &amp; Align</h3><p>We start with your business and regulatory context: systems, data, risk exposure, and priorities. Together we define scope, success measures, and a delivery roadmap.</p></article></li>
+   <li class="wdf-stage"><article class="wdf-card"><span class="wdf-number" aria-hidden="true">02</span><h3>Architect &amp; Design</h3><p>Our teams design secure, scalable architectures with compliance, data governance, and resilience built in from day one, not added later.</p></article></li>
+   <li class="wdf-stage"><article class="wdf-card"><span class="wdf-number" aria-hidden="true">03</span><h3>Build &amp; Integrate</h3><p>Agile, iterative engineering with continuous integration and delivery. We integrate with your core platforms and legacy systems so value reaches production in stages, not in one big release.</p></article></li>
+   <li class="wdf-stage"><article class="wdf-card"><span class="wdf-number" aria-hidden="true">04</span><h3>Test &amp; Validate</h3><p>Automated testing for functionality, performance, and security, so systems hold up under real transaction volumes and audit scrutiny before they go live.</p></article></li>
+   <li class="wdf-stage"><article class="wdf-card"><span class="wdf-number" aria-hidden="true">05</span><h3>Deploy, Run &amp; Optimize</h3><p>We manage releases and provide production support and infrastructure management, continuously improving performance, cost, and reliability as your needs evolve.</p></article></li>
+  </ol>
+  <div class="wdf-outcome"><svg viewBox="0 0 24 28" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true"><path d="M12 2 22 6v8c0 6-10 12-10 12S2 20 2 14V6z"/><path d="m7 13 3 3 7-7"/></svg><p>Every phase is built around one outcome: technology your teams can trust to <em>scale, comply, and perform.</em></p></div>
+ </div>
+</section>
+</main>
+</body>
+</html>
