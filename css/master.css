@@ -2204,6 +2204,14 @@ html body #difference.wd-approved .wd-stage::before{
   }
 }
 @media(max-width:759px){html body #difference.wd-approved .wd-header{width:100%}}
+
+/* Homepage hero: quieter scale while preserving the existing responsive layout. */
+@media(min-width:1001px){
+  html[data-site-page="home"] body.home-page .hero h1{font-size:clamp(54px,4.8vw,78px)}
+}
+@media(max-width:1000px){
+  html[data-site-page="home"] body.home-page .hero h1{font-size:clamp(40px,7.7vw,60px)}
+}
 html body.home-page :is(.ws-copy,.wi-content,.wb-card,.m6-case-body,.company-grid>* ,.wg-detail){min-width:0}
 html body.home-page :is(.ws-heading,.rai-heading,.wp-heading,.wg-heading,.heading-row){flex-wrap:wrap;gap:var(--home-copy-gap)}
 html body.home-page :is(.ws-heading h2,.rai-heading h2,.wp-heading h2,.wg-heading h2){max-width:100%}
