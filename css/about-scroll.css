@@ -1,0 +1,24 @@
+/* Content-sized version of the AI/ML stacking component. */
+html body.about-v2-page #events .as-heading{position:sticky;top:calc(var(--navbar-space) + var(--heading-exit,0px));display:block;z-index:20}
+html body.about-v2-page #events .as-heading p{max-width:none}
+html body.about-v2-page #events .as-stack{display:flex;flex-direction:column;gap:clamp(100px,22svh,200px);padding-top:var(--card-gap);padding-bottom:0}
+html body.about-v2-page #events .as-card{position:sticky;top:calc(var(--navbar-space) + var(--heading-height) + var(--card-gap) + var(--index)*var(--stack-step) + var(--card-exit,0px));display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);height:var(--event-card-height,400px);min-height:0;flex-shrink:0;transform:scale(calc(1 - var(--covered,0)*.018))}
+html body.about-v2-page #events .as-copy{height:auto;min-height:0;padding:clamp(26px,2.5vw,42px);background:none;justify-content:center}
+html body.about-v2-page #events .as-art{position:relative;inset:auto;min-width:0;min-height:0;margin:0}
+html body.about-v2-page #events .as-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform:none}
+html body.about-v2-page #events .as-hold{display:none}
+html body.about-v2-page #events.ab-heading-flow .as-heading,html body.about-v2-page #events.ab-stack-static .as-heading{position:relative;top:auto}
+html body.about-v2-page #events.ab-stack-static .as-card{position:relative;top:auto;height:auto;transform:none}
+html body.about-v2-page #events.ab-stack-static .as-stack{gap:24px}
+html body.about-v2-page #events.ab-stack-static .as-card:after{opacity:0}
+@media(max-width:699px){
+ html body.about-v2-page #events .as-card{display:flex;flex-direction:column;height:auto}
+ html body.about-v2-page #events .as-art{order:-1;height:230px;flex:none}
+ html body.about-v2-page #events .as-copy{padding:26px}
+}
+/* Animate content, preserving the sticky section and card containers. */
+.about-v2-page .ab-enter{opacity:0;translate:0 30px;transition:opacity .75s ease var(--ab-delay,0ms),translate .85s cubic-bezier(.22,1,.36,1) var(--ab-delay,0ms)}
+.about-v2-page .ab-enter[data-ab-direction=left]{translate:-36px 0}
+.about-v2-page .ab-enter[data-ab-direction=right]{translate:36px 0}
+.about-v2-page .ab-enter.ab-in-view{opacity:1;translate:0 0}
+@media(prefers-reduced-motion:reduce){.about-v2-page .ab-enter{opacity:1;translate:none;transition:none}}
