@@ -13,4 +13,18 @@ document.addEventListener('DOMContentLoaded',()=>{
  const tabs=[...document.querySelectorAll('.ab-tabs [role=tab]')];
  function selectTab(tab,focus=false){tabs.forEach(t=>{const selected=t===tab;t.setAttribute('aria-selected',String(selected));t.tabIndex=selected?0:-1;document.getElementById(t.getAttribute('aria-controls')).hidden=!selected});if(focus)tab.focus()}
  tabs.forEach((tab,i)=>{tab.addEventListener('click',()=>selectTab(tab));tab.addEventListener('keydown',e=>{let index;if(e.key==='ArrowRight')index=(i+1)%tabs.length;else if(e.key==='ArrowLeft')index=(i-1+tabs.length)%tabs.length;else if(e.key==='Home')index=0;else if(e.key==='End')index=tabs.length-1;else return;e.preventDefault();selectTab(tabs[index],true)})});
+ const leadershipMore=document.querySelector('#ab-leadership-more');
+ const leadershipExpand=document.querySelector('[data-leadership-expand]');
+ const leadershipCollapse=document.querySelector('[data-leadership-collapse]');
+ if(leadershipMore&&leadershipExpand&&leadershipCollapse){
+  function setLeadershipExpanded(expanded){
+   leadershipMore.hidden=!expanded;
+   leadershipExpand.hidden=expanded;
+   leadershipCollapse.hidden=!expanded;
+   leadershipExpand.setAttribute('aria-expanded',String(expanded));
+   leadershipCollapse.setAttribute('aria-expanded',String(expanded));
+  }
+  leadershipExpand.addEventListener('click',()=>setLeadershipExpanded(true));
+  leadershipCollapse.addEventListener('click',()=>{setLeadershipExpanded(false);leadershipExpand.focus();leadershipExpand.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'})});
+ }
 });
