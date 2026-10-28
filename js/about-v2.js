@@ -3,7 +3,15 @@ document.addEventListener('DOMContentLoaded',()=>{
  if(root){
   const slides=[...root.querySelectorAll('.ab-slide')],dots=[...root.querySelectorAll('[data-slide]')],status=root.querySelector('[data-slider-status]');
   const reduce=matchMedia('(prefers-reduced-motion: reduce)');let active=0,timer=0,touchStart=null;
-  function schedule(){clearTimeout(timer);if(!document.hidden&&!reduce.matches)timer=setTimeout(()=>show(active+1,false),7000)}
+  const slideDuration=7000;
+  function schedule(){
+   clearTimeout(timer);
+   dots.forEach(dot=>dot.classList.remove('is-progressing'));
+   if(document.hidden||reduce.matches||slides.length<2)return;
+   void dots[active].offsetWidth;
+   dots[active].classList.add('is-progressing');
+   timer=setTimeout(()=>show(active+1,false),slideDuration);
+  }
   function show(i,announce=true){active=(i+slides.length)%slides.length;slides.forEach((el,j)=>{el.classList.toggle('is-active',j===active);el.setAttribute('aria-hidden',String(j!==active))});dots.forEach((el,j)=>el.setAttribute('aria-current',String(j===active)));if(announce)status.textContent=`Slide ${active+1} of ${slides.length}`;schedule()}
   dots.forEach((b,i)=>b.addEventListener('click',()=>show(i)));
   root.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();show(active+(e.key==='ArrowRight'?1:-1))}});

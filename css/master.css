@@ -2292,41 +2292,95 @@ html body.home-page .wi-content{max-width:calc(100% - 48px)}
 
 
 /* Global presence: one stable map frame and natural-height location details. */
-html body.home-page .wg-panel,
-html body.home-page .wg-main,
-html body.home-page .wg-map-area{min-width:0;max-width:100%}
-html body.home-page .wg-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,250px);min-height:0}
-html body.home-page .wg-map-area{display:block;padding:20px 12px 20px 20px;overflow:hidden}
-html body.home-page .wg-map{
+html body:is(.home-page,.contact-page) .wg-panel,
+html body:is(.home-page,.contact-page) .wg-main,
+html body:is(.home-page,.contact-page) .wg-map-area{min-width:0;max-width:100%}
+html body:is(.home-page,.contact-page) .wg-main{display:grid;grid-template-columns:minmax(0,1fr) minmax(210px,250px);min-height:0}
+html body:is(.home-page,.contact-page) .wg-map-area{display:block;padding:20px 12px 20px 20px;overflow:hidden}
+html body:is(.home-page,.contact-page) .wg-map{
  width:100%;height:clamp(280px,28vw,400px);min-height:280px;
  aspect-ratio:auto;margin:0;position:relative;overflow:hidden;
 }
-html body.home-page .wg-zoom-layer{width:100%;height:auto;aspect-ratio:1360/544}
-html body.home-page .wg-world{display:block;width:100%;height:auto;aspect-ratio:1360/544;max-width:none}
-html body.home-page .wg-detail{
+html body:is(.home-page,.contact-page) .wg-zoom-layer{width:100%;height:auto;aspect-ratio:1360/544}
+html body:is(.home-page,.contact-page) .wg-world{display:block;width:100%;height:auto;aspect-ratio:1360/544;max-width:none}
+html body:is(.home-page,.contact-page) .wg-detail{
  display:flex;flex-direction:column;align-self:stretch;justify-content:center;
  gap:14px;height:auto;min-height:0;grid-template-rows:none;
  margin:20px 24px 20px 12px;padding:20px 0 20px 22px;
 }
-html body.home-page .wg-detail>:is(p,h3,div){margin-block:0!important;min-width:0}
-html body.home-page .wg-detail .wg-office-list{margin-top:0}
-html body.home-page .wg-detail :is(.wg-region,.wg-cities,.wg-detail-copy){overflow-wrap:anywhere}
-html body.home-page .wg-cities{gap:6px}
-html body.home-page .wg-locations{display:flex;flex-wrap:wrap;gap:8px;padding:18px 20px}
-html body.home-page .wg-country{max-width:100%;white-space:normal;min-width:0}
-html body.home-page .wg-bottom{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+html body:is(.home-page,.contact-page) .wg-detail>:is(p,h3,div){margin-block:0!important;min-width:0}
+html body:is(.home-page,.contact-page) .wg-detail .wg-office-list{margin-top:0}
+html body:is(.home-page,.contact-page) .wg-detail :is(.wg-region,.wg-cities,.wg-detail-copy){overflow-wrap:anywhere}
+html body:is(.home-page,.contact-page) .wg-cities{gap:6px}
+html body:is(.home-page,.contact-page) .wg-locations{display:flex;flex-wrap:wrap;gap:8px;padding:18px 20px}
+html body:is(.home-page,.contact-page) .wg-country{max-width:100%;white-space:normal;min-width:0}
+html body:is(.home-page,.contact-page) .wg-bottom{display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
 @media(max-width:899px){
- html body.home-page .wg-main{grid-template-columns:minmax(0,1fr)}
- html body.home-page .wg-map-area{padding:16px 12px}
- html body.home-page .wg-map{height:clamp(260px,43vw,360px);min-height:260px}
- html body.home-page .wg-detail{
+ html body:is(.home-page,.contact-page) .wg-main{grid-template-columns:minmax(0,1fr)}
+ html body:is(.home-page,.contact-page) .wg-map-area{padding:16px 12px}
+ html body:is(.home-page,.contact-page) .wg-map{height:clamp(260px,43vw,360px);min-height:260px}
+ html body:is(.home-page,.contact-page) .wg-detail{
   margin:0 20px;padding:22px 0;border-left:0;border-top:1px solid var(--wg-line);
   display:flex;gap:12px;
  }
- html body.home-page .wg-detail::before{left:0;top:-1px;width:30px;height:1px}
- html body.home-page .wg-detail-footer{display:block}
- html body.home-page .wg-map-toolbar{left:10px;right:10px;gap:8px}
- html body.home-page .wg-map-status{letter-spacing:.4px}
+ html body:is(.home-page,.contact-page) .wg-detail::before{left:0;top:-1px;width:30px;height:1px}
+ html body:is(.home-page,.contact-page) .wg-detail-footer{display:block}
+ html body:is(.home-page,.contact-page) .wg-map-toolbar{left:10px;right:10px;gap:8px}
+ html body:is(.home-page,.contact-page) .wg-map-status{letter-spacing:.4px}
+}
+
+/* Dark-flow type scale: one hero treatment and a distinct, smaller section treatment. */
+:root{
+ --site-hero-heading-size:clamp(42px,4.5vw,68px);
+ --site-hero-copy-size:clamp(16px,1.2vw,18px);
+ --site-section-heading-size:clamp(32px,3.82vw,55px);
+ --site-section-copy-size:clamp(15px,1.15vw,17px);
+ --site-heading-color:#f3f1ee;
+ --site-copy-color:#bcb6c3;
+ --site-section-copy-color:#a9a3ae;
+}
+/* Page templates use different heading weights; keep one display face and weight. */
+html[data-site-page] body main :is(h1,h2,h3){
+ font-family:var(--display,'Manrope',Arial,sans-serif)!important;
+ font-weight:500!important;
+}
+html[data-site-page] body main :is(h1,h2,h3) em{
+ font-family:Georgia,'Times New Roman',serif!important;
+ font-style:italic!important;
+ font-weight:400!important;
+}
+html[data-site-page] body main :is(.hero h1,.bh-hero .bh-title,.ah-hero .ah-title,.cm-hero-compact h1,.ab-slider h1,.ab-hero h1,.ao-hero h1,.career-hero h1,.ins-hero h1,.ct-contact h1){
+ font-size:var(--site-hero-heading-size)!important;
+ line-height:1.08!important;
+ letter-spacing:-.045em!important;
+ color:var(--site-heading-color)!important;
+}
+html[data-site-page] body main :is(.hero-description,.bh-footer > p:first-child,.ah-footer > p,.cm-hero-description,.ab-slider-content > p,.ab-hero-copy > p,.ao-hero-copy > p,.career-hero-copy > p,.ins-hero-copy > p:last-child,.ct-lead){
+ font-family:var(--sans,'DM Sans',Arial,sans-serif)!important;
+ font-weight:400!important;
+ font-size:var(--site-hero-copy-size)!important;
+ line-height:1.6!important;
+ color:var(--site-copy-color)!important;
+}
+html[data-site-page] body main :is(.section-heading h2,.heading-row h2,.ws-heading h2,.wi-heading h2,.rai-heading h2,.wp-heading h2,.wg-heading h2,.wb-heading h2,.be-heading h2,.ss-heading h2,.aj-heading h2,.ai-overview-copy h2,.ab-heading h2,.ao-heading h2,.career-section-heading h2,.career-values-title h2,.ins-library-heading h2,.m6-cta h2){
+ font-size:var(--site-section-heading-size)!important;
+ line-height:1.13!important;
+ letter-spacing:-.035em!important;
+ color:var(--site-heading-color)!important;
+}
+html[data-site-page] body main :is(.heading-row > p,.ws-intro,.wi-subheading,.rai-intro,.wp-intro,.wg-intro,.wb-intro,.be-intro,.ss-intro,.ai-overview-lead,.ab-heading > p,.ao-heading > p,.career-values-title > p,.ins-library-heading > p,.m6-cta-description){
+ font-family:var(--sans,'DM Sans',Arial,sans-serif)!important;
+ font-weight:400!important;
+ font-size:var(--site-section-copy-size)!important;
+ line-height:1.65!important;
+ color:var(--site-section-copy-color)!important;
+}
+html[data-site-page] body main h1 em,
+html[data-site-page] body main :is(.section-heading,.heading-row,.ws-heading,.wi-heading,.rai-heading,.wp-heading,.wg-heading,.wb-heading,.be-heading,.ss-heading,.aj-heading,.ai-overview-copy,.ab-heading,.ao-heading,.career-section-heading,.career-values-title,.ins-library-heading,.m6-cta) h2 em{
+ color:var(--accent)!important;
+}
+@media(max-width:700px){
+ :root{--site-hero-heading-size:clamp(36px,9vw,50px);--site-section-heading-size:clamp(29px,7vw,42px)}
 }
 
 

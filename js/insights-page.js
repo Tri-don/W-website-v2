@@ -8,6 +8,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const featuredDots = [...document.querySelectorAll('.ins-featured-dots button')];
   let featuredIndex = 0;
   let touchStartX = 0;
+  let featuredTimer;
+  const featuredDuration = 7000;
+
+  const scheduleFeatured = () => {
+    window.clearTimeout(featuredTimer);
+    featuredDots.forEach((dot) => dot.classList.remove('is-progressing'));
+    if (document.hidden || reducedMotion.matches || featuredSlides.length < 2) return;
+    void featuredDots[featuredIndex].offsetWidth;
+    featuredDots[featuredIndex].classList.add('is-progressing');
+    featuredTimer = window.setTimeout(() => showFeatured(featuredIndex + 1), featuredDuration);
+  };
 
   const showFeatured = (nextIndex, focusDot = false) => {
     if (!featuredSlides.length) return;
@@ -25,10 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
       dot.tabIndex = selected ? 0 : -1;
     });
     if (focusDot) featuredDots[featuredIndex]?.focus();
+    scheduleFeatured();
   };
 
-  document.querySelector('[data-featured-prev]')?.addEventListener('click', () => showFeatured(featuredIndex - 1));
-  document.querySelector('[data-featured-next]')?.addEventListener('click', () => showFeatured(featuredIndex + 1));
   featuredDots.forEach((dot, index) => dot.addEventListener('click', () => showFeatured(index)));
   featuredSlider?.addEventListener('keydown', (event) => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
@@ -42,6 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const distance = (event.changedTouches[0]?.clientX || 0) - touchStartX;
     if (Math.abs(distance) > 50) showFeatured(featuredIndex + (distance < 0 ? 1 : -1));
   }, { passive: true });
+  document.addEventListener('visibilitychange', scheduleFeatured);
+  reducedMotion.addEventListener('change', scheduleFeatured);
   showFeatured(0);
 
   const selectTab = (tab, focus = false) => {

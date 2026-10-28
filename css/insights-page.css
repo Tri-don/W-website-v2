@@ -39,13 +39,12 @@ body.insights-page { margin: 0; background: var(--ins-bg); color: var(--ins-text
 .ins-featured-meta { display: flex; gap: 12px; align-items: center; margin-top: 26px; color: rgba(255, 255, 255, .74); font-size: 13px; }
 .ins-featured-meta svg { width: 20px; transition: transform .25s ease; }
 .ins-featured:hover .ins-featured-meta svg { transform: translate(3px, -3px); }
-.ins-featured-controls { position: absolute; z-index: 4; top: 20px; right: 20px; display: flex; align-items: center; gap: 11px; padding: 7px; background: rgba(8, 8, 9, .66); border: 1px solid rgba(255, 255, 255, .16); backdrop-filter: blur(12px); }
-.ins-featured-arrow { width: 32px; height: 32px; display: grid; place-items: center; padding: 0; border: 0; background: transparent; color: #fff; cursor: pointer; }
-.ins-featured-arrow svg { width: 19px; }
-.ins-featured-dots { display: flex; align-items: center; gap: 7px; }
-.ins-featured-dots button { width: 6px; height: 6px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .38); cursor: pointer; transition: width .25s ease, border-radius .25s ease, background-color .25s ease; }
-.ins-featured-dots button.is-active { width: 20px; border-radius: 6px; background: var(--ins-accent); }
-.ins-featured-arrow:focus-visible, .ins-featured-dots button:focus-visible { outline: 2px solid var(--ins-accent); outline-offset: 3px; }
+.ins-featured-controls { position: absolute; z-index: 4; bottom: 28px; right: 28px; display: flex; align-items: center; padding: 10px; background: rgba(8, 8, 9, .72); border: 1px solid rgba(255, 255, 255, .16); backdrop-filter: blur(12px); }
+.ins-featured-dots { display: flex; align-items: center; gap: 10px; }
+.ins-featured-dots button { position: relative; flex: none; overflow: hidden; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .34); cursor: pointer; transition: width .25s ease, border-radius .25s ease, background-color .25s ease; }
+.ins-featured-dots button.is-active { width: 34px; border-radius: 8px; background: #624393; }
+.ins-featured-dots button.is-progressing.is-active::before { position: absolute; inset: 0; border-radius: inherit; background: #e9dbff; transform: scaleX(0); transform-origin: left center; animation: ins-featured-progress 7000ms linear forwards; content: ""; }
+@keyframes ins-featured-progress { to { transform: scaleX(1); } }
 
 .ins-library { padding: clamp(92px, 9vw, 140px) 0 clamp(110px, 11vw, 170px); }
 .ins-library-heading { display: flex; justify-content: space-between; gap: 36px; align-items: end; margin-bottom: 54px; }
@@ -108,7 +107,8 @@ body.insights-page { margin: 0; background: var(--ins-bg); color: var(--ins-text
   .ins-featured-slider { min-height: 390px; }
   .ins-featured-copy { max-width: 100%; padding: 26px 24px; }
   .ins-featured h2 { font-size: 31px; }
-  .ins-featured-controls { top: 14px; right: 14px; }
+  .ins-featured-controls { bottom: 16px; right: 16px; }
+  .ins-featured-copy { padding-bottom: 64px; }
   .ins-library { padding: 80px 0 110px; }
   .ins-library-heading { margin-bottom: 40px; }
   .ins-tabs { gap: 30px; margin-bottom: 34px; }
@@ -120,3 +120,5 @@ body.insights-page { margin: 0; background: var(--ins-bg); color: var(--ins-text
   html { scroll-behavior: auto; }
   .ins-featured, .ins-featured img, .ins-card, .ins-card-media img, .ins-card-arrow svg { transition: none; }
 }
+
+@media (prefers-reduced-motion: reduce) { .ins-featured-dots button.is-progressing.is-active::before { animation: none; } }

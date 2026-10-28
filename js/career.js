@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const slides = [...document.querySelectorAll('.career-hero-slide')];
   const dots = [...document.querySelectorAll('.career-dot')];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const slideDuration = 5200;
   let active = 0;
   let timer;
 
@@ -17,7 +18,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const startSlider = () => {
     window.clearInterval(timer);
-    if (!reduceMotion.matches && slides.length > 1) timer = window.setInterval(() => showSlide(active + 1), 5200);
+    dots.forEach((dot) => dot.classList.remove('is-progressing'));
+    if (reduceMotion.matches || slides.length < 2) return;
+    // Restart the inner fill whenever the active slide's timer restarts.
+    void dots[active].offsetWidth;
+    dots[active].classList.add('is-progressing');
+    timer = window.setInterval(() => {
+      showSlide(active + 1);
+      dots.forEach((dot) => dot.classList.remove('is-progressing'));
+      void dots[active].offsetWidth;
+      dots[active].classList.add('is-progressing');
+    }, slideDuration);
   };
 
   dots.forEach((dot, index) => dot.addEventListener('click', () => {

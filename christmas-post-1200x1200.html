@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wissen Technology - Christmas Post (1200x1200px)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&family=Manrope:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;1,400;1,600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      background: #040405;
+      color: #f3f1ee;
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px 80px;
+    }
+    .top-panel {
+      max-width: 900px;
+      width: 100%;
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 600;
+      color: #b6a0ed;
+      background: rgba(182, 160, 237, 0.1);
+      border: 1px solid rgba(182, 160, 237, 0.25);
+      padding: 6px 16px;
+      border-radius: 999px;
+      margin-bottom: 12px;
+    }
+    .badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #b6a0ed;
+      box-shadow: 0 0 8px #b6a0ed;
+    }
+    h1 {
+      font-family: 'Manrope', sans-serif;
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    p.desc {
+      color: #9a989f;
+      font-size: 15px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn-primary {
+      background: #b6a0ed;
+      color: #080809;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14.5px;
+      font-weight: 700;
+      padding: 12px 26px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 0 25px rgba(182, 160, 237, 0.35);
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-primary:hover {
+      background: #c5b0e1;
+      transform: translateY(-2px);
+      box-shadow: 0 0 35px rgba(182, 160, 237, 0.55);
+    }
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.05);
+      color: #f3f1ee;
+      font-family: 'Manrope', sans-serif;
+      font-size: 14.5px;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(182, 160, 237, 0.4);
+    }
+    /* Scaled Display Container */
+    .preview-wrapper {
+      position: relative;
+      width: 600px;
+      height: 600px;
+      max-width: 95vw;
+      max-height: 95vw;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 25px 80px rgba(0, 0, 0, 0.9), 0 0 80px rgba(182, 160, 237, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .preview-wrapper img,
+    .preview-wrapper svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      object-fit: contain;
+    }
+    .info-strip {
+      margin-top: 20px;
+      font-size: 13px;
+      color: #706c78;
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      justify-content: center;
+    }
+    .info-strip span strong {
+      color: #a8a5ac;
+    }
+    canvas#exportCanvas {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="top-panel">
+    <div class="badge">
+      <span class="badge-dot"></span>
+      Direct Local Design Asset
+    </div>
+    <h1>Wissen Technology • Christmas Greeting</h1>
+    <p class="desc">
+      Standalone 1200x1200 px design generated directly without Canva login dependencies.<br>
+      Utilizes official Wissen brand palette (<code>#080809</code>, <code>#b6a0ed</code>), typography, and transparent brand logo.
+    </p>
+
+    <div class="btn-group">
+      <button class="btn-primary" onclick="downloadPNG()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Download 1200x1200px PNG
+      </button>
+
+      <a class="btn-secondary" href="christmas-post-1200x1200.svg" download="Wissen-Technology-Christmas-Post-1200x1200.svg">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 8 12 12 14 14"></polyline>
+        </svg>
+        Download Vector SVG
+      </a>
+    </div>
+  </div>
+
+  <!-- Live 1200x1200 Vector Preview (Scaled to 600px in UI) -->
+  <div class="preview-wrapper" id="previewContainer">
+    <object id="svgObject" data="christmas-post-1200x1200.svg" type="image/svg+xml" style="width:100%; height:100%; pointer-events:none;"></object>
+  </div>
+
+  <div class="info-strip">
+    <span>Dimensions: <strong>1200 &times; 1200 px</strong></span>
+    <span>&bull;</span>
+    <span>Aspect Ratio: <strong>1:1 Square</strong></span>
+    <span>&bull;</span>
+    <span>Format: <strong>PNG / Scalable Vector SVG</strong></span>
+  </div>
+
+  <canvas id="exportCanvas" width="1200" height="1200"></canvas>
+
+  <script>
+    function downloadPNG() {
+      fetch('christmas-post-1200x1200.svg')
+        .then(res => res.text())
+        .then(svgText => {
+          const canvas = document.getElementById('exportCanvas');
+          const ctx = canvas.getContext('2d');
+          const img = new Image();
+          
+          const svgBlob = new Blob([svgText], {type: 'image/svg+xml;charset=utf-8'});
+          const URL = window.URL || window.webkitURL || window;
+          const blobURL = URL.createObjectURL(svgBlob);
+
+          img.onload = function() {
+            ctx.clearRect(0, 0, 1200, 1200);
+            ctx.drawImage(img, 0, 0, 1200, 1200);
+            URL.revokeObjectURL(blobURL);
+
+            const pngURL = canvas.toDataURL('image/png');
+            const link = document.createElement('a');
+            link.download = 'Wissen-Technology-Christmas-Post-1200x1200.png';
+            link.href = pngURL;
+            link.click();
+          };
+          img.src = blobURL;
+        })
+        .catch(err => {
+          console.error("Export error: ", err);
+          alert("Downloading SVG fallback...");
+          window.location.href = 'christmas-post-1200x1200.svg';
+        });
+    }
+  </script>
+</body>
+</html>

@@ -162,7 +162,7 @@ document.addEventListener('DOMContentLoaded',()=>{
  header.addEventListener('pointerenter',()=>clearTimeout(closeTimer));
  header.addEventListener('pointerleave',()=>{if(desktop.matches&&hover.matches)closeTimer=setTimeout(()=>{if(!header.contains(document.activeElement))closeDropdown();},180);});
  header.addEventListener('focusout',()=>setTimeout(()=>{if(!header.contains(document.activeElement))closeDropdown();},0));
- document.querySelector('.nv-backdrop').addEventListener('click',()=>{closeDropdown();if(!desktop.matches)toggleMobile(false);});
+ document.querySelector('.nv-backdrop')?.addEventListener('click',()=>{closeDropdown();if(!desktop.matches)toggleMobile(false);});
  document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(current)closeDropdown(true);else if(nav.classList.contains('nv-is-open')){toggleMobile(false);mobileButton.focus();}}});
  mobileButton.addEventListener('click',()=>toggleMobile(!nav.classList.contains('nv-is-open')));
  document.querySelector('[data-open-services]')?.addEventListener('click',()=>{if(!desktop.matches)toggleMobile(true);openDropdown('services');categories.find(t=>t.tabIndex===0)?.focus();});
