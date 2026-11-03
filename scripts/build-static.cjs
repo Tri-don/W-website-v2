@@ -3,6 +3,7 @@
 const fs=require('node:fs'), path=require('node:path'), {spawnSync}=require('node:child_process');
 const ROOT=path.resolve(__dirname,'..'), OUT=path.resolve(ROOT,'dist');
 const B=require('../src/blog/content.js'), Blog=require('../build_blogs.cjs');
+const HomeBlog=require('../src/blog/home-cards.js');
 const read=p=>fs.readFileSync(path.join(ROOT,p),'utf8');
 function write(p,text){const target=path.resolve(OUT,p);if(!target.startsWith(OUT+path.sep))throw new Error('Output path escaped dist');fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,text);}
 function normalize(html){return html.replace(/href="((?:\.\.\/)*)Blog(?:-v[23])?\.html"/g,(_,prefix)=>`href="${prefix}blogs/"`);}
@@ -44,6 +45,15 @@ async function build(){
   const files=[...new Set(Object.values(manifest.pages).map(p=>p.file))].filter(f=>!/-v\d+\.html$/i.test(f)&&f!=='Blog.html');
   for(const file of files){
     let html=normalize(read(file));
+    if(file==='index.html'){
+      const marker=/<!-- SANITY_HOME_BLOGS_START -->[\s\S]*?<!-- SANITY_HOME_BLOGS_END -->/;
+      if(!marker.test(html))throw new Error('Homepage blog section not found');
+      const data=HomeBlog.fromPosts(posts),count=HomeBlog.select(data).length;
+      html=html.replace(marker,()=>`<!-- SANITY_HOME_BLOGS_START -->
+        <div class="wb-grid" data-home-blog-grid data-card-count="${count}" aria-busy="false">${HomeBlog.render(data,{static:true})}</div>
+        <div class="wb-home-controls"><p class="wb-home-status" data-home-blog-status role="status">${count?'':'New perspectives are on their way. Check back soon.'}</p><button class="wb-home-retry" type="button" data-home-blog-retry hidden>Try again</button></div>
+        <!-- SANITY_HOME_BLOGS_END -->`);
+    }
     if(file==='Insights.html'){
       const featuredMarker=/<!-- SANITY_FEATURED_START -->[\s\S]*?<!-- SANITY_FEATURED_END -->/;
       if(!featuredMarker.test(html))throw new Error('Insights featured panel not found');

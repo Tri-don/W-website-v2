@@ -1788,7 +1788,110 @@ modules["insights-cms"] = function(){
 })();
 
 };
-const page = {"about-us":{"file":"About-Us.html","scripts":[{"key":"master","timing":"head"},{"key":"about-v2","timing":"defer"},{"key":"about-scroll","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"application-development":{"file":"Application-Development.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"autonomous-operations":{"file":"Autonomous-Operations.html","scripts":[{"key":"master","timing":"head"},{"key":"autonomous-operations","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"capital-markets-technology":{"file":"Capital-Markets-Technology.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"career":{"file":"Career.html","scripts":[{"key":"master","timing":"defer"},{"key":"career","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"contact-us":{"file":"Contact-Us.html","scripts":[{"key":"master","timing":"defer"},{"key":"contact-us","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"index":{"file":"index.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-difference-centering","timing":"defer"}]},"industries-bfsi":{"file":"Industries-BFSI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"insights":{"file":"Insights.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"defer"},{"key":"insights-page","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"insights-cms","timing":"defer"}]},"responsible-privacy-preserving-financial-ai":{"file":"Responsible-Privacy-Preserving-Financial-AI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"risk-regulatory-compliance-engineering":{"file":"Risk-Regulatory-Compliance-Engineering.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"services-ai-ml":{"file":"Services-Ai-ML.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"wealth-asset-management-data-infrastructure":{"file":"Wealth-Asset-Management-Data-Infrastructure.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"about-us-v2":{"file":"About-Us-v2.html","scripts":[{"key":"master","timing":"head"},{"key":"about-v2","timing":"defer"},{"key":"about-scroll","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"index-v2":{"file":"index-v2.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-scale-preview","timing":"defer"},{"key":"home-difference-centering","timing":"defer"}]},"blog-v3":{"file":"Blog.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"blog-page","timing":"defer"}]}};
+modules["home-blog-cards"] = function(){
+/* Homepage card adapter: shared by the live page and the static build. */
+(function(root,factory){
+  if(typeof module==='object'&&module.exports)module.exports=factory(require('./content.js'));
+  else root.WissenHomeBlog=factory(root.WissenBlog);
+})(typeof globalThis!=='undefined'?globalThis:this,function(B){
+  'use strict';
+  const usable=p=>p&&p.title&&B.validSlug(B.slug(p));
+  const arrow='<span class="wb-arrow" aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>';
+  const polygons='0.1666667,0.0176737 0.3693135,0.4680000 -0.0359802,0.4680000|0.6166667,0.0176737 0.8193135,0.4680000 0.4140198,0.4680000|0.6390198,0.0000000 1.0443135,0.0000000 0.8416667,0.4503263|-0.0359802,0.5000000 0.3693135,0.5000000 0.1666667,0.9503263|0.4140198,0.5000000 0.8193135,0.5000000 0.6166667,0.9503263|0.3916667,0.5176737 0.5943135,0.9680000 0.1890198,0.9680000|-0.2609802,0.0000000 0.1443135,0.0000000 -0.0583333,0.4503263';
+  function select(data){
+    const seen=new Set(),latest=(data.latest||[]).filter(p=>{
+      if(!usable(p)||seen.has(B.slug(p)))return false;
+      seen.add(B.slug(p));return true;
+    });
+    const featured=usable(data.featured)?data.featured:latest[0];
+    if(!featured)return [];
+    const sides=latest.filter(p=>B.slug(p)!==B.slug(featured)).slice(0,2);
+    return [...sides.slice(0,1).map(post=>({post,featured:false})),{post:featured,featured:true},...sides.slice(1).map(post=>({post,featured:false}))];
+  }
+  function fromPosts(posts){
+    const latest=posts.filter(usable).slice().sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||'')||String(a._id).localeCompare(String(b._id)));
+    return {featured:latest.find(p=>p.featured)||null,latest:latest.slice(0,3)};
+  }
+  function photo(post){
+    const url=B.imageUrl(post.mainImage,1000);
+    return url?`<img loading="lazy" decoding="async" src="${B.esc(url)}" alt="${B.esc(post.mainImage?.alt||'')}">`:'<span class="wb-home-art" aria-hidden="true"></span>';
+  }
+  function published(post){
+    const date=new Date(post.publishedAt);
+    return Number.isNaN(date.getTime())?'':`<time class="wb-home-date" datetime="${B.esc(post.publishedAt)}">${B.esc(date.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}))}</time>`;
+  }
+  function render(data,options={}){
+    return select(data).map(({post,featured})=>{
+      const slug=B.slug(post),href=options.static?`blogs/${slug}/`:`Blog.html?slug=${encodeURIComponent(slug)}`;
+      const category=`<span class="wb-category">${B.esc(post.categories?.[0]?.title||'Blog')}</span>`;
+      const title=`<h3 id="home-blog-${slug}" data-wissen-type="card-title">${B.esc(post.title)}</h3>`;
+      return `<a class="wb-card ${featured?'wb-feature':'wb-standard'}" data-home-blog-card data-blog-slug="${B.esc(slug)}" href="${B.esc(href)}" aria-labelledby="home-blog-${slug}">${featured?`<div class="wb-feature-photo"><svg class="wb-mask-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><clipPath id="wb-home-cms-mask" clipPathUnits="objectBoundingBox">${polygons.split('|').map(points=>`<polygon points="${points}"/>`).join('')}</clipPath></defs></svg><div class="wb-mask-photo">${photo(post)}</div></div><div class="wb-feature-copy">${category}${title}${published(post)}${arrow}</div>`:`<div class="wb-card-top">${category}${arrow}</div>${title}${published(post)}<div class="wb-photo-frame">${photo(post)}</div>`}</a>`;
+    }).join('\n');
+  }
+  function query(config){
+    const projection='{_id,title,slug,featured,"publishedAt":coalesce(publishedAt,_createdAt),mainImage{alt,crop,hotspot,asset->{url}},categories[]->{title}}';
+    const filter=`${B.filter} && defined(title) && count(body) > 0`;
+    const order=' | order(coalesce(publishedAt,_createdAt) desc, _id asc)';
+    return {url:`https://${config.projectId}.api.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`,params:{
+      query:`{"featured":*[${filter} && featured == true]${order}[0]${projection},"latest":*[${filter}]${order}[0...3]${projection}}`,
+      perspective:'published','$type':JSON.stringify(config.documentType)
+    }};
+  }
+  return {select,fromPosts,render,query};
+});
+
+};
+modules["home-blog-cms"] = function(){
+/* Homepage only. Reuse the existing card design with public, published CMS data. */
+(() => {
+  function init(){
+    const section=document.querySelector('[data-home-blog]'),H=window.WissenHomeBlog;
+    if(!section||!H)return;
+    const grid=section.querySelector('[data-home-blog-grid]'),status=section.querySelector('[data-home-blog-status]'),retry=section.querySelector('[data-home-blog-retry]');
+    let config,busy=false,refreshedAt=0,signature='';
+    async function load(){
+      if(busy)return;
+      busy=true;retry.hidden=true;grid.setAttribute('aria-busy','true');
+      const hasCards=()=>Boolean(grid.querySelector('[data-home-blog-card]'));
+      status.textContent=hasCards()?'':'Loading articles...';
+      try {
+        if(!config){
+          const res=await fetch('src/blog/config.json',{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
+          if(!res.ok)throw new Error('Blog settings unavailable');
+          config=await res.json();
+        }
+        const q=H.query(config),url=new URL(q.url);
+        Object.entries(q.params).forEach(([key,value])=>url.searchParams.set(key,value));
+        const res=await fetch(url,{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(15000)});
+        if(!res.ok)throw new Error('Blog articles unavailable');
+        const {result}=await res.json();
+        if(!result||!Array.isArray(result.latest))throw new Error('Invalid blog response');
+        const next=JSON.stringify(result);
+        if(next!==signature){
+          grid.innerHTML=H.render(result);
+          grid.dataset.cardCount=String(H.select(result).length);
+          signature=next;
+        }
+        status.textContent=hasCards()?'':'New perspectives are on their way. Check back soon.';
+        refreshedAt=Date.now();
+      } catch {
+        status.textContent=hasCards()?'Showing available articles. Updates could not be loaded.':'Articles could not be loaded. Please try again.';
+        retry.hidden=false;
+      } finally {
+        busy=false;grid.setAttribute('aria-busy','false');
+      }
+    }
+    const refresh=()=>{if(!document.hidden&&Date.now()-refreshedAt>60000)load();};
+    retry.addEventListener('click',load);
+    document.addEventListener('visibilitychange',refresh);
+    window.addEventListener('focus',refresh);
+    load();
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+
+};
+const page = {"about-us":{"file":"About-Us.html","scripts":[{"key":"master","timing":"head"},{"key":"about-v2","timing":"defer"},{"key":"about-scroll","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"application-development":{"file":"Application-Development.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"autonomous-operations":{"file":"Autonomous-Operations.html","scripts":[{"key":"master","timing":"head"},{"key":"autonomous-operations","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"capital-markets-technology":{"file":"Capital-Markets-Technology.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"career":{"file":"Career.html","scripts":[{"key":"master","timing":"defer"},{"key":"career","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"contact-us":{"file":"Contact-Us.html","scripts":[{"key":"master","timing":"defer"},{"key":"contact-us","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"index":{"file":"index.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-difference-centering","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}]},"industries-bfsi":{"file":"Industries-BFSI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"insights":{"file":"Insights.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"defer"},{"key":"insights-page","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"insights-cms","timing":"defer"}]},"responsible-privacy-preserving-financial-ai":{"file":"Responsible-Privacy-Preserving-Financial-AI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"risk-regulatory-compliance-engineering":{"file":"Risk-Regulatory-Compliance-Engineering.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"services-ai-ml":{"file":"Services-Ai-ML.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"wealth-asset-management-data-infrastructure":{"file":"Wealth-Asset-Management-Data-Infrastructure.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"about-us-v2":{"file":"About-Us-v2.html","scripts":[{"key":"master","timing":"head"},{"key":"about-v2","timing":"defer"},{"key":"about-scroll","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"index-v2":{"file":"index-v2.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-scale-preview","timing":"defer"},{"key":"home-difference-centering","timing":"defer"}]},"blog-v3":{"file":"Blog.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"blog-page","timing":"defer"}]}};
 const config = page[document.documentElement.dataset.wissenPage];
 if(!config)return;
 const delayed=[];

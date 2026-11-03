@@ -6444,6 +6444,32 @@ html[data-wissen-global] body.blog-page-v3.wissen-global-type main [data-wissen-
 
 
 
+/* home-blog-cms */
+.wb-home-cms .wb-category:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.wb-home-cms .wb-card-top .wb-category:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ max-width: calc(100% - 48px); }
+.wb-home-cms .wb-card h3:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; overflow-wrap: anywhere; }
+.wb-home-cms .wb-home-date:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ display: block; margin-top: 12px; color: var(--wb-muted); font-size: 12px; line-height: 1.5; }
+.wb-home-cms .wb-feature-copy .wb-home-date:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ color: #3b304c; padding-right: 44px; }
+html[data-wissen-global] body.wissen-global-type .wb-home-cms .wb-feature-photo:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ height: clamp(170px, 20vw, 280px); }
+html[data-wissen-global] body.wissen-global-type .wb-home-cms .wb-feature-copy:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ min-height: 0; flex: 1 1 auto; }
+.wb-home-cms .wb-mask-photo:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ clip-path: url("#wb-home-cms-mask"); -webkit-clip-path: url("#wb-home-cms-mask"); }
+.wb-home-cms .wb-home-art:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ display: block; width: 100%; height: 100%; min-height: 150px; background: linear-gradient(135deg, transparent 40%, #a890db55 40% 60%, transparent 60%), linear-gradient(45deg, #272131 40%, #524265 40% 60%, #272131 60%); }
+.wb-home-cms .wb-home-all:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ display: inline-flex; gap: 12px; align-items: center; margin-top: 16px; font-size: 14px; }
+.wb-home-cms .wb-home-controls:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
+.wb-home-cms .wb-home-controls:has(.wb-home-status:empty):has(button[hidden]):where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ display: none; }
+.wb-home-cms .wb-home-status:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ margin: 0; color: var(--wb-muted); font-size: 14px; }
+.wb-home-cms .wb-home-status:empty:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ display: none; }
+.wb-home-cms .wb-home-retry:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ border: 1px solid currentColor; background: transparent; color: inherit; padding: 8px 16px; font: inherit; font-size: 14px; cursor: pointer; }
+.wb-home-cms .wb-home-retry[hidden]:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ display: none; }
+.wb-home-cms .wb-home-retry:focus-visible:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *),.wb-home-cms .wb-home-all:focus-visible:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ outline: 2px solid var(--wb-accent); outline-offset: 5px; }
+.wb-home-cms .wb-grid[data-card-count="0"]:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ display: none; }
+.wb-home-cms .wb-grid[data-card-count="1"]:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ grid-template-columns: minmax(0, 1fr); max-width: 440px; }
+.wb-home-cms .wb-grid[data-card-count="2"]:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+@media(max-width:760px){.wb-home-cms .wb-grid[data-card-count="2"]:where(html[data-wissen-css~="home-blog-cms"],html[data-wissen-css~="home-blog-cms"] *){ grid-template-columns: minmax(0, 1fr); }
+ }
+
+
+
 /* Shared website design system */
 /* Shared design system. This is the final layer in css/site.css. */
 html[data-wissen-global] body.wissen-global-type {

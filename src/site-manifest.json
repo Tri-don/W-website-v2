@@ -104,6 +104,11 @@
       "key": "blog-page-v3",
       "path": "src/styles/blog-page-v3.css",
       "base": "css"
+    },
+    {
+      "key": "home-blog-cms",
+      "path": "src/styles/home-blog-cms.css",
+      "base": "css"
     }
   ],
   "scripts": [
@@ -162,6 +167,14 @@
     {
       "key": "insights-cms",
       "path": "src/scripts/insights-cms.js"
+    },
+    {
+      "key": "home-blog-cards",
+      "path": "src/blog/home-cards.js"
+    },
+    {
+      "key": "home-blog-cms",
+      "path": "src/scripts/home-blog-cms.js"
     }
   ],
   "pages": {
@@ -271,6 +284,14 @@
       "file": "index.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
@@ -280,6 +301,10 @@
         },
         {
           "key": "home-difference-centering",
+          "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
           "timing": "defer"
         }
       ]

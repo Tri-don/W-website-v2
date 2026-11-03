@@ -6,6 +6,16 @@ The existing HTML, CSS and JavaScript website stays in place. The article layout
 
 `Blog.html` is the selected v3 article layout and live Sanity entry point. Open `Blog.html?slug=your-article-slug` over HTTP for a specific published article, or omit the slug for the latest post. `Blog-preview.html` is the illustrative review page. Generated article pages use the same v3 layout.
 
+## Homepage blog cards (homepage only)
+
+The `index.html` blog section now uses Sanity while retaining its two dark image cards and central lavender card with the original geometric image mask. Categories replace the former news logos; titles, cover images, image alternative text and dates come from the post. Missing publication dates use the creation date, as in Insights. Long titles wrap naturally and are limited visually to three lines. No article text is rewritten or given manual line breaks.
+
+The newest published post marked Featured occupies the centre card. If none is featured, the newest post takes that position. The side cards use the two newest other posts, with no duplicate articles. View all blogs leads to the complete Blogs tab in Insights. With fewer than three published articles, the section shows only the available articles.
+
+The shared adapter in `src/blog/home-cards.js` renders both the build-time snapshot and live CMS content. `src/scripts/home-blog-cms.js` refreshes published content on page load and when returning to the browser after one minute. Preview authentication is retained for same-site settings only; requests to Sanity omit credentials. Loading, empty and retry states are included. The build snapshot remains usable when a live request fails. Images without a cover use a decorative brand motif.
+
+This adapter is enabled only for `index.html`. Other webpages and homepage variants retain their existing sections until this layout is approved.
+
 ## Insights Blogs tab
 
 The Blogs tab in `Insights.html` is sourced exclusively from published Sanity `blogPost` documents. It shows the cover image, category, title, excerpt and publication date, newest first. Drafts and future-dated articles are excluded. The hero slider also uses the newest three Sanity posts. Other Insights tabs remain separately managed.
