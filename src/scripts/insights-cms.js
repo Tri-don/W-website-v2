@@ -15,7 +15,8 @@
       status.textContent=grid.querySelector('[data-insights-blog-card]')?'Updating articles…':'Loading articles…';
       try {
         if(!config){
-          const response=await fetch('src/blog/config.json',{credentials:'omit',signal:AbortSignal.timeout(15000)});
+          // Preserve same-site preview authentication; Sanity requests below still omit credentials.
+          const response=await fetch('src/blog/config.json',{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
           if(!response.ok)throw new Error('Configuration unavailable');
           config=await response.json();
         }
