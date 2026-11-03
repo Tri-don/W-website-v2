@@ -1,0 +1,10 @@
+.git
+.vercel
+.env*
+dist
+node_modules
+__pycache__
+handoff
+sanity
+*.log
+*-preview.html

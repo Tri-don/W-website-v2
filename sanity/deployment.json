@@ -1,0 +1,13 @@
+{
+  "projectId": "zu6gxemo",
+  "dataset": "production",
+  "workspaceName": "default",
+  "management": "MCP-managed",
+  "studioUrl": "https://wissen-blogs-zu6gxemo.sanity.studio/",
+  "types": [
+    "blogAuthor",
+    "blogCategory",
+    "blogPost"
+  ]
+}
+

@@ -1,0 +1,127 @@
+/* Shared footer across all website pages. */
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type footer.wf {
+  padding-top: 56px;
+  padding-bottom: 0;
+  border-top: 0;
+}
+@media (max-width: 1100px) {
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type footer.wf {
+  padding-top: 48px;
+}
+}
+@media (max-width: 760px) {
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type footer.wf {
+  padding-top: 40px;
+}
+}
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-top {
+  grid-template-columns: minmax(0, .85fr) minmax(0, 2.5fr);
+  gap: 64px;
+}
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-columns {
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, .75fr);
+  gap: 28px;
+}
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-column {
+  display: flex;
+  grid-column: auto;
+  gap: 0;
+}
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-column h2 {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: .02em;
+  text-transform: none;
+  color: #a6a2ad;
+  margin-bottom: 12px;
+}
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-column a {
+  font-size: 14px;
+  line-height: 1.55;
+  min-height: 36px;
+  padding-block: 4px;
+}
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-column a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+@media (max-width: 1100px) {
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-top {
+  grid-template-columns: 1fr;
+    gap: 40px;
+}
+}
+@media (max-width: 760px) {
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-columns {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 24px;
+}
+}
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-wordmark-group {
+  padding-bottom: 0;
+}
+@media (max-width: 760px) {
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-column a {
+  min-height: 44px;
+}
+}
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-divider::before {
+  background: #2d2931;
+}
+
+/* Full-width black footer and final marquee. */
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type footer.wf > .wf-wrap:first-child {
+  width: 100%;
+  max-width: none;
+  margin-inline: 0;
+  padding-top: calc(2 * var(--wissen-footer-section-space));
+  padding-bottom: 32px;
+  padding-inline: max(var(--site-gutter), calc((100% - var(--site-max)) / 2 + var(--site-gutter)));
+  background: #000000;
+  border-radius: 0;
+}
+@media (max-width: 760px) {
+  html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type footer.wf > .wf-wrap:first-child {
+    padding-bottom: 24px;
+  }
+}
+
+/* Continue the black panel through the marquee and its upper gap. */
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-wordmark {
+  background: #000000;
+  margin-top: 0;
+  font-size: clamp(7.5rem, 18.7vw, 19.125rem);
+  padding-top: 28px;
+}
+@media (max-width: 760px) {
+  html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-wordmark {
+    font-size: 28.9vw;
+    padding-top: 24px;
+  }
+}
+
+/* A shallow bottom crop retains the g/y shapes and ends at the page edge. */
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-wordmark-track {
+  margin-bottom: 0;
+}
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-wordmark-group {
+  height: 1.035em;
+  padding-bottom: 0;
+}
+@media (max-width: 760px) {
+  html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type .wf-wordmark-group {
+    height: 1.048em;
+  }
+}
+
+html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type footer.wf {
+  --wissen-footer-section-space: 3rem;
+}
+@media (max-width: 1100px) {
+  html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type footer.wf { --wissen-footer-section-space: 2.5rem; }
+}
+@media (max-width: 700px) {
+  html[data-wissen-global][data-wissen-footer="current"] body.wissen-global-type footer.wf { --wissen-footer-section-space: 2rem; }
+}

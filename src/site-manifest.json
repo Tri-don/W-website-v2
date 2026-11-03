@@ -1,0 +1,430 @@
+{
+  "styles": [
+    {
+      "key": "master",
+      "path": "src/styles/master.css",
+      "base": "css"
+    },
+    {
+      "key": "about-v2",
+      "path": "src/styles/about-v2.css",
+      "base": "css"
+    },
+    {
+      "key": "about-scroll",
+      "path": "src/styles/about-scroll.css",
+      "base": "css"
+    },
+    {
+      "key": "application-development",
+      "path": "src/styles/application-development.css",
+      "base": "css"
+    },
+    {
+      "key": "application-development-layout",
+      "path": "src/styles/application-development-layout.css",
+      "base": "css"
+    },
+    {
+      "key": "application-development-imagery",
+      "path": "src/styles/application-development-imagery.css",
+      "base": "css"
+    },
+    {
+      "key": "application-development-typography",
+      "path": "src/styles/application-development-typography.css",
+      "base": "css"
+    },
+    {
+      "key": "autonomous-operations",
+      "path": "src/styles/autonomous-operations.css",
+      "base": "css"
+    },
+    {
+      "key": "career",
+      "path": "src/styles/career.css",
+      "base": "css"
+    },
+    {
+      "key": "contact-us",
+      "path": "src/styles/contact-us.css",
+      "base": "css"
+    },
+    {
+      "key": "insights-page",
+      "path": "src/styles/insights-page.css",
+      "base": "css"
+    },
+    {
+      "key": "about-spacing-trial",
+      "path": "src/styles/about-spacing-trial.css",
+      "base": "css"
+    },
+    {
+      "key": "footer",
+      "path": "src/styles/footer.css",
+      "base": "css"
+    },
+    {
+      "key": "home-scale-preview",
+      "path": "src/styles/home-scale-preview.css",
+      "base": "css"
+    },
+    {
+      "key": "journey-timeline",
+      "path": "src/styles/journey-timeline.css",
+      "base": "css"
+    },
+    {
+      "key": "ai-impact-layout",
+      "path": "src/styles/ai-impact-layout.css",
+      "base": "css"
+    },
+    {
+      "key": "ai-services-layout",
+      "path": "src/styles/ai-services-layout.css",
+      "base": "css"
+    },
+    {
+      "key": "bfsi-subpages",
+      "path": "src/styles/bfsi-subpages.css",
+      "base": "css"
+    },
+    {
+      "key": "blog-page",
+      "path": "src/styles/blog-page.css",
+      "base": "css"
+    },
+    {
+      "key": "blog-page-v2",
+      "path": "src/styles/blog-page-v2.css",
+      "base": "css"
+    },
+    {
+      "key": "blog-page-v3",
+      "path": "src/styles/blog-page-v3.css",
+      "base": "css"
+    }
+  ],
+  "scripts": [
+    {
+      "key": "blog-content",
+      "path": "src/blog/content.js"
+    },
+    {
+      "key": "master",
+      "path": "src/scripts/master.js"
+    },
+    {
+      "key": "about-v2",
+      "path": "src/scripts/about-v2.js"
+    },
+    {
+      "key": "about-scroll",
+      "path": "src/scripts/about-scroll.js"
+    },
+    {
+      "key": "application-development",
+      "path": "src/scripts/application-development.js"
+    },
+    {
+      "key": "autonomous-operations",
+      "path": "src/scripts/autonomous-operations.js"
+    },
+    {
+      "key": "career",
+      "path": "src/scripts/career.js"
+    },
+    {
+      "key": "contact-us",
+      "path": "src/scripts/contact-us.js"
+    },
+    {
+      "key": "insights-page",
+      "path": "src/scripts/insights-page.js"
+    },
+    {
+      "key": "site-appearance",
+      "path": "src/scripts/site-appearance.js"
+    },
+    {
+      "key": "home-scale-preview",
+      "path": "src/scripts/home-scale-preview.js"
+    },
+    {
+      "key": "home-difference-centering",
+      "path": "src/scripts/home-difference-centering.js"
+    },
+    {
+      "key": "blog-page",
+      "path": "src/scripts/blog-page.js"
+    }
+  ],
+  "pages": {
+    "about-us": {
+      "file": "About-Us.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "about-v2",
+          "timing": "defer"
+        },
+        {
+          "key": "about-scroll",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "application-development": {
+      "file": "Application-Development.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "application-development",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "autonomous-operations": {
+      "file": "Autonomous-Operations.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "autonomous-operations",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "capital-markets-technology": {
+      "file": "Capital-Markets-Technology.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "career": {
+      "file": "Career.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "defer"
+        },
+        {
+          "key": "career",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "contact-us": {
+      "file": "Contact-Us.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "defer"
+        },
+        {
+          "key": "contact-us",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "index": {
+      "file": "index.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        },
+        {
+          "key": "home-difference-centering",
+          "timing": "defer"
+        }
+      ]
+    },
+    "industries-bfsi": {
+      "file": "Industries-BFSI.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "insights": {
+      "file": "Insights.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "defer"
+        },
+        {
+          "key": "insights-page",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "responsible-privacy-preserving-financial-ai": {
+      "file": "Responsible-Privacy-Preserving-Financial-AI.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "risk-regulatory-compliance-engineering": {
+      "file": "Risk-Regulatory-Compliance-Engineering.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "services-ai-ml": {
+      "file": "Services-Ai-ML.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "wealth-asset-management-data-infrastructure": {
+      "file": "Wealth-Asset-Management-Data-Infrastructure.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "about-us-v2": {
+      "file": "About-Us-v2.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "about-v2",
+          "timing": "defer"
+        },
+        {
+          "key": "about-scroll",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "index-v2": {
+      "file": "index-v2.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        },
+        {
+          "key": "home-scale-preview",
+          "timing": "defer"
+        },
+        {
+          "key": "home-difference-centering",
+          "timing": "defer"
+        }
+      ]
+    },
+    "blog-v3": {
+      "file": "Blog.html",
+      "scripts": [
+        {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        },
+        {
+          "key": "blog-page",
+          "timing": "defer"
+        }
+      ]
+    }
+  },
+  "footer_template": "src/partials/footer.html"
+}

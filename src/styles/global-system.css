@@ -1,0 +1,297 @@
+/* Shared design system. This is the final layer in css/site.css. */
+html[data-wissen-global] body.wissen-global-type {
+  --wissen-bg: #080809;
+  --wissen-section-space: 3rem;
+  --section-edge: var(--wissen-section-space);
+  --wissen-hero: clamp(2.5rem, calc(.970588rem + 4.705882vw), 4.5rem);
+  --wissen-section-title: clamp(1.875rem, calc(1.014706rem + 2.647059vw), 3rem);
+  --wissen-feature-title: clamp(1.375rem, calc(1.279412rem + .294118vw), 1.5rem);
+  --wissen-card-title: clamp(1.25rem, calc(1.154412rem + .294118vw), 1.375rem);
+  --wissen-hero-body: clamp(1rem, calc(.904412rem + .294118vw), 1.125rem);
+  --site-hero-heading-size: var(--wissen-hero);
+  --site-section-heading-size: var(--wissen-section-title);
+  --site-hero-copy-size: var(--wissen-hero-body);
+  --site-section-copy-size: 1rem;
+  background: var(--wissen-bg);
+}
+html[data-wissen-global] body.wissen-global-type main > section,
+html[data-wissen-global] body.wissen-global-type footer.wf {
+  background: var(--wissen-bg);
+}
+html[data-wissen-global] body.wissen-global-type :is(.ad-ref-hero,.ins-hero)::before {
+  background: none;
+}
+html[data-wissen-global] body.wissen-global-type .m6-cta-bg { display: none; }
+/* Restore the original orbit/glow background for the Ready to transform CTA. */
+html[data-wissen-global] body.wissen-global-type .m6-cta[aria-labelledby="contact-heading"] .m6-cta-bg { display: block; }
+/* Contain the orbit's decorative glow so it cannot widen the mobile page. */
+html[data-wissen-global] body.wissen-global-type .ao-hero { overflow: clip; }
+
+/* Explicit text roles keep navigation, phone mock-ups and metric values separate.
+ * Importance is limited to these mapped roles because the legacy theme forces
+ * several old scales with !important. User styles can still override them. */
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type] {
+  overflow-wrap: anywhere;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="hero-title"] {
+  font-size: var(--wissen-hero) !important;
+  line-height: 1.1 !important;
+  letter-spacing: -.04em !important;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="section-title"] {
+  font-size: var(--wissen-section-title) !important;
+  line-height: 1.18 !important;
+  letter-spacing: -.03em !important;
+  white-space: normal;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="feature-title"] {
+  font-size: var(--wissen-feature-title) !important;
+  line-height: 1.3 !important;
+  letter-spacing: -.02em !important;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="card-title"] {
+  font-size: var(--wissen-card-title) !important;
+  line-height: 1.3 !important;
+  letter-spacing: -.015em !important;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="hero-body"] {
+  font-size: var(--wissen-hero-body) !important;
+  line-height: 1.55 !important;
+  max-width: 65ch;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="body"] {
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+  max-width: 65ch;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="card-body"],
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="card-body-long"] {
+  font-size: .875rem !important;
+  line-height: 1.55 !important;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="card-body-long"] {
+  line-height: 1.6 !important;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="label"] {
+  font-size: .75rem !important;
+  line-height: 1.3 !important;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="caption"] {
+  font-size: .875rem !important;
+  line-height: 1.5 !important;
+}
+html[data-wissen-global] body.wissen-global-type main [data-wissen-type="control"] {
+  font-size: .875rem !important;
+  line-height: 1.4 !important;
+}
+html[data-wissen-global] body.wissen-global-type main :is([data-wissen-type="hero-title"],[data-wissen-type="section-title"],[data-wissen-type="feature-title"],[data-wissen-type="card-title"]) em,
+html[data-wissen-global] body.wissen-global-type main .m6-cases-title-line {
+  font-size: inherit !important;
+  line-height: inherit !important;
+  letter-spacing: inherit !important;
+  white-space: normal;
+}
+html[data-wissen-global] body.wissen-global-type .bfsi-cta-title-line {
+  white-space: normal;
+}
+html[data-wissen-global] body.wissen-global-type .wb-feature-copy {
+  flex: 1 0 auto;
+}
+html[data-wissen-global] body.wissen-global-type .wb-card.wb-feature {
+  height: auto !important;
+}
+html[data-wissen-global] body.wissen-global-type .wb-feature-photo {
+  height: clamp(185px, 22vw, 330px);
+  flex: 0 0 auto;
+}
+html[data-wissen-global] body.wissen-global-type .ws-copy {
+  flex-shrink: 0;
+}
+/* Preserve the service mosaic while allowing enlarged descriptions to grow. */
+html[data-wissen-global] body.wissen-global-type.home-page .ws-grid {
+  grid-template-rows: minmax(250px, auto) minmax(290px, auto) minmax(270px, auto);
+}
+html[data-wissen-global] body.wissen-global-type.home-page .ws-cell { height: auto; }
+html[data-wissen-global] body.wissen-global-type.home-page .ws-card {
+  height: auto;
+  min-height: 100%;
+}
+@media (max-width: 1100px) and (min-width: 761px) {
+  html[data-wissen-global] body.wissen-global-type.home-page .ws-grid {
+    grid-template-rows: repeat(3, minmax(330px, auto));
+  }
+}
+@media (max-width: 760px) {
+  html[data-wissen-global] body.wissen-global-type.home-page .ws-grid {
+    grid-template-rows: none;
+    grid-auto-rows: minmax(320px, auto);
+  }
+}
+html[data-wissen-global] body.wissen-global-type main :is(.ad-ref-impact-copy,.ad-service-body,.m6-case-body,.ws-copy,.be-card,.ins-card-body,.ss-copy,.ab-person,.career-value,.career-benefit) {
+  min-width: 0;
+}
+html[data-wissen-global] body.wissen-global-type .as-heading p {
+  white-space: normal;
+  flex-shrink: 1;
+}
+html[data-wissen-global] body.wissen-global-type .m6-case-metrics { flex-wrap: wrap; }
+html[data-wissen-global] body.wissen-global-type .m6-case-metrics > div {
+  flex: 1 1 8em;
+  min-width: 0;
+}
+html[data-wissen-global] body.wissen-global-type .m6-case-metrics b {
+  font-size: clamp(2.25rem, 3.4vw, 3rem);
+  line-height: 1.2;
+}
+
+/* Section edges use one responsive token. Sticky animations retain their
+ * tracks and get viewport-aware padding rather than a fixed-height overflow. */
+html[data-wissen-global] body.wissen-global-type main > section:not([data-wissen-hero]):not(.wd-difference):not(.bs-shift):not(.as-section):not(.m6-cases) {
+  padding-block: var(--wissen-section-space) !important;
+}
+html[data-wissen-global] body.wissen-global-type main > section > .wrap.section {
+  padding-block: 0 !important;
+}
+html[data-wissen-global] body.wissen-global-type .bs-stage,
+html[data-wissen-global] body.wissen-global-type .m6-cases:not(.is-scroll-driven),
+html[data-wissen-global] body.wissen-global-type .m6-cases.is-scroll-driven .m6-cases-stage {
+  padding-block: var(--wissen-section-space) !important;
+}
+html[data-wissen-global] body.wissen-global-type .as-section {
+  padding-top: var(--wissen-section-space) !important;
+}
+html[data-wissen-global] body.wissen-global-type .as-section.as-short .as-stack {
+  padding-bottom: var(--wissen-section-space);
+}
+html[data-wissen-global] body.wissen-global-type .wd-difference:not(.wd-enhanced) .wd-stage {
+  padding-block: var(--wissen-section-space);
+}
+html[data-wissen-global] body.wissen-global-type .wd-enhanced .wd-stage {
+  padding-top: min(var(--wissen-section-space), 8svh);
+  padding-bottom: min(var(--wissen-section-space), 6svh);
+}
+html[data-wissen-global] body.wissen-global-type main > [data-wissen-hero]:not(.ad-ref-hero):not(.ab-slider):not(.career-hero) {
+  padding-top: calc(var(--wissen-section-space) + 4.5rem) !important;
+  padding-bottom: var(--wissen-section-space) !important;
+  height: auto !important;
+  max-height: none !important;
+}
+/* Slideshow copy stays in normal flow so larger headings never get cropped. */
+html[data-wissen-global] body.wissen-global-type .ab-slider {
+  display: flex;
+  align-items: flex-end;
+  height: auto;
+  min-height: min(820px, 94svh);
+}
+html[data-wissen-global] body.wissen-global-type .ab-slider-content {
+  position: relative;
+  bottom: auto;
+  padding-top: calc(var(--wissen-section-space) + 4.5rem);
+  padding-bottom: var(--wissen-section-space);
+}
+html[data-wissen-global] body.wissen-global-type .career-hero {
+  height: auto;
+  max-height: none;
+}
+html[data-wissen-global] body.wissen-global-type .career-hero-copy {
+  padding-top: calc(var(--wissen-section-space) + 4.5rem);
+  padding-bottom: var(--wissen-section-space);
+}
+@media (max-width: 1100px) {
+  html[data-wissen-global] body.wissen-global-type { --wissen-section-space: 2.5rem; }
+}
+@media (max-width: 700px) {
+  html[data-wissen-global] body.wissen-global-type { --wissen-section-space: 2rem; }
+  html[data-wissen-global] body.wissen-global-type .as-heading {
+    flex-wrap: wrap;
+    align-items: flex-start;
+  }
+}
+
+/* One continuous dark/charcoal canvas, beginning at the measured hero edge. */
+html[data-wissen-global] body.wissen-global-type {
+  --wissen-hero-height: 100svh;
+  background-color: #030304;
+  background-image:
+    linear-gradient(#080809, #080809),
+    linear-gradient(180deg,
+      #080809 0%,
+      #101013 8%,
+      #09090b 17%,
+      #151519 29%,
+      #0a0a0c 38%,
+      #121216 53%,
+      #08080b 63%,
+      #141418 76%,
+      #09090d 86%,
+      #060608 94%,
+      #030304 100%);
+  background-repeat: no-repeat;
+  background-position: center top, center bottom;
+  background-size: 100% var(--wissen-hero-height), 100% calc(100% - var(--wissen-hero-height));
+}
+@supports (height: 100dvh) {
+  html[data-wissen-global] body.wissen-global-type { --wissen-hero-height: 100dvh; }
+}
+html[data-wissen-global] body.wissen-global-type main > section {
+  background: transparent !important;
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+html[data-wissen-global] body.wissen-global-type main .partners {
+  border-top: 0 !important;
+  border-bottom: 0 !important;
+}
+html[data-wissen-global] body.wissen-global-type main .bfsi-section-sweep { display: none; }
+/* Clear full-section masks while retaining cards, media and scene objects. */
+html[data-wissen-global] body.wissen-global-type main :is(.wd-track,.as-heading,.ah-stage) {
+  background: transparent;
+}
+html[data-wissen-global] body.wissen-global-type .as-heading::after { background: none; }
+html[data-wissen-global] body.wissen-global-type #difference .wd-stage::before {
+  background: radial-gradient(ellipse at calc(50% + var(--wd-glow-x,16%)) 56%,
+    var(--wd-glow,var(--wd-halo-color)) 0%, transparent 68%);
+}
+html[data-wissen-global] body.wissen-global-type .ah-stage::after {
+  background:
+    linear-gradient(180deg, #08080970, transparent 25%, #08080920 60%, #080809 100%),
+    radial-gradient(ellipse at 50% 48%, #08080970, transparent 64%);
+}
+html[data-wissen-global] body.wissen-global-type .ab-slider-shade {
+  background:
+    linear-gradient(90deg, #080809b8, transparent 85%),
+    linear-gradient(0deg, #080809 0%, #080809db 8%, #08080980 28%, transparent 65%);
+}
+html[data-wissen-global] body.wissen-global-type footer.wf {
+  background: linear-gradient(180deg, rgba(2, 2, 3, 0) 0%, rgba(2, 2, 3, .4) 24%, #020203 82%, #020203 100%);
+}
+
+/* Supersede the homepage accordion's former compact-only spacing override. */
+html[data-wissen-global] body.wissen-global-type main > #industries {
+  padding-block: var(--wissen-section-space) !important;
+}
+
+/* Homepage Difference exception: center the full composition below the navbar. */
+html[data-site-page="home"] body.wissen-global-type #difference {
+  scroll-margin-top: var(--wissen-nav-covered, 98px);
+}
+html[data-site-page="home"] body.wissen-global-type #difference.wd-enhanced .wd-stage {
+  top: var(--wissen-nav-covered, 98px);
+  height: calc(100svh - var(--wissen-nav-covered, 98px));
+  height: calc(100dvh - var(--wissen-nav-covered, 98px));
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(16px, 3dvh, 32px);
+}
+html[data-site-page="home"] body.wissen-global-type #difference.wd-enhanced .wd-panels {
+  margin-bottom: 0;
+}
+html[data-site-page="home"] body.wissen-global-type #difference:not(.wd-enhanced) .wd-stage {
+  min-height: calc(100dvh - var(--wissen-nav-covered, 98px));
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-block: clamp(24px, 4dvh, 48px);
+}

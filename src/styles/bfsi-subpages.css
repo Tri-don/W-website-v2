@@ -1,0 +1,8 @@
+/* Domain service cards share the same bottom-aligned CTA, including Application Development. */
+html[data-wissen-global] body.cm-page.wissen-global-type #services .ws-copy {
+  position: relative;
+  inset: auto;
+  align-self: stretch;
+  flex-grow: 1;
+  height: auto;
+}

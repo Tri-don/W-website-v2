@@ -1,0 +1,41 @@
+/* Keep timeline structure out of the body-copy measure. */
+html[data-wissen-global] body.wissen-global-type .aj-section .aj-row {
+  width: 100%;
+  max-width: none;
+  grid-template-columns: minmax(0, 1fr) 112px minmax(0, 1fr);
+}
+html[data-wissen-global] body.wissen-global-type .aj-section .aj-copy { min-width: 0; }
+html[data-wissen-global] body.wissen-global-type .aj-section .aj-heading { margin-bottom: var(--wissen-section-space); }
+@media (max-width: 760px) {
+  html[data-wissen-global] body.wissen-global-type .aj-section .aj-row {
+    grid-template-columns: 42px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    min-height: 0;
+    padding-block: 24px;
+    gap: 16px;
+    align-items: start;
+  }
+  html[data-wissen-global] body.wissen-global-type .aj-section .aj-dot { top: 50px; }
+  html[data-wissen-global] body.wissen-global-type .aj-section .aj-emblem { align-self: start; }
+}
+
+/* Alternate the scrolling accent: first card left, second right, and so on.
+   The decorative rail is the first list child, so even children are cards 1/3/5. */
+html[data-wissen-global] body.wissen-global-type .aj-section .aj-row::after {
+  display: block;
+  left: auto;
+  right: 0;
+  width: 2px;
+  border: 0;
+  background: var(--accent);
+  pointer-events: none;
+}
+html[data-wissen-global] body.wissen-global-type .aj-section .aj-row:nth-child(even)::after {
+  left: 0;
+  right: auto;
+}
+@media (max-width: 760px) {
+  html[data-wissen-global] body.wissen-global-type .aj-section .aj-row:nth-child(even)::after {
+    left: 43px;
+  }
+}

@@ -1,0 +1,26 @@
+[
+  {
+    "_id": "related-layout-sample-ai",
+    "title": "Making AI useful in regulated environments.",
+    "slug": {"current": "making-ai-useful-in-regulated-environments"},
+    "excerpt": "Building intelligent systems around security, accountability and the decisions people need to make.",
+    "categories": [{"title": "AI & Engineering"}],
+    "mainImage": {"url": "assets/images/ai-ml-neural-processor.png", "alt": "Neural processor artwork from Wissen Dark"}
+  },
+  {
+    "_id": "related-layout-sample-platforms",
+    "title": "Modernising platforms without disrupting delivery.",
+    "slug": {"current": "modernising-platforms-without-disrupting-delivery"},
+    "excerpt": "An incremental approach to evolving enterprise systems while keeping essential business operations moving.",
+    "categories": [{"title": "Enterprise Engineering"}],
+    "mainImage": {"url": "assets/images/64d3bb66c7265833.webp", "alt": "Technology imagery from the Wissen Dark website"}
+  },
+  {
+    "_id": "related-layout-sample-data",
+    "title": "Designing data foundations for enterprise AI.",
+    "slug": {"current": "designing-data-foundations-for-enterprise-ai"},
+    "excerpt": "Connecting data quality, access and governance to the outcomes your AI systems are expected to deliver.",
+    "categories": [{"title": "Data & AI"}],
+    "mainImage": {"url": "assets/images/64616d9e2a7a263a.jpg", "alt": "Financial technology imagery from Wissen Dark"}
+  }
+]

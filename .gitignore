@@ -2,3 +2,11 @@
 Thumbs.db
 Desktop.ini
 *.log
+node_modules/
+.vercel/
+.env
+.env.*
+dist/
+__pycache__/
+src/blog/generated-pages.json
+blogs/

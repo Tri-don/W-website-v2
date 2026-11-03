@@ -1,0 +1,47 @@
+/* About Us hero, Events and certification refinements. Shared appearance is global. */
+
+html:is([data-wissen-page="about-us"], [data-wissen-page="about-us-v2"])[data-wissen-global] body.wissen-global-type .ab-slider {
+  min-height: 100svh;
+  min-height: 100dvh;
+  max-height: none;
+}
+html:is([data-wissen-page="about-us"], [data-wissen-page="about-us-v2"])[data-wissen-global] body.wissen-global-type .ab-slider-content {
+  padding-top: calc(var(--wissen-section-space) + 2.25rem);
+  padding-bottom: var(--wissen-section-space);
+}
+/* Balance the Events-to-Insights gap with the other section transitions. */
+html:is([data-wissen-page="about-us"], [data-wissen-page="about-us-v2"])[data-wissen-global] body.wissen-global-type #events {
+  padding-bottom: var(--wissen-section-space) !important;
+}
+
+/* Certification cards: smaller marks, unchanged icon-to-copy gaps. */
+html:is([data-wissen-page="about-us"], [data-wissen-page="about-us-v2"])[data-wissen-global] body.wissen-global-type #company .m4-cert-logo {
+  background: #141416;
+  padding: 32px 28px;
+  grid-template-rows: 60px 1fr;
+}
+html:is([data-wissen-page="about-us"], [data-wissen-page="about-us-v2"])[data-wissen-global] body.wissen-global-type #company .m4-cert-logo img {
+  width: 54px;
+  height: 60px;
+}
+html:is([data-wissen-page="about-us"], [data-wissen-page="about-us-v2"])[data-wissen-global] body.wissen-global-type #company .m4-cert-logo .soc-logo {
+  width: 54px;
+  height: 54px;
+  margin-top: 2px;
+}
+@media (max-width: 760px) {
+  html:is([data-wissen-page="about-us"], [data-wissen-page="about-us-v2"])[data-wissen-global] body.wissen-global-type #company .m4-cert-logo {
+    padding: 28px 24px;
+    grid-template-columns: 52px minmax(0, 1fr);
+    grid-template-rows: 1fr;
+  }
+  html:is([data-wissen-page="about-us"], [data-wissen-page="about-us-v2"])[data-wissen-global] body.wissen-global-type #company .m4-cert-logo img {
+    width: 52px;
+    height: 60px;
+  }
+  html:is([data-wissen-page="about-us"], [data-wissen-page="about-us-v2"])[data-wissen-global] body.wissen-global-type #company .m4-cert-logo .soc-logo {
+    width: 52px;
+    height: 52px;
+    margin-top: 6px;
+  }
+}

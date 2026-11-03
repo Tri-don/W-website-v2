@@ -1,0 +1,275 @@
+/*
+ * Application Development typography trial — integration required.
+ * Load AFTER all existing CSS and inline <style> blocks on this page only.
+ * Add class="appdev-type-trial" to its <body> (preserve existing classes).
+ * Opt-in text roles are mapped on Application-Development.html.
+ * Responsive component adjustments remain scoped to this trial.
+ * Rollback: remove or comment out this stylesheet's <link> element.
+ */
+
+body.appdev-type-trial {
+  /* Fluid sizes: mobile at <= 520px, desktop at >= 1200px. */
+  --appdev-trial-hero: clamp(2.5rem, calc(0.970588rem + 4.705882vw), 4.5rem);
+  --appdev-trial-section: clamp(1.875rem, calc(1.014706rem + 2.647059vw), 3rem);
+  --appdev-trial-card: clamp(1.375rem, calc(1.279412rem + 0.294118vw), 1.5rem);
+  --appdev-trial-intro: clamp(1rem, calc(0.904412rem + 0.294118vw), 1.125rem);
+  --appdev-trial-card-copy: 0.875rem;
+  --appdev-trial-compact-title: clamp(1.25rem, calc(1.154412rem + 0.294118vw), 1.375rem);
+}
+
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="hero-title"] {
+  font-size: var(--appdev-trial-hero);
+  line-height: 1.1;
+  letter-spacing: -0.04em;
+}
+
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="section-title"] {
+  font-size: var(--appdev-trial-section);
+  line-height: 1.18;
+  letter-spacing: -0.03em;
+}
+
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="card-title"] {
+  font-size: var(--appdev-trial-card);
+  line-height: 1.3;
+  letter-spacing: -0.02em;
+}
+
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="hero-body"] {
+  font-size: var(--appdev-trial-intro);
+  line-height: 1.55;
+}
+
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="body"] {
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="card-body"] {
+  font-size: var(--appdev-trial-card-copy);
+  line-height: 1.55;
+}
+
+/* Use for a long paragraph inside a card, where extra leading is useful. */
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="card-body-long"] {
+  font-size: var(--appdev-trial-card-copy);
+  line-height: 1.6;
+}
+
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="label"] {
+  font-size: 0.75rem;
+  line-height: 1.3;
+}
+
+/* Apply only to content controls, never globally to nav/footer/phone UI. */
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="control"] {
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
+/* Preserve the theme's italic font, weight, and color; match its text role. */
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="hero-title"] em,
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="section-title"] em,
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main [data-appdev-type="card-title"] em {
+  font-size: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+}
+
+/*
+ * Preserve theme font families, weights, colors, images, and animations.
+ * The responsive rules below adjust text wrapping and crowded card columns.
+ * Do not apply text roles to metric values, icons, or phone-screen mock UI.
+ * If existing rules win the cascade, inspect the actual selector/inline style
+ * and resolve that conflict narrowly. Do not add blanket !important rules.
+ */
+
+/* The shared closing CTA declares these properties !important. Match only
+ * those two opted-in elements; all original theme rules remain intact. */
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main #contact-heading[data-appdev-type="section-title"] {
+  font-size: var(--appdev-trial-section) !important;
+  line-height: 1.18 !important;
+  letter-spacing: -0.03em !important;
+}
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main .m6-cta-description[data-appdev-type="body"] {
+  font-size: 1rem !important;
+  line-height: 1.6 !important;
+}
+
+/* Let heading emphasis and long words reflow, including user text-spacing
+ * overrides. In particular, the shared CTA uses nowrap on its italic line. */
+html[data-site-page="application-development"] body.appdev-type-trial main [data-appdev-type] {
+  overflow-wrap: anywhere;
+}
+html[data-site-page="application-development"] body.appdev-type-trial main [data-appdev-type="section-title"] em {
+  white-space: normal;
+}
+html[data-site-page="application-development"] body.appdev-type-trial main :is([data-appdev-type="hero-body"], [data-appdev-type="body"]) {
+  max-width: 65ch;
+}
+html[data-site-page="application-development"] body.appdev-type-trial main .ad-ref-hero-copy > p {
+  max-width: 65ch;
+}
+/* Feature cards retain a larger title; dense grids and stories use 20–22px. */
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main :is(.ad-ref-challenge,.ad-ref-impact-copy,.ad-service-body,.m6-case) [data-appdev-type="card-title"] {
+  font-size: var(--appdev-trial-compact-title);
+  line-height: 1.3;
+  letter-spacing: -0.015em;
+}
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main :is(.ad-ref-challenge,.ad-service) h3 {
+  min-height: 0;
+}
+/* Metric captions explain the figures and need more space than metadata. */
+html[data-site-page="application-development"] body.ad-page.appdev-type-trial main .m6-case-metrics small[data-appdev-type="label"] {
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+html[data-site-page="application-development"] body.appdev-type-trial main :is(.ad-ref-impact-copy,.ad-service-body,.m6-case-body) {
+  min-width: 0;
+}
+html[data-site-page="application-development"] body.appdev-type-trial main .m6-case-metrics > div {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+/* Use roomier columns before long headings become narrow text towers. */
+@media (min-width: 701px) and (max-width: 1279px) {
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-challenge-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-challenge:nth-child(n) {
+    padding: 24px 20px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-services-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 601px) and (max-width: 899px) {
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-challenge-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (max-width: 600px) {
+  html[data-site-page="application-development"] body.appdev-type-trial :is(.ad-ref-challenge-grid,.ad-services-grid,.ad-ref-impact-grid) {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-challenge:nth-child(n) {
+    grid-column: auto;
+    padding: 26px 0;
+    border-right: 0;
+  }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-grid > :nth-child(1) { order: 1; }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-grid > :nth-child(2) { order: 2; }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-grid > :nth-child(3) { order: 3; }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-grid > :nth-child(4) { order: 4; }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-grid > :nth-child(5) { order: 6; }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-grid > :nth-child(6) { order: 5; }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-grid > :nth-child(7) { order: 8; }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-grid > :nth-child(8) { order: 7; }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-media,
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-impact-media img {
+    min-height: 0;
+    height: 240px;
+  }
+}
+
+/* Figure columns wrap when text is enlarged instead of splitting numbers. */
+html[data-site-page="application-development"] body.appdev-type-trial main .m6-case-metrics {
+  flex-wrap: wrap;
+}
+html[data-site-page="application-development"] body.appdev-type-trial main .m6-case-metrics > div {
+  flex: 1 1 8em;
+}
+html[data-site-page="application-development"] body.appdev-type-trial main .m6-case-metrics b {
+  font-size: clamp(2.25rem, 3.4vw, 3rem);
+  line-height: 1.2;
+}
+
+/* Overview cards: align both descriptions and remove the unused media row. */
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition {
+  display: block;
+  min-height: 220px;
+  padding: clamp(26px, 2.5vw, 32px);
+}
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition-copy {
+  max-width: 100%;
+}
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition-copy h3 {
+  max-width: none;
+  min-block-size: 2lh;
+}
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition-copy > p {
+  max-width: 42ch;
+  margin-top: 12px;
+}
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition-abstract {
+  width: clamp(220px, 60cqw, 280px);
+}
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition-abstract,
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition-abstract.ad-abstract-square {
+  right: -14%;
+  bottom: -30%;
+}
+@container (min-width: 26rem) {
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition-copy h3 {
+    min-block-size: 1lh;
+  }
+}
+@media (max-width: 700px) {
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition {
+    min-height: 0;
+  }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-proposition-copy h3 {
+    min-block-size: 0;
+  }
+}
+
+/* Page-wide vertical rhythm: generous section edges, scaled for small screens. */
+html[data-site-page="application-development"] body.appdev-type-trial {
+  --appdev-section-space: 6rem;
+  --section-edge: var(--appdev-section-space);
+}
+html[data-site-page="application-development"] body.appdev-type-trial main > .ad-section,
+html[data-site-page="application-development"] body.appdev-type-trial main > .m6-cases:not(.is-scroll-driven),
+html[data-site-page="application-development"] body.appdev-type-trial #case-studies.is-scroll-driven .m6-cases-stage {
+  padding-block: var(--appdev-section-space);
+}
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-hero {
+  padding-top: calc(clamp(122px, 10vw, 154px) + 24px);
+  padding-bottom: 24px;
+}
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-devices {
+  margin-top: calc(clamp(32px, 4vw, 54px) + 16px);
+}
+@media (max-width: 1100px) {
+  html[data-site-page="application-development"] body.appdev-type-trial {
+    --appdev-section-space: 5rem;
+  }
+}
+@media (max-width: 700px) {
+  html[data-site-page="application-development"] body.appdev-type-trial {
+    --appdev-section-space: 4rem;
+  }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-hero {
+    padding-top: 132px;
+    padding-bottom: 16px;
+  }
+  html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-devices {
+    margin-top: 48px;
+  }
+}
+
+/* One continuous page canvas; cards retain their contrasting surfaces. */
+html[data-site-page="application-development"] body.appdev-type-trial,
+html[data-site-page="application-development"] body.appdev-type-trial main > section,
+html[data-site-page="application-development"] body.appdev-type-trial footer.wf {
+  background: var(--bg, #080809);
+}
+html[data-site-page="application-development"] body.appdev-type-trial .ad-ref-hero::before {
+  background: none;
+}

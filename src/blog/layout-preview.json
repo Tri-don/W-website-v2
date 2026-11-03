@@ -1,0 +1,21 @@
+{
+  "_id":"layout-preview-only",
+  "title":"Building enterprise AI that earns trust.",
+  "slug":{"current":"building-enterprise-ai-that-earns-trust"},
+  "excerpt":"The path from a promising prototype to a dependable business capability starts with the right engineering questions.",
+  "categories":[{"title":"AI & Engineering"}],
+  "mainImage":{"url":"assets/images/brain-poster.jpg","alt":"Neural network artwork from the Wissen Dark website"},
+  "body":[
+    {"_type":"block","children":[{"_type":"span","text":"A successful demonstration is a beginning. Bringing AI into an enterprise means designing for the people, processes and constraints that will surround it every day."}]},
+    {"_type":"block","style":"h2","children":[{"_type":"span","text":"Start with the business decision"}]},
+    {"_type":"block","children":[{"_type":"span","text":"Before choosing a model, be clear about the decision it will support. Who uses the output? What does a useful answer look like? What happens when the system is uncertain? These questions connect technical choices to the work that matters."}]},
+    {"_type":"block","style":"blockquote","children":[{"_type":"span","text":"Trust is something we build into the system, one engineering decision at a time."}]},
+    {"_type":"block","style":"h2","children":[{"_type":"span","text":"Design for the real environment"}]},
+    {"_type":"block","children":[{"_type":"span","text":"Real environments bring incomplete data, changing inputs and competing priorities. A useful design makes those constraints visible and gives people a clear way to review the outcome."}]},
+    {"_type":"block","listItem":"bullet","level":1,"children":[{"_type":"span","text":"Define what good performance means for the business."}]},
+    {"_type":"block","listItem":"bullet","level":1,"children":[{"_type":"span","text":"Make human review part of the workflow where it matters."}]},
+    {"_type":"block","listItem":"bullet","level":1,"children":[{"_type":"span","text":"Plan for monitoring, feedback and ongoing improvement."}]},
+    {"_type":"block","style":"h2","children":[{"_type":"span","text":"Make improvement part of delivery"}]},
+    {"_type":"block","children":[{"_type":"span","text":"Delivery continues after the first release. Capture the feedback that changes a decision, investigate where expectations and outcomes diverge, and use what you learn to improve the next iteration."}]}
+  ]
+}

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" data-site-page="home">
+<html lang="en" data-site-page="home" data-wissen-global="true" data-wissen-footer="current" data-wissen-page="index" data-wissen-css="master footer">
 
 <head>
   <meta charset="utf-8" />
@@ -9,11 +9,13 @@
     content="Strategy, design and engineering. Explore Wissen Technology's digital services, industry expertise and people." />
   <title>Website Mark7 | Wissen Technology</title>
 
-  <link rel="stylesheet" href="css/master.css" />
-  <script src="js/master.js"></script>
+  
+  
+<link rel="stylesheet" href="css/site.css">
+<script src="js/site.js"></script>
 </head>
 
-<body class="home-page">
+<body class="home-page wissen-global-type">
   <div class="m3-loader" aria-hidden="true">
     <div class="m3-loader-brand">
       <img decoding="async" src="assets/images/1906600056658812.png" alt="Wissen Technology" width="155"
@@ -65,7 +67,7 @@
     <div class="nv-dropdown" id="nv-services" hidden>
       <div class="nv-services-layout">
         <div class="nv-categories" role="tablist" aria-label="Service categories" aria-orientation="vertical">
-          <button class="nv-category" id="tab-app" role="tab" aria-selected="true" aria-controls="panel-app"
+          <a href="Application-Development.html" class="nv-category" id="tab-app" role="tab" aria-selected="true" aria-controls="panel-app"
             tabindex="0" data-category="app">
             <svg class="nv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35"
               stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -76,7 +78,7 @@
               stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="m9 5 7 7-7 7" />
             </svg>
-          </button>
+          </a>
           <button class="nv-category" id="tab-data" role="tab" aria-selected="false" aria-controls="panel-data"
             tabindex="-1" data-category="data">
             <svg class="nv-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35"
@@ -142,23 +144,23 @@
         <div class="nv-panels">
           <section class="nv-capabilities" id="panel-app" role="tabpanel" aria-labelledby="tab-app">
             <p class="nv-kicker">Explore our capabilities</p>
-            <h2>Application Development</h2>
+            <h2><a href="Application-Development.html">Application Development</a></h2>
             <div class="nv-capability-grid">
-              <a class="nv-item" href="Application-Development.html"><svg class="nv-icon"
+              <a class="nv-item" href="Application-Development-Services.html#web-applications"><svg class="nv-icon"
                   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round"
                   stroke-linejoin="round" aria-hidden="true">
                   <rect x="3" y="4" width="18" height="16" rx="1" />
                   <path d="M3 9h18M6 6.5h.1M9 6.5h.1m6 8 3 3m0-3-3 3" />
                 </svg><span><strong>Web applications</strong><small>Responsive experiences for the modern
                     web.</small></span></a><a class="nv-item"
-                href="Application-Development.html"><svg class="nv-icon" viewBox="0 0 24 24"
+                href="Application-Development-Services.html#mobile-applications"><svg class="nv-icon" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true">
                   <rect x="7" y="2" width="10" height="20" rx="2" />
                   <path d="M10 18h4" />
                 </svg><span><strong>Mobile applications</strong><small>Intuitive experiences across
                     devices.</small></span></a><a class="nv-item"
-                href="Application-Development.html"><svg class="nv-icon" viewBox="0 0 24 24"
+                href="Application-Development-Services.html#enterprise-platforms"><svg class="nv-icon" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true">
                   <rect x="3" y="3" width="18" height="7" rx="1" />
@@ -166,34 +168,34 @@
                   <path d="M7 6h.1M7 17h.1M12 6h6M12 17h6" />
                 </svg><span><strong>Enterprise platforms (ERP, CRM)</strong><small>Reliable systems for complex
                     operations.</small></span></a><a class="nv-item"
-                href="Application-Development.html"><svg class="nv-icon" viewBox="0 0 24 24"
+                href="Application-Development-Services.html#application-modernization"><svg class="nv-icon" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true">
                   <path d="m10 3-1 3-3 1-3-1-1 3 2 3-1 3 1 3 3-1 3 1 1 3h3l1-3 3-1 3 1 1-3-2-3 1-3-1-3-3 1-3-1-1-3Z" />
                   <circle cx="12" cy="12" r="3" />
                 </svg><span><strong>Application modernization</strong><small>Evolve existing systems with
                     confidence.</small></span></a><a class="nv-item"
-                href="Application-Development.html"><svg class="nv-icon" viewBox="0 0 24 24"
+                href="Application-Development-Services.html#api-integrations"><svg class="nv-icon" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true">
                   <path d="m9 15 6-6m-5-2 2-2a5 5 0 0 1 7 7l-2 2m-3 3-2 2a5 5 0 0 1-7-7l2-2" />
                 </svg><span><strong>API & integrations</strong><small>Connect platforms, data and
                     workflows.</small></span></a><a class="nv-item"
-                href="Application-Development.html"><svg class="nv-icon" viewBox="0 0 24 24"
+                href="Application-Development-Services.html#frontend-engineering"><svg class="nv-icon" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true">
                   <rect x="2" y="3" width="20" height="14" rx="1" />
                   <path d="M12 17v4M7 21h10" />
                 </svg><span><strong>Frontend engineering</strong><small>Turn thoughtful design into usable
                     interfaces.</small></span></a><a class="nv-item"
-                href="Application-Development.html"><svg class="nv-icon" viewBox="0 0 24 24"
+                href="Application-Development-Services.html#quality-engineering"><svg class="nv-icon" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true">
                   <path d="m12 2 8 4v6c0 5-8 10-8 10S4 17 4 12V6Z" />
                   <path d="m8 12 3 3 5-6" />
                 </svg><span><strong>Quality engineering &amp; test automation</strong><small>Build confidence through reliable
                     testing.</small></span></a><a class="nv-item"
-                href="Application-Development.html"><svg class="nv-icon" viewBox="0 0 24 24"
+                href="Application-Development-Services.html#maintenance-enhancement"><svg class="nv-icon" viewBox="0 0 24 24"
                   fill="none" stroke="currentColor" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round"
                   aria-hidden="true">
                   <path d="M14 6a5 5 0 0 0-6 6L2 18l4 4 6-6a5 5 0 0 0 6-6l-4 2-3-3Z" />
@@ -574,25 +576,25 @@
   </header>
   <div class="nv-backdrop" aria-hidden="true"></div>
   <main id="main">
-    <section class="hero" aria-labelledby="hero-title">
+    <section class="hero" aria-labelledby="hero-title" data-wissen-hero="true">
       <canvas class="hero-field" aria-hidden="true"></canvas>
       <div class="hero-copy">
-        <p class="eyebrow intro">PRODUCT ENGINEERING DNA.</p>
-        <h1 id="hero-title">
+        <p class="eyebrow intro" data-wissen-type="label">PRODUCT ENGINEERING DNA.</p>
+        <h1 id="hero-title" data-wissen-type="hero-title">
           <span class="line"><span>Enterprise Engineering</span></span><span class="line"><span>ingeniously
               <em>delivered</em></span></span>
         </h1>
-        <p class="hero-description intro">
+        <p class="hero-description intro" data-wissen-type="hero-body">
           We bring deep domain understanding and a product mindset to the
           AI-led customised solutions that move your business forward.
         </p>
         <div class="hero-actions intro">
-          <a class="button primary magnetic ui-button ui-primary" href="index.html#services">Explore our expertise
+          <a class="button primary magnetic ui-button ui-primary" href="index.html#services" data-wissen-type="control">Explore our expertise
             <span><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20" fill="none"
                 stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
                 aria-hidden="true" focusable="false">
                 <path d="M7 17 17 7M7 7h10v10" />
-              </svg></span></a><a class="text-link ui-text" href="Contact-Us.html">Start a
+              </svg></span></a><a class="text-link ui-text" href="Contact-Us.html" data-wissen-type="control">Start a
             conversation
             <span><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20" fill="none"
                 stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
@@ -613,8 +615,8 @@
     </section>
     <section class="scale wrap" id="scale" aria-label="Wissen Technology at a glance">
       <div class="scale-intro reveal">
-        <p class="eyebrow">THE SCALE BEHIND THE IDEAS</p>
-        <p>Built on expertise.<br />Trusted at scale.</p>
+        <p class="eyebrow" data-wissen-type="label">THE SCALE BEHIND THE IDEAS</p>
+        <p data-wissen-type="body">Built on expertise.<br /> Trusted at scale.</p>
       </div>
       <div class="stat reveal">
         <strong data-count="1" data-prefix="$" data-suffix="Bn">$1Bn</strong><span>Worth project value</span>
@@ -629,12 +631,12 @@
     <section class="ws-services" id="services" aria-labelledby="ws-title">
       <header class="ws-heading ws-reveal">
         <div>
-          <p class="ws-eyebrow">Key offerings</p>
-          <h2 id="ws-title">
-            Complex challenges.<br />Clear <em>possibilities.</em>
+          <p class="ws-eyebrow" data-wissen-type="label">Key offerings</p>
+          <h2 id="ws-title" data-wissen-type="section-title">
+            Complex challenges.<br /> Clear <em>possibilities.</em>
           </h2>
         </div>
-        <p class="ws-intro">
+        <p class="ws-intro" data-wissen-type="body">
           From the first idea to the systems that power your business. Explore
           the expertise that moves you forward.
         </p>
@@ -647,8 +649,8 @@
                 width="782" height="1030" />
             </div>
             <div class="ws-copy">
-              <h3 id="ws-app-title">Application<br />Development</h3>
-              <p>Digital experiences.<br />Scalable platforms.</p>
+              <h3 id="ws-app-title" data-wissen-type="card-title">Application<br /> Development</h3>
+              <p data-wissen-type="card-body">Digital experiences.<br /> Scalable platforms.</p>
               <span class="ws-link">Explore
                 <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20"
                     fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
@@ -663,8 +665,8 @@
             <img loading="lazy" decoding="async" class="ws-art" src="assets/images/big-data.svg" alt="" width="1046"
               height="1046" />
             <div class="ws-copy">
-              <h3 id="ws-data-title">Agentic Data<br />Platforms</h3>
-              <p>Prepare enterprise data<br />for AI agents.</p>
+              <h3 id="ws-data-title" data-wissen-type="card-title">Agentic Data<br /> Platforms</h3>
+              <p data-wissen-type="card-body">Prepare enterprise data<br /> for AI agents.</p>
               <span class="ws-link">Explore
                 <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20"
                     fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
@@ -679,8 +681,8 @@
             <img loading="lazy" decoding="async" class="ws-art" src="assets/images/intelligent-automation.svg" alt=""
               width="782" height="1018" />
             <div class="ws-copy">
-              <h3 id="ws-auto-title">Intelligent<br />Automation</h3>
-              <p>Less friction.<br />More opportunity.</p>
+              <h3 id="ws-auto-title" data-wissen-type="card-title">Intelligent<br /> Automation</h3>
+              <p data-wissen-type="card-body">Less friction.<br /> More opportunity.</p>
               <span class="ws-link">Explore
                 <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20"
                     fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
@@ -695,8 +697,8 @@
             <img loading="lazy" decoding="async" class="ws-art" src="assets/images/ai-ml.svg" alt="" width="774"
               height="1030" />
             <div class="ws-copy">
-              <h3 id="ws-ai-title">AI &amp; ML</h3>
-              <p>Bring intelligence<br />into your business.</p>
+              <h3 id="ws-ai-title" data-wissen-type="card-title">AI &amp; ML</h3>
+              <p data-wissen-type="card-body">Bring intelligence<br /> into your business.</p>
               <span class="ws-link">Explore
                 <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20"
                     fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
@@ -711,8 +713,8 @@
             <img loading="lazy" decoding="async" class="ws-art" src="assets/images/cloud.svg" alt="" width="774"
               height="1010" />
             <div class="ws-copy">
-              <h3 id="ws-cloud-title">Cloud</h3>
-              <p>Strategy, migration<br />and management.</p>
+              <h3 id="ws-cloud-title" data-wissen-type="card-title">Cloud</h3>
+              <p data-wissen-type="card-body">Strategy, migration<br /> and management.</p>
               <span class="ws-link">Explore
                 <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20"
                     fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
@@ -727,8 +729,8 @@
             <img loading="lazy" decoding="async" class="ws-art" src="assets/images/support.svg" alt="" width="764"
               height="1008" />
             <div class="ws-copy">
-              <h3 id="ws-support-title">Experience Design</h3>
-              <p>Create intuitive, engaging<br />digital experiences.</p>
+              <h3 id="ws-support-title" data-wissen-type="card-title">Experience Design</h3>
+              <p data-wissen-type="card-body">Create intuitive, engaging<br /> digital experiences.</p>
               <span class="ws-link">Explore
                 <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20"
                     fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
@@ -782,8 +784,8 @@
         <div class="wd-stage">
           <header class="wd-header">
             <div>
-              <p class="wd-eyebrow">Our approach</p>
-              <h2 id="wd-heading">
+              <p class="wd-eyebrow" data-wissen-type="label">Our approach</p>
+              <h2 id="wd-heading" data-wissen-type="section-title">
                 The <em>difference</em><span class="wd-brand-line">Wissen Technology makes.</span>
               </h2>
             </div>
@@ -791,16 +793,16 @@
           <div class="wd-panels">
             <article class="wd-panel wd-active" aria-labelledby="wd-title-0">
               <div class="wd-copy">
-                <p class="wd-count"><b>01</b> / 04</p>
-                <p class="wd-kick">Discover</p>
-                <h2 id="wd-title-0">
+                <p class="wd-count" data-wissen-type="label"><b>01</b> / 04</p>
+                <p class="wd-kick" data-wissen-type="label">Discover</p>
+                <h2 id="wd-title-0" data-wissen-type="section-title">
                   <span class="wd-word">Start</span>
                   <span class="wd-word">with</span>
                   <span class="wd-word">the</span>
                   <span class="wd-word"><em>real</em></span>
                   <span class="wd-word"><em>problem.</em></span>
                 </h2>
-                <p class="wd-body">
+                <p class="wd-body" data-wissen-type="body">
                   Domain experts map the business, the data and the
                   constraints before a line of code is written.
                 </p>
@@ -818,16 +820,16 @@
             </article>
             <article class="wd-panel" aria-labelledby="wd-title-1">
               <div class="wd-copy">
-                <p class="wd-count"><b>02</b> / 04</p>
-                <p class="wd-kick">Architect</p>
-                <h2 id="wd-title-1">
+                <p class="wd-count" data-wissen-type="label"><b>02</b> / 04</p>
+                <p class="wd-kick" data-wissen-type="label">Architect</p>
+                <h2 id="wd-title-1" data-wissen-type="section-title">
                   <span class="wd-word">Architected</span>
                   <span class="wd-word">right</span>
                   <span class="wd-word">the</span>
                   <span class="wd-word"><em>first</em></span>
                   <span class="wd-word"><em>time.</em></span>
                 </h2>
-                <p class="wd-body">
+                <p class="wd-body" data-wissen-type="body">
                   A genuine product engineering mindset means custom
                   solutions, faster time to market and significantly less
                   rework.
@@ -846,15 +848,15 @@
             </article>
             <article class="wd-panel" aria-labelledby="wd-title-2">
               <div class="wd-copy">
-                <p class="wd-count"><b>03</b> / 04</p>
-                <p class="wd-kick">Engineer</p>
-                <h2 id="wd-title-2">
+                <p class="wd-count" data-wissen-type="label"><b>03</b> / 04</p>
+                <p class="wd-kick" data-wissen-type="label">Engineer</p>
+                <h2 id="wd-title-2" data-wissen-type="section-title">
                   <span class="wd-word">Delivery</span>
                   <span class="wd-word">shaped</span>
                   <span class="wd-word"><em>around</em></span>
                   <span class="wd-word"><em>you.</em></span>
                 </h2>
-                <p class="wd-body">
+                <p class="wd-body" data-wissen-type="body">
                   Outcome-based projects for predictable cost and timelines,
                   or agile pods for teams that need flexibility at speed.
                 </p>
@@ -873,9 +875,9 @@
             </article>
             <article class="wd-panel" aria-labelledby="wd-title-3">
               <div class="wd-copy">
-                <p class="wd-count"><b>04</b> / 04</p>
-                <p class="wd-kick">Scale</p>
-                <h2 id="wd-title-3">
+                <p class="wd-count" data-wissen-type="label"><b>04</b> / 04</p>
+                <p class="wd-kick" data-wissen-type="label">Scale</p>
+                <h2 id="wd-title-3" data-wissen-type="section-title">
                   <span class="wd-word">AI</span>
                   <span class="wd-word">where</span>
                   <span class="wd-word">it</span>
@@ -883,7 +885,7 @@
                   <span class="wd-word"><em>the</em></span>
                   <span class="wd-word"><em>needle.</em></span>
                 </h2>
-                <p class="wd-body">
+                <p class="wd-body" data-wissen-type="body">
                   AI/ML, cloud and data engineering applied where they deliver
                   real business outcomes, at twice the impact of traditional
                   providers.
@@ -905,17 +907,17 @@
       </div>
     </section>
     <section class="rai viewport-section" id="responsible-ai" aria-labelledby="rai-title">
-      <p class="rai-eyebrow">Responsible AI</p>
+      <p class="rai-eyebrow" data-wissen-type="label">Responsible AI</p>
       <header class="rai-heading">
-        <h2 id="rai-title">Building AI you can <em>trust.</em></h2>
-        <p class="rai-intro">
+        <h2 id="rai-title" data-wissen-type="section-title">Building AI you can <em>trust.</em></h2>
+        <p class="rai-intro" data-wissen-type="body">
           Ethical, secure, transparent and governed AI solutions designed for
           enterprise use.
         </p>
       </header>
       <div class="rai-diagram" role="group" aria-label="Responsible AI lifecycle, with governance across every stage">
         <div class="rai-diagram-head">
-          <p class="rai-caption">Trust at every stage</p>
+          <p class="rai-caption" data-wissen-type="label">Trust at every stage</p>
         </div>
         <div class="rai-governance">
           <div class="rai-governance-title">
@@ -925,7 +927,7 @@
               <path d="m7 13 3 3 7-7" />
             </svg>Governance by design
           </div>
-          <p class="rai-controls">
+          <p class="rai-controls" data-wissen-type="body">
             <span>Guardrails</span><span>Human review</span><span>Audit &amp; monitoring</span>
           </p>
         </div>
@@ -981,20 +983,20 @@
       </div>
       <div class="rai-pillars">
         <article class="rai-pillar">
-          <h3>Ethical</h3>
-          <p>Bias mitigation and human oversight by design.</p>
+          <h3 data-wissen-type="card-title">Ethical</h3>
+          <p data-wissen-type="card-body">Bias mitigation and human oversight by design.</p>
         </article>
         <article class="rai-pillar">
-          <h3>Secure</h3>
-          <p>Delivered under ISO 27001 security controls.</p>
+          <h3 data-wissen-type="card-title">Secure</h3>
+          <p data-wissen-type="card-body">Delivered under ISO 27001 security controls.</p>
         </article>
         <article class="rai-pillar">
-          <h3>Transparent</h3>
-          <p>Decisions that can be traced and explained.</p>
+          <h3 data-wissen-type="card-title">Transparent</h3>
+          <p data-wissen-type="card-body">Decisions that can be traced and explained.</p>
         </article>
         <article class="rai-pillar">
-          <h3>Governed</h3>
-          <p>Model monitoring from data to deployment.</p>
+          <h3 data-wissen-type="card-title">Governed</h3>
+          <p data-wissen-type="card-body">Model monitoring from data to deployment.</p>
         </article>
       </div>
       <div class="rai-footer">
@@ -1010,13 +1012,13 @@
         <source data-src="assets/videos/822fd8c8337b087b.mp4" type="video/mp4" />
       </video>
       <div class="wrap">
-        <p class="eyebrow reveal">
+        <p class="eyebrow reveal" data-wissen-type="label">
           TECHNOLOGY IS THE HOW. PEOPLE ARE THE WHY.
         </p>
-        <p class="statement-text reveal">
-          The future doesn’t<br />build itself.<br /><em>We build it together.</em>
+        <p class="statement-text reveal" data-wissen-type="section-title">
+          The future doesn’t<br /> build itself.<br /> <em>We build it together.</em>
         </p>
-        <a class="text-link reveal ui-text" href="#company">Meet Wissen Technology
+        <a class="text-link reveal ui-text" href="#company" data-wissen-type="control">Meet Wissen Technology
           <span><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor"
               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
               <path d="M7 17 17 7M7 7h10v10" />
@@ -1025,11 +1027,10 @@
     </section>
     <section class="wi-industries viewport-section" id="industries" aria-labelledby="wi-heading">
       <header class="wi-heading">
-        <p class="wi-eyebrow">Industries we service</p>
-        <h2 id="wi-heading">
-          Domain depth where the<br />stakes are <em>highest.</em>
+        <p class="wi-eyebrow" data-wissen-type="label">Industries we service</p>
+        <h2 id="wi-heading" data-wissen-type="section-title">
+          Domain depth where the<br /> stakes are <em>highest.</em>
         </h2>
-        <p class="wi-subheading">Select an industry to see where we focus.</p>
       </header>
       <!-- Native radio inputs provide click/tap selection and arrow-key navigation, without JavaScript. -->
       <div class="wi-accordion" role="group" aria-label="Explore our industries">
@@ -1042,17 +1043,17 @@
           <span class="wi-number" aria-hidden="true">01</span>
           <span class="wi-vertical" aria-hidden="true">BFSI &amp; FinTech</span>
           <div class="wi-content">
-            <h3>BFSI &amp; FinTech</h3>
-            <p class="wi-lead">Engineering smarter financial experiences.</p>
-            <p class="wi-description">
+            <h3 data-wissen-type="card-title">BFSI &amp; FinTech</h3>
+            <p class="wi-lead" data-wissen-type="card-body">Engineering smarter financial experiences.</p>
+            <p class="wi-description" data-wissen-type="card-body">
               From trading and risk to lending platforms, we help turn complex
               workflows into intuitive digital experiences.
             </p>
             <ul class="wi-tags" aria-label="Focus areas">
-              <li>Trading platforms</li>
-              <li>Risk analytics</li>
-              <li>Digital lending</li>
-              <li>Wealth management</li>
+              <li data-wissen-type="card-body">Trading platforms</li>
+              <li data-wissen-type="card-body">Risk analytics</li>
+              <li data-wissen-type="card-body">Digital lending</li>
+              <li data-wissen-type="card-body">Wealth management</li>
             </ul>
             <a class="wi-link" href="Industries-BFSI.html">Explore BFSI
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1067,19 +1068,19 @@
           <span class="wi-number" aria-hidden="true">02</span>
           <span class="wi-vertical" aria-hidden="true">Retail</span>
           <div class="wi-content">
-            <h3>Retail</h3>
-            <p class="wi-lead">
+            <h3 data-wissen-type="card-title">Retail</h3>
+            <p class="wi-lead" data-wissen-type="card-body">
               Connected experiences. From discovery to delivery.
             </p>
-            <p class="wi-description">
+            <p class="wi-description" data-wissen-type="card-body">
               Bring stores, digital channels and operations together to create
               a more seamless shopping experience.
             </p>
             <ul class="wi-tags" aria-label="Focus areas">
-              <li>Digital commerce</li>
-              <li>Customer experience</li>
-              <li>Inventory visibility</li>
-              <li>Retail analytics</li>
+              <li data-wissen-type="card-body">Digital commerce</li>
+              <li data-wissen-type="card-body">Customer experience</li>
+              <li data-wissen-type="card-body">Inventory visibility</li>
+              <li data-wissen-type="card-body">Retail analytics</li>
             </ul>
             <a class="wi-link" href="https://wissen.com/industries/retail">Explore Retail
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1095,17 +1096,17 @@
           <span class="wi-number" aria-hidden="true">03</span>
           <span class="wi-vertical" aria-hidden="true">Healthcare &amp; Life Sciences</span>
           <div class="wi-content">
-            <h3>Healthcare &amp;<br />Life Sciences</h3>
-            <p class="wi-lead">Better technology. More human care.</p>
-            <p class="wi-description">
+            <h3 data-wissen-type="card-title">Healthcare &amp;<br /> Life Sciences</h3>
+            <p class="wi-lead" data-wissen-type="card-body">Better technology. More human care.</p>
+            <p class="wi-description" data-wissen-type="card-body">
               Connect healthcare data and simplify critical workflows,
               supporting the people delivering care and advancing research.
             </p>
             <ul class="wi-tags" aria-label="Focus areas">
-              <li>Patient experiences</li>
-              <li>Data interoperability</li>
-              <li>Clinical workflows</li>
-              <li>Research platforms</li>
+              <li data-wissen-type="card-body">Patient experiences</li>
+              <li data-wissen-type="card-body">Data interoperability</li>
+              <li data-wissen-type="card-body">Clinical workflows</li>
+              <li data-wissen-type="card-body">Research platforms</li>
             </ul>
             <a class="wi-link" href="https://wissen.com/industries/healthcare-life-sciences">Explore Healthcare
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1121,17 +1122,17 @@
           <span class="wi-number" aria-hidden="true">04</span>
           <span class="wi-vertical" aria-hidden="true">Telecom</span>
           <div class="wi-content">
-            <h3>Telecom</h3>
-            <p class="wi-lead">Powering a more connected world.</p>
-            <p class="wi-description">
+            <h3 data-wissen-type="card-title">Telecom</h3>
+            <p class="wi-lead" data-wissen-type="card-body">Powering a more connected world.</p>
+            <p class="wi-description" data-wissen-type="card-body">
               Modernize the platforms behind connectivity, from network
               operations to the everyday experiences of your customers.
             </p>
             <ul class="wi-tags" aria-label="Focus areas">
-              <li>Network operations</li>
-              <li>Service automation</li>
-              <li>Customer platforms</li>
-              <li>Data insights</li>
+              <li data-wissen-type="card-body">Network operations</li>
+              <li data-wissen-type="card-body">Service automation</li>
+              <li data-wissen-type="card-body">Customer platforms</li>
+              <li data-wissen-type="card-body">Data insights</li>
             </ul>
             <a class="wi-link" href="https://wissen.com/industries/telecom">Explore Telecom
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1147,18 +1148,18 @@
           <span class="wi-number" aria-hidden="true">05</span>
           <span class="wi-vertical" aria-hidden="true">Manufacturing</span>
           <div class="wi-content">
-            <h3>Manufacturing</h3>
-            <p class="wi-lead">Build intelligence into every operation.</p>
-            <p class="wi-description">
+            <h3 data-wissen-type="card-title">Manufacturing</h3>
+            <p class="wi-lead" data-wissen-type="card-body">Build intelligence into every operation.</p>
+            <p class="wi-description" data-wissen-type="card-body">
               Connect production systems and operational data to help teams
               improve visibility, streamline processes and make informed
               decisions.
             </p>
             <ul class="wi-tags" aria-label="Focus areas">
-              <li>Connected factories</li>
-              <li>Process automation</li>
-              <li>Quality insights</li>
-              <li>Supply chain visibility</li>
+              <li data-wissen-type="card-body">Connected factories</li>
+              <li data-wissen-type="card-body">Process automation</li>
+              <li data-wissen-type="card-body">Quality insights</li>
+              <li data-wissen-type="card-body">Supply chain visibility</li>
             </ul>
             <a class="wi-link" href="https://wissen.com/industries/manufacturing">Explore Manufacturing
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1173,17 +1174,17 @@
           <span class="wi-number" aria-hidden="true">06</span>
           <span class="wi-vertical" aria-hidden="true">Energy &amp; Commodities</span>
           <div class="wi-content">
-            <h3>Energy &amp; Commodities</h3>
-            <p class="wi-lead">Clarity for a changing energy landscape.</p>
-            <p class="wi-description">
+            <h3 data-wissen-type="card-title">Energy &amp; Commodities</h3>
+            <p class="wi-lead" data-wissen-type="card-body">Clarity for a changing energy landscape.</p>
+            <p class="wi-description" data-wissen-type="card-body">
               Bring asset, market and operational data into focus with digital
               platforms built for complex energy and commodity workflows.
             </p>
             <ul class="wi-tags" aria-label="Focus areas">
-              <li>Asset monitoring</li>
-              <li>Trading systems</li>
-              <li>Operational analytics</li>
-              <li>Energy platforms</li>
+              <li data-wissen-type="card-body">Asset monitoring</li>
+              <li data-wissen-type="card-body">Trading systems</li>
+              <li data-wissen-type="card-body">Operational analytics</li>
+              <li data-wissen-type="card-body">Energy platforms</li>
             </ul>
             <a class="wi-link" href="https://wissen.com/industries/energy-commodities">Explore Energy
               <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -1198,8 +1199,8 @@
         <div class="m6-cases-stage">
           <header class="wrap m6-cases-heading">
             <div>
-              <p class="eyebrow">Case studies</p>
-              <h2 id="case-studies-heading">
+              <p class="eyebrow" data-wissen-type="label">Case studies</p>
+              <h2 id="case-studies-heading" data-wissen-type="section-title">
                 <span class="m6-cases-title-line">Impact you can <em>measure.</em></span>
               </h2>
             </div>
@@ -1210,39 +1211,39 @@
               <article class="m6-case">
                 <div class="m6-case-image">
                   <img src="assets/images/5b8f6126e23f8036.webp" alt="" loading="lazy" decoding="async" width="640"
-                    height="400" /><span>Data platform</span>
+                    height="400" /><span data-wissen-type="label">Data platform</span>
                 </div>
                 <div class="m6-case-body">
-                  <p class="m6-case-capability">Data engineering, AWS</p>
-                  <h3>
+                  <p class="m6-case-capability" data-wissen-type="label">Data engineering, AWS</p>
+                  <h3 data-wissen-type="card-title">
                     <a href="https://wissen.com/insights/success-stories/case-study-cloud-migration-using-emr"
                       target="_blank" rel="noopener">Cloud migration using Amazon EMR</a>
                   </h3>
                   <div class="m6-case-metrics">
                     <div>
-                      <b>60%</b><small>Improvement in query run time</small>
+                      <b>60%</b><small data-wissen-type="caption">Improvement in query run time</small>
                     </div>
-                    <div><b>28%</b><small>Reduction in cost</small></div>
+                    <div><b>28%</b><small data-wissen-type="caption">Reduction in cost</small></div>
                   </div>
                 </div>
               </article>
               <article class="m6-case">
                 <div class="m6-case-image">
                   <img src="assets/images/e9d173906261b4a6.webp" alt="" loading="lazy" decoding="async" width="640"
-                    height="400" /><span>Transportation</span>
+                    height="400" /><span data-wissen-type="label">Transportation</span>
                 </div>
                 <div class="m6-case-body">
-                  <p class="m6-case-capability">Cloud migration, AWS</p>
-                  <h3>
+                  <p class="m6-case-capability" data-wissen-type="label">Cloud migration, AWS</p>
+                  <h3 data-wissen-type="card-title">
                     <a href="https://wissen.com/insights/success-stories/case-study-aws-relational-database-service-for-a-leading-transportation-company"
                       target="_blank" rel="noopener">Streamlining data handling with Amazon RDS</a>
                   </h3>
                   <div class="m6-case-metrics">
                     <div>
-                      <b>100%</b><small>Application availability</small>
+                      <b>100%</b><small data-wissen-type="caption">Application availability</small>
                     </div>
                     <div>
-                      <b>45%</b><small>Faster end-to-end queries</small>
+                      <b>45%</b><small data-wissen-type="caption">Faster end-to-end queries</small>
                     </div>
                   </div>
                 </div>
@@ -1250,16 +1251,16 @@
               <article class="m6-case">
                 <div class="m6-case-image">
                   <img src="assets/images/64d3bb66c7265833.webp" alt="" loading="lazy" decoding="async" width="640"
-                    height="400" /><span>BFSI &amp; FinTech</span>
+                    height="400" /><span data-wissen-type="label">BFSI &amp; FinTech</span>
                 </div>
                 <div class="m6-case-body">
-                  <p class="m6-case-capability">AI &amp; ML</p>
-                  <h3>
+                  <p class="m6-case-capability" data-wissen-type="label">AI &amp; ML</p>
+                  <h3 data-wissen-type="card-title">
                     <a href="https://wissen.com/insights/success-stories/success-story-bridging-the-gap-revolutionizing-loan-approval-with-ai"
                       target="_blank" rel="noopener">Revolutionizing loan approval with AI</a>
                   </h3>
                   <div class="m6-case-metrics">
-                    <p>
+                    <p data-wissen-type="card-body-long">
                       AI-driven document checks, risk scoring and decision
                       support
                     </p>
@@ -1274,17 +1275,17 @@
               <article class="m6-case">
                 <div class="m6-case-image">
                   <img src="assets/images/088bfb0f03c6514f.webp" alt="" loading="lazy" decoding="async" width="640"
-                    height="400" /><span>Data platform</span>
+                    height="400" /><span data-wissen-type="label">Data platform</span>
                 </div>
                 <div class="m6-case-body">
-                  <p class="m6-case-capability">Big Data, AWS</p>
-                  <h3>
+                  <p class="m6-case-capability" data-wissen-type="label">Big Data, AWS</p>
+                  <h3 data-wissen-type="card-title">
                     <a href="https://wissen.com/insights/success-stories/case-study-greenplum-db-to-aws-redshift-migration"
                       target="_blank" rel="noopener">Greenplum to Amazon Redshift migration</a>
                   </h3>
                   <div class="m6-case-metrics">
                     <div>
-                      <b>50%</b><small>Improvement in query run time</small>
+                      <b>50%</b><small data-wissen-type="caption">Improvement in query run time</small>
                     </div>
                   </div>
                 </div>
@@ -1292,16 +1293,16 @@
               <article class="m6-case">
                 <div class="m6-case-image">
                   <img src="assets/images/91bf318f47c89efc.webp" alt="" loading="lazy" decoding="async" width="640"
-                    height="400" /><span>Intelligent automation</span>
+                    height="400" /><span data-wissen-type="label">Intelligent automation</span>
                 </div>
                 <div class="m6-case-body">
-                  <p class="m6-case-capability">AI &amp; ML</p>
-                  <h3>
+                  <p class="m6-case-capability" data-wissen-type="label">AI &amp; ML</p>
+                  <h3 data-wissen-type="card-title">
                     <a href="https://wissen.com/insights/success-stories/case-study-pdf-data-extraction" target="_blank"
                       rel="noopener">Purchase order data extraction with machine learning</a>
                   </h3>
                   <div class="m6-case-metrics">
-                    <p>
+                    <p data-wissen-type="card-body-long">
                       Spatial and typographic cues used to extract PDF data
                     </p>
                     <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20"
@@ -1315,16 +1316,16 @@
               <article class="m6-case">
                 <div class="m6-case-image">
                   <img src="assets/images/761f7a9387ba22c5.webp" alt="" loading="lazy" decoding="async" width="640"
-                    height="400" /><span>Telecom</span>
+                    height="400" /><span data-wissen-type="label">Telecom</span>
                 </div>
                 <div class="m6-case-body">
-                  <p class="m6-case-capability">Production support</p>
-                  <h3>
+                  <p class="m6-case-capability" data-wissen-type="label">Production support</p>
+                  <h3 data-wissen-type="card-title">
                     <a href="https://wissen.com/insights/success-stories/case-study-fault-monitoring-and-management"
                       target="_blank" rel="noopener">Transforming fault management in telecom</a>
                   </h3>
                   <div class="m6-case-metrics">
-                    <p>
+                    <p data-wissen-type="card-body-long">
                       Scalable fault monitoring built on deep telecom
                       expertise
                     </p>
@@ -1337,9 +1338,9 @@
                 </div>
               </article>
               <article class="m6-case m6-case-end">
-                <h3>See every<br />success story.</h3>
-                <p>From trading platforms to remote patient monitoring.</p>
-                <a class="button ui-button ui-secondary" href="https://wissen.com/insights/success-stories">Browse all
+                <h3 data-wissen-type="card-title">See every<br /> success story.</h3>
+                <p data-wissen-type="card-body-long">From trading platforms to remote patient monitoring.</p>
+                <a class="button ui-button ui-secondary" href="https://wissen.com/insights/success-stories" data-wissen-type="control">Browse all
                   <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20"
                       fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
                       stroke-linejoin="round" aria-hidden="true" focusable="false">
@@ -1356,15 +1357,15 @@
     </section>
     <section class="solutions section wrap viewport-section" id="solutions">
       <div class="section-heading reveal">
-        <p class="eyebrow">SOLUTIONS IN FOCUS</p>
-        <h2>Ideas with<br /><em>an application.</em></h2>
+        <p class="eyebrow" data-wissen-type="label">SOLUTIONS IN FOCUS</p>
+        <h2 data-wissen-type="section-title">Ideas with<br /> <em>an application.</em></h2>
       </div>
       <div class="solution-grid">
         <a class="solution-feature tilt reveal" href="https://wissen.com/solutions/interview-ninja">
           <div class="feature-copy">
             <span class="pill">FEATURED SOLUTION</span>
-            <h3>Better interviews.<br />Better possibilities.</h3>
-            <p>
+            <h3 data-wissen-type="feature-title">Better interviews.<br /> Better possibilities.</h3>
+            <p data-wissen-type="body">
               Meet InterviewNinja. Bring structure and consistency to
               interviews across your organisation.
             </p>
@@ -1380,8 +1381,8 @@
         </a>
         <div class="solution-secondary">
           <a class="small-feature reveal" href="https://wissen.com/services/cloud">
-            <p class="eyebrow">CLOUD</p>
-            <h3>Make your next<br />move a cloud move.</h3>
+            <p class="eyebrow" data-wissen-type="label">CLOUD</p>
+            <h3 data-wissen-type="card-title">Make your next<br /> move a cloud move.</h3>
             <div>
               <span>Accelerate cloud adoption</span><span class="circle-arrow"><svg class="ui-arrow-icon"
                   viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6"
@@ -1390,8 +1391,8 @@
                 </svg></span>
             </div>
           </a><a class="small-feature data-feature reveal" href="https://wissen.com/services/big-data-analytics">
-            <p class="eyebrow">DATA &amp; ANALYTICS</p>
-            <h3>Big decisions.<br />Better data.</h3>
+            <p class="eyebrow" data-wissen-type="label">DATA &amp; ANALYTICS</p>
+            <h3 data-wissen-type="card-title">Big decisions.<br /> Better data.</h3>
             <div>
               <span>Explore Big Data</span><span class="circle-arrow"><svg class="ui-arrow-icon" viewBox="0 0 24 24"
                   width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
@@ -1406,9 +1407,9 @@
     <section class="company section wrap viewport-section" id="company" aria-labelledby="certifications-heading">
       <div class="company-grid">
         <div class="reveal">
-          <p class="eyebrow">CERTIFICATIONS &amp; RECOGNITION</p>
-          <h2 id="certifications-heading">Excellence. <em>Certified.</em></h2>
-          <p class="body-copy">
+          <p class="eyebrow" data-wissen-type="label">CERTIFICATIONS &amp; RECOGNITION</p>
+          <h2 id="certifications-heading" data-wissen-type="section-title">Excellence. <em>Certified.</em></h2>
+          <p class="body-copy" data-wissen-type="body">
             Quality, security, and a culture that puts people first.
           </p>
         </div>
@@ -1416,8 +1417,8 @@
           <figure class="m4-cert-logo">
             <img decoding="async" src="assets/images/52da055192d304c3.webp" alt="CMMI Level 3" loading="lazy" />
             <figcaption>
-              <h3>CMMI Level 3</h3>
-              <p>
+              <h3 data-wissen-type="caption">CMMI Level 3</h3>
+              <p data-wissen-type="caption">
                 Defined, repeatable engineering processes that drive
                 consistent, high-quality project delivery.
               </p>
@@ -1427,8 +1428,8 @@
             <img decoding="async" src="assets/images/8442a4783052df6b.webp" alt="AICPA SOC" class="soc-logo"
               loading="lazy" />
             <figcaption>
-              <h3>AICPA SOC</h3>
-              <p>
+              <h3 data-wissen-type="caption">AICPA SOC</h3>
+              <p data-wissen-type="caption">
                 Robust controls that safeguard customer data and support
                 secure, reliable service delivery.
               </p>
@@ -1437,8 +1438,8 @@
           <figure class="m4-cert-logo">
             <img decoding="async" src="assets/images/ee22688c32826625.webp" alt="ISO 9001" loading="lazy" />
             <figcaption>
-              <h3>ISO 9001</h3>
-              <p>
+              <h3 data-wissen-type="caption">ISO 9001</h3>
+              <p data-wissen-type="caption">
                 Consistent quality management focused on reliable delivery and
                 continuous improvement.
               </p>
@@ -1447,8 +1448,8 @@
           <figure class="m4-cert-logo">
             <img decoding="async" src="assets/images/6b2fbec73e585e50.webp" alt="ISO 27001" loading="lazy" />
             <figcaption>
-              <h3>ISO 27001</h3>
-              <p>
+              <h3 data-wissen-type="caption">ISO 27001</h3>
+              <p data-wissen-type="caption">
                 Robust information security practices protecting critical data
                 and systems.
               </p>
@@ -1457,8 +1458,8 @@
           <figure class="m4-cert-logo">
             <img decoding="async" src="assets/images/6e68de38601bbd55.webp" alt="Great Place to Work" loading="lazy" />
             <figcaption>
-              <h3>Great Place to Work</h3>
-              <p>
+              <h3 data-wissen-type="caption">Great Place to Work</h3>
+              <p data-wissen-type="caption">
                 A people-first workplace built on trust, collaboration, and
                 opportunities to learn and grow.
               </p>
@@ -1470,13 +1471,13 @@
     <section class="wb-blog viewport-section" id="insights" aria-labelledby="wb-title">
       <header class="wb-heading">
         <div>
-          <p class="wb-eyebrow">Blog &amp; Insights</p>
-          <h2 id="wb-title">
-            Ideas that move<br />business <em>forward.</em>
+          <p class="wb-eyebrow" data-wissen-type="label">Blog &amp; Insights</p>
+          <h2 id="wb-title" data-wissen-type="section-title">
+            Ideas that move<br /> business <em>forward.</em>
           </h2>
         </div>
         <div class="wb-intro">
-          <p>Perspectives from the people<br />engineering what’s next.</p>
+          <p data-wissen-type="body">Perspectives from the people<br /> engineering what’s next.</p>
         </div>
       </header>
       <div class="wb-grid">
@@ -1491,8 +1492,8 @@
                 <path d="M7 17 17 7M7 7h10v10" />
               </svg></span>
           </div>
-          <h3 id="wb-capital-title">
-            Capital that works<br />while we sleep.
+          <h3 id="wb-capital-title" data-wissen-type="card-title">
+            Capital that works<br /> while we sleep.
           </h3>
           <div class="wb-photo-frame wb-thought-photo">
             <img loading="lazy" decoding="async" src="assets/images/Thought Leadership.jpg"
@@ -1523,8 +1524,8 @@
           </div>
           <div class="wb-feature-copy">
             <span class="wb-category">Blog : AI &amp; Engineering</span>
-            <h3 id="wb-ai-title">
-              AI is rewiring the<br />software industry.
+            <h3 id="wb-ai-title" data-wissen-type="card-title">
+              AI is rewiring the<br /> software industry.
             </h3>
             <span class="wb-arrow" aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20"
                 height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
@@ -1544,8 +1545,8 @@
                 <path d="M7 17 17 7M7 7h10v10" />
               </svg></span>
           </div>
-          <h3 id="wb-transformation-title">
-            Forging the future<br />of transformation.
+          <h3 id="wb-transformation-title" data-wissen-type="card-title">
+            Forging the future<br /> of transformation.
           </h3>
           <div class="wb-photo-frame wb-team-photo">
             <img loading="lazy" decoding="async" src="assets/images/54b8da78cefa1b7d.webp"
@@ -1556,10 +1557,10 @@
     </section>
     <section class="wp" id="people" aria-labelledby="wp-title">
       <div class="wp-wrap">
-        <p class="wp-eyebrow">People of Wissen Technology</p>
+        <p class="wp-eyebrow" data-wissen-type="label">People of Wissen Technology</p>
         <header class="wp-heading">
-          <h2 id="wp-title">Work. Play. <em>Learn.</em></h2>
-          <p class="wp-intro">
+          <h2 id="wp-title" data-wissen-type="section-title">Work. Play. <em>Learn.</em></h2>
+          <p class="wp-intro" data-wissen-type="body">
             The people behind the possibilities. Shared ideas, shared
             celebrations, and room to grow.
           </p>
@@ -1668,39 +1669,39 @@
         <div class="m6-cta-ring m6-cta-ring-three"></div>
       </div>
       <div class="wrap">
-        <h2 id="contact-heading">
+        <h2 id="contact-heading" data-wissen-type="section-title">
           <span class="bfsi-cta-title-line">Ready to transform</span>
           <em>what’s next?</em>
         </h2>
-        <p class="m6-cta-description">
+        <p class="m6-cta-description" data-wissen-type="body">
           Partner with Wissen Technology to solve complex business challenges
           through AI, engineering and deep domain expertise.
         </p>
         <div class="m6-cta-actions">
-          <a class="button primary magnetic ui-button ui-primary" href="Contact-Us.html">Start a
+          <a class="button primary magnetic ui-button ui-primary" href="Contact-Us.html" data-wissen-type="control">Start a
             conversation
             <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20" fill="none"
                 stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
                 aria-hidden="true" focusable="false">
                 <path d="M7 17 17 7M7 7h10v10" />
               </svg></span></a><a class="button m6-cta-secondary magnetic ui-button ui-secondary"
-            href="index.html#case-studies">Explore success stories</a>
+            href="index.html#case-studies" data-wissen-type="control">Explore success stories</a>
         </div>
       </div>
     </section>
     <section class="wg viewport-section" id="global-presence" aria-labelledby="wg-title">
-      <p class="wg-eyebrow">Global presence</p>
+      <p class="wg-eyebrow" data-wissen-type="label">Global presence</p>
       <header class="wg-heading">
-        <h2 id="wg-title">Global minds.<br />Shared <em>ambition.</em></h2>
-        <p class="wg-intro">
+        <h2 id="wg-title" data-wissen-type="section-title">Global minds.<br /> Shared <em>ambition.</em></h2>
+        <p class="wg-intro" data-wissen-type="body">
           Invested in the growth and success of our clients and our people.
           Bringing engineering expertise to businesses around the world.
         </p>
       </header>
       <div class="wg-panel">
         <div class="wg-panel-top">
-          <p class="wg-caption">Connected across continents</p>
-          <p class="wg-count"><strong>08</strong> countries</p>
+          <p class="wg-caption" data-wissen-type="label">Connected across continents</p>
+          <p class="wg-count" data-wissen-type="label"><strong>08</strong> countries</p>
         </div>
         <div class="wg-main">
           <div class="wg-map-area">
@@ -1964,23 +1965,23 @@
             </figure>
           </div>
           <aside class="wg-detail" aria-live="polite" aria-atomic="true">
-            <p class="wg-detail-kicker">Our global footprint</p>
-            <h3>India</h3>
-            <p class="wg-region">South Asia</p>
+            <p class="wg-detail-kicker" data-wissen-type="label">Our global footprint</p>
+            <h3 data-wissen-type="card-title">India</h3>
+            <p class="wg-region" data-wissen-type="card-body">South Asia</p>
             <div class="wg-details-body">
               <div class="wg-office-list">
-                <p class="wg-office-label">Locations</p>
-                <p class="wg-cities">
-                  Bengaluru<br />Mumbai<br />Hyderabad<br />Pune
+                <p class="wg-office-label" data-wissen-type="label">Locations</p>
+                <p class="wg-cities" data-wissen-type="card-body">
+                  Bengaluru<br /> Mumbai<br /> Hyderabad<br /> Pune
                 </p>
               </div>
-              <p class="wg-detail-copy">
+              <p class="wg-detail-copy" data-wissen-type="card-body">
                 Part of a connected footprint bringing our people, clients and
                 engineering expertise together.
               </p>
             </div>
-            <p class="wg-detail-footer">
-              One engineering culture.<br />Across borders.
+            <p class="wg-detail-footer" data-wissen-type="card-body">
+              One engineering culture.<br /> Across borders.
             </p>
           </aside>
         </div>
@@ -2005,96 +2006,44 @@
       </div>
     </section>
   </main>
-  <footer class="wf">
-    <div class="wf-wrap">
-      <div class="wf-top">
-        <div class="wf-info">
-          <a class="wf-brand" href="index.html" aria-label="Wissen Technology homepage"><img
-              src="assets/images/1906600056658812.png" alt="Wissen Technology" /></a>
-          <div class="wf-social" aria-label="Social media">
-            <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/company/wissen-technology/"
-              aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9z" />
-              </svg></a>
-            <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/wissen_tech" aria-label="X"><svg
-                viewBox="0 0 24 24" fill="currentColor">
-                <path
-                  d="M17.5 3h3.1l-6.8 7.8 8 10.2h-6.3l-4.9-6.4L5 21H1.9l7.3-8.3L1.5 3h6.4l4.4 5.9L17.5 3zm-1.1 16.2h1.7L7.2 4.7H5.4l11 14.5z" />
-              </svg></a>
-            <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/WissenTechOfficial"
-              aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor">
-                <path d="M14 8V6.3c0-.8.2-1.3 1.4-1.3H17V2h-2.6C11.3 2 10 3.6 10 6.1V8H8v3h2v11h4V11h2.7l.3-3h-3z" />
-              </svg></a>
-            <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/wissentech/"
-              aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                <rect x="3" y="3" width="18" height="18" rx="5" />
-                <circle cx="12" cy="12" r="4" />
-              </svg></a>
-          </div>
-          <p class="wf-location">
-            Global minds. Shared ambition.<br />Engineering what’s next,
-            together.
-          </p>
-          <a class="wf-contact ui-text" href="Contact-Us.html">Get in touch
-            <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20" fill="none"
-                stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
-                aria-hidden="true" focusable="false">
-                <path d="M7 17 17 7M7 7h10v10" />
-              </svg></span></a>
-        </div>
-        <div class="wf-columns">
-          <nav class="wf-column" aria-label="Company">
-            <h2>Company</h2>
-            <a href="index.html#company">About Wissen Technology</a><a href="index.html#people">Our people</a><a
-              href="Insights.html">Insights</a><a
-              href="Career.html">Careers</a>
-          </nav>
-          <nav class="wf-column" aria-label="Expertise">
-            <h2>Expertise</h2>
-            <a href="Application-Development.html">Application development</a><a
-              href="https://wissen.com/services/cloud">Cloud engineering</a><a
-              href="https://wissen.com/services/big-data-analytics">Data & analytics</a><a href="Services-Ai-ML.html">AI
-              & machine learning</a>
-          </nav>
-          <nav class="wf-column" aria-label="Explore">
-            <h2>Explore</h2>
-            <a href="index.html#industries">Industries</a><a href="index.html#solutions">Our solutions</a><a
-              href="index.html#global-presence">Global presence</a><a
-              href="Contact-Us.html">Contact us</a>
-          </nav>
-        </div>
-      </div>
-      <div class="wf-divider"></div>
-      <div class="wf-middle">
-        <p class="wf-note">
-          From strategy to engineering, we bring your digital future into
-          focus. Built on knowledge. Driven by people.
-        </p>
-        <div class="wf-legal">
-          <a href="https://wissen.com/term/privacy-policy">Privacy policy</a><a
-            href="https://wissen.com/term/cookies">Cookie policy</a>
-        </div>
-      </div>
-    </div>
-    <div class="wf-wordmark" aria-hidden="true">
-      <div class="wf-wordmark-track">
-        <div class="wf-wordmark-group">
-          wissen technology<span class="wf-separator">&nbsp;&nbsp;&nbsp;</span>
-        </div>
-        <div class="wf-wordmark-group">
-          wissen technology<span class="wf-separator">&nbsp;&nbsp;&nbsp;</span>
-        </div>
-      </div>
-    </div>
-    <div class="wf-wrap wf-bottom">
-      <p>
-        © <span id="wf-year">2026</span> Wissen Technology. All rights
-        reserved.
-      </p>
-      <p class="wf-signature">Strategy / Design / Engineering</p>
-    </div>
-  </footer>
+  <footer class="wf"><div class="wf-wrap"><div class="wf-top"><div class="wf-info"><a class="wf-brand" href="index.html" aria-label="Wissen Technology homepage"><img src="assets/images/1906600056658812.png" alt="Wissen Technology"></a><div class="wf-social" aria-label="Social media">
+          <a target="_blank" rel="noopener noreferrer" href="https://www.linkedin.com/company/wissen-technology/" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM3 9h4v12H3zM9 9h3.8v1.7h.1c.5-1 1.8-2 3.8-2 4 0 4.8 2.6 4.8 6V21h-4v-5.4c0-1.3 0-3-1.8-3s-2.1 1.4-2.1 2.9V21H9z"/></svg></a>
+          <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/wissen_tech" aria-label="X"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.5 3h3.1l-6.8 7.8 8 10.2h-6.3l-4.9-6.4L5 21H1.9l7.3-8.3L1.5 3h6.4l4.4 5.9L17.5 3zm-1.1 16.2h1.7L7.2 4.7H5.4l11 14.5z"/></svg></a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.facebook.com/WissenTechOfficial" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 8V6.3c0-.8.2-1.3 1.4-1.3H17V2h-2.6C11.3 2 10 3.6 10 6.1V8H8v3h2v11h4V11h2.7l.3-3h-3z"/></svg></a>
+          <a target="_blank" rel="noopener noreferrer" href="https://www.instagram.com/wissentech/" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/></svg></a>
+        </div><p class="wf-location">Global minds. Shared ambition.<br>Engineering what’s next, together.</p><a class="wf-contact ui-text" href="Contact-Us.html">Get in touch <span aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M7 17 17 7M7 7h10v10"/></svg></span></a></div><div class="wf-columns">
+<nav class="wf-column" aria-label="Footer Industries"><h2>Industries</h2>
+<a href="Industries-BFSI.html">BFSI &amp; FinTech</a>
+<a href="index.html#wi-telecom">Telecom</a>
+<a href="index.html#wi-retail">Retail</a>
+<a href="index.html#wi-manufacturing">Manufacturing</a>
+<a href="index.html#wi-healthcare">Healthcare &amp; Life Sciences</a>
+<a href="index.html#wi-energy">Energy &amp; Commodities</a>
+</nav>
+<nav class="wf-column" aria-label="Footer Services"><h2>Services</h2>
+<a href="Application-Development.html">Application Development</a>
+<a href="https://wissen.com/services/big-data-analytics">Agentic Data Platforms</a>
+<a href="https://wissen.com/services/intelligent-automation">Intelligent Automation</a>
+<a href="Services-Ai-ML.html">AI &amp; ML</a>
+<a href="https://wissen.com/services/cloud">Cloud</a>
+<a href="https://wissen.com/services/production-support">Experience Design</a>
+</nav>
+<nav class="wf-column" aria-label="Footer Accelerators"><h2>Accelerators</h2>
+<a href="Autonomous-Operations.html">Autonomous Operations</a>
+<a href="Contact-Us.html">Delivery &amp; Quality</a>
+<a href="Contact-Us.html">Agentic Platform</a>
+<a href="Contact-Us.html">Document Intelligence</a>
+<a href="Contact-Us.html">Data &amp; Knowledge</a>
+<a href="Contact-Us.html">Cloud &amp; Platform</a>
+<a href="Contact-Us.html">Industry Solutions</a>
+</nav>
+<nav class="wf-column" aria-label="Footer Company"><h2>Company</h2>
+<a href="About-Us.html">About Us</a>
+<a href="Insights.html">Insights</a>
+<a href="Career.html">Careers</a>
+<a href="Contact-Us.html">Contact Us</a>
+</nav>
+</div></div><div class="wf-divider" aria-hidden="true"></div><div class="wf-middle"><p class="wf-note">&copy; <span id="wf-year">2026</span> Wissen Technology. All rights reserved.</p><div class="wf-legal"><a href="https://wissen.com/term/privacy-policy">Privacy policy</a><a href="https://wissen.com/term/cookies">Cookie policy</a></div></div></div><div class="wf-wordmark" aria-hidden="true"><div class="wf-wordmark-track"><div class="wf-wordmark-group">wissen technology<span class="wf-separator">&nbsp;&nbsp;&nbsp;</span></div><div class="wf-wordmark-group">wissen technology<span class="wf-separator">&nbsp;&nbsp;&nbsp;</span></div></div></div></footer>
 </body>
 
 </html>

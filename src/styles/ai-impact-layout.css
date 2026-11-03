@@ -1,0 +1,18 @@
+/* Compact impact cards with one bottom-left text block. */
+html[data-wissen-page="services-ai-ml"] body.wissen-global-type #impact .ai-impact-card {
+  min-height: 260px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-start;
+  text-align: left;
+}
+html[data-wissen-page="services-ai-ml"] body.wissen-global-type #impact .ai-impact-card h3 { margin: 0 0 12px; }
+html[data-wissen-page="services-ai-ml"] body.wissen-global-type #impact .ai-impact-card > p { margin: 0; }
+@media (max-width: 1100px) {
+  html[data-wissen-page="services-ai-ml"] body.wissen-global-type #impact .ai-impact-card { min-height: 240px; }
+}
+@media (max-width: 700px) {
+  html[data-wissen-page="services-ai-ml"] body.wissen-global-type #impact .ai-impact-card { min-height: 220px; }
+}
