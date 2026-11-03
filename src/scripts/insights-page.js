@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const featuredSlider = document.querySelector('.ins-featured-slider');
-  const featuredSlides = [...document.querySelectorAll('[data-featured-slide]')];
-  const featuredDots = [...document.querySelectorAll('.ins-featured-dots button')];
+  let featuredSlides = [...document.querySelectorAll('[data-featured-slide]')];
+  let featuredDots = [...document.querySelectorAll('.ins-featured-dots button')];
   let featuredIndex = 0;
   let touchStartX = 0;
   let featuredTimer;
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const scheduleFeatured = () => {
     window.clearTimeout(featuredTimer);
     featuredDots.forEach((dot) => dot.classList.remove('is-progressing'));
-    if (document.hidden || reducedMotion.matches || featuredSlides.length < 2) return;
+    if (document.hidden || reducedMotion.matches || featuredSlides.length < 2 || !featuredDots[featuredIndex]) return;
     void featuredDots[featuredIndex].offsetWidth;
     featuredDots[featuredIndex].classList.add('is-progressing');
     featuredTimer = window.setTimeout(() => showFeatured(featuredIndex + 1), featuredDuration);
@@ -39,7 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
     scheduleFeatured();
   };
 
-  featuredDots.forEach((dot, index) => dot.addEventListener('click', () => showFeatured(index)));
+  const connectFeatured = () => {
+    window.clearTimeout(featuredTimer);
+    featuredSlides = [...document.querySelectorAll('[data-featured-slide]')];
+    featuredDots = [...document.querySelectorAll('.ins-featured-dots button')];
+    featuredDots.forEach((dot, index) => dot.addEventListener('click', () => showFeatured(index)));
+    featuredIndex=0;
+    showFeatured(0);
+  };
+  document.addEventListener('insights:featured-updated',connectFeatured);
+  connectFeatured();
   featuredSlider?.addEventListener('keydown', (event) => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
     event.preventDefault();

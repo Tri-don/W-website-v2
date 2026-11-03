@@ -188,9 +188,17 @@
     return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
   }
   const imageProjection=`{alt,caption,credit,crop,hotspot,asset->{url}}`;
-  const cardProjection=`{_id,title,slug,publishedAt,excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
-  const projection=`{_id,_updatedAt,title,slug,publishedAt,excerpt,tags,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
-  const filter=`_type == $type && defined(slug.current) && defined(publishedAt) && dateTime(publishedAt) <= dateTime(now())`;
+  const cardProjection=`{_id,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
+  const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
+  const filter=`_type == $type && defined(slug.current) && dateTime(coalesce(publishedAt,_createdAt)) <= dateTime(now())`;
+  function featuredInsights(posts, options={}) {
+    const featured=posts.filter(p=>p.title&&validSlug(slug(p))).slice(0,3);
+    if(!featured.length)return '<div class="ins-featured-empty"><p>New perspectives are on their way. Check back soon.</p></div>';
+    return `<div class="ins-featured-track" aria-live="polite">${featured.map((p,index)=>{
+      const cover=imageUrl(p.mainImage), href=options.static?`blogs/${slug(p)}/`:`Blog.html?slug=${encodeURIComponent(slug(p))}`;
+      return `<a class="ins-featured${index?'':' is-active'}" data-featured-slide href="${esc(href)}" aria-label="${esc(`Featured article ${index+1} of ${featured.length}: ${p.title}`)}" aria-hidden="${Boolean(index)}" tabindex="${index?-1:0}">${cover?`<img src="${esc(cover)}" alt="${esc(p.mainImage?.alt||'')}" ${index?'loading="lazy"':'fetchpriority="high"'} decoding="async">`:''}<div class="ins-featured-copy"><span class="ins-featured-label">${esc(p.categories?.[0]?.title||'Latest blog')}</span><h2 data-wissen-type="feature-title">${esc(p.title)}</h2><span class="ins-featured-meta">Read article <span aria-hidden="true">&rarr;</span></span></div></a>`;
+    }).join('')}</div><div class="ins-featured-controls" role="group" aria-label="Featured insight controls"${featured.length<2?' hidden':''}><div class="ins-featured-dots" role="tablist" aria-label="Choose featured insight">${featured.map((p,index)=>`<button${index?'':' class="is-active"'} type="button" role="tab" aria-selected="${!index}" tabindex="${index?-1:0}" aria-label="Show featured insight ${index+1}: ${esc(p.title)}"></button>`).join('')}</div></div>`;
+  }
   function insightCards(posts, options={}) {
     return posts.filter(p=>p.title&&validSlug(slug(p))).map(p=>{
       const cover=imageUrl(p.mainImage,800), published=date(p.publishedAt);
@@ -201,12 +209,12 @@
   function insightsQuery(config, page=0) {
     const start=Math.max(0,Math.floor(Number(page)||0))*12;
     return {url:`https://${config.projectId}.api.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`,params:{
-      query:`*[${filter} && defined(title) && count(body) > 0] | order(publishedAt desc, _id asc)[${start}...${start+13}]${cardProjection}`,
+      query:`*[${filter} && defined(title) && count(body) > 0] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[${start}...${start+13}]${cardProjection}`,
       perspective:'published','$type':JSON.stringify(config.documentType)
     }};
   }
   function query(config, params={}, cdn=true) {
-    return { url:`https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`, params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(publishedAt desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
+    return { url:`https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`, params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
   }
-  return {esc,safeUrl,imageUrl,plain,slug,validSlug,bodyHtml,render,state,query,projection,filter,shareLinks,selectRelated,insightCards,insightsQuery};
+  return {esc,safeUrl,imageUrl,plain,slug,validSlug,bodyHtml,render,state,query,projection,filter,shareLinks,selectRelated,insightCards,insightsQuery,featuredInsights};
 });

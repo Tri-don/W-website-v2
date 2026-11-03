@@ -8,7 +8,7 @@ The existing HTML, CSS and JavaScript website stays in place. The article layout
 
 ## Insights Blogs tab
 
-The Blogs tab in `Insights.html` is sourced exclusively from published Sanity `blogPost` documents. It shows the cover image, category, title, excerpt and publication date, newest first. Drafts and future-dated articles are excluded. The featured hero and other Insights tabs remain separately managed.
+The Blogs tab in `Insights.html` is sourced exclusively from published Sanity `blogPost` documents. It shows the cover image, category, title, excerpt and publication date, newest first. Drafts and future-dated articles are excluded. The hero slider also uses the newest three Sanity posts. Other Insights tabs remain separately managed.
 
 `src/scripts/insights-cms.js` queries the public API without credentials when the Blogs tab opens, with 12 articles per page and a Load more button. Returning to the tab or browser window refreshes content after one minute. Live card links use `Blog.html?slug=...`, so newly published posts can open before a static deployment completes. A page already open is refreshed on return or reload; this is not a continuous subscription.
 
@@ -24,7 +24,7 @@ The template is configured for project `zu6gxemo`, public dataset `production`, 
 
 The current declarative model is saved in `sanity/schemaTypes/blog-model.json`, with the deployed declaration in `sanity/schema.mcp.txt` and deployment address in `sanity/deployment.json`. `sanity/schemaTypes/blog.js` is a local Studio adapter for a future migration; the active Studio is MCP-managed. Do not create a competing CLI deployment for the same workspace. See `sanity/README.md` for editing instructions.
 
-Drafts are excluded. A post needs a title, lowercase hyphenated slug, excerpt, publication date and body. Dates in the future are excluded until that date passes; generated pages require another build afterward. Authors, categories and cover images are optional. Provide image alternative text when an image is supplied. The managed schema contains declarative field definitions and built-in type validation; the stronger function-based validations in the future local Studio adapter are not applied to the active managed Studio. The website filters missing publication dates and the static generator rejects missing titles, invalid or duplicate slugs and empty bodies.
+Drafts are excluded. A post needs a title, lowercase hyphenated slug, excerpt and body. When the publication date is blank, the website uses the document creation date. Explicit dates in the future are excluded until that date passes; generated pages require another build afterward. Authors, categories and cover images are optional. Provide image alternative text when an image is supplied. The managed schema contains declarative field definitions and built-in type validation; the stronger function-based validations in the future local Studio adapter are not applied to the active managed Studio. The static generator rejects missing titles, invalid or duplicate slugs and empty bodies.
 
 For the live browser template, allow the actual development/production origin in Sanity's CORS settings if needed. Use exact origins and leave credential access disabled for this public, read-only integration. Do not put a write token in public website files. If the dataset becomes private, use an authenticated server/build integration instead of the browser fetch.
 

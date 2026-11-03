@@ -45,6 +45,9 @@ async function build(){
   for(const file of files){
     let html=normalize(read(file));
     if(file==='Insights.html'){
+      const featuredMarker=/<!-- SANITY_FEATURED_START -->[\s\S]*?<!-- SANITY_FEATURED_END -->/;
+      if(!featuredMarker.test(html))throw new Error('Insights featured panel not found');
+      html=html.replace(featuredMarker,()=>`<!-- SANITY_FEATURED_START -->${B.featuredInsights(posts,{static:true})}<!-- SANITY_FEATURED_END -->`);
       const marker=/<!-- SANITY_BLOGS_START -->[\s\S]*?<!-- SANITY_BLOGS_END -->/;
       if(!marker.test(html))throw new Error('Insights blog panel not found');
       html=html.replace(marker,()=>`<!-- SANITY_BLOGS_START -->

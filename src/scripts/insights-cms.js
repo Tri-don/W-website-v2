@@ -32,7 +32,14 @@
         }
         const html=B.insightCards(posts);
         if(nextPage)grid.insertAdjacentHTML('beforeend',html);
-        else grid.innerHTML=html;
+        else {
+          grid.innerHTML=html;
+          const featured=document.querySelector('[data-insights-featured]');
+          if(featured){
+            featured.innerHTML=B.featuredInsights(posts);
+            document.dispatchEvent(new CustomEvent('insights:featured-updated'));
+          }
+        }
         page=nextPage;refreshedAt=Date.now();
         more.hidden=payload.result.length<=12;
         status.textContent=grid.querySelector('[data-insights-blog-card]')?'':'New perspectives are on their way. Check back soon.';
@@ -50,7 +57,7 @@
     document.addEventListener('insights:tabchange',refresh);
     document.addEventListener('visibilitychange',refresh);
     window.addEventListener('focus',refresh);
-    refresh();
+    load();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
   else init();

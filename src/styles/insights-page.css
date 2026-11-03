@@ -41,6 +41,8 @@ body.insights-page { margin: 0; background: var(--ins-bg); color: var(--ins-text
 .ins-featured:hover .ins-featured-meta svg { transform: translate(3px, -3px); }
 .ins-featured-controls { position: absolute; z-index: 4; bottom: 28px; right: 28px; display: flex; align-items: center; padding: 10px; background: rgba(8, 8, 9, .72); border: 1px solid rgba(255, 255, 255, .16); backdrop-filter: blur(12px); }
 .ins-featured-dots { display: flex; align-items: center; gap: 10px; }
+.ins-featured-controls[hidden] { display: none; }
+.ins-featured-empty { height: 100%; min-height: inherit; display: flex; align-items: flex-end; padding: 32px; color: var(--ins-muted); }
 .ins-featured-dots button { position: relative; flex: none; overflow: hidden; width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: rgba(255, 255, 255, .34); cursor: pointer; transition: width .25s ease, border-radius .25s ease, background-color .25s ease; }
 .ins-featured-dots button.is-active { width: 34px; border-radius: 8px; background: #624393; }
 .ins-featured-dots button.is-progressing.is-active::before { position: absolute; inset: 0; border-radius: inherit; background: #e9dbff; transform: scaleX(0); transform-origin: left center; animation: ins-featured-progress 7000ms linear forwards; content: ""; }

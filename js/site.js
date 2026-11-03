@@ -192,9 +192,17 @@ modules["blog-content"] = function(){
     return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
   }
   const imageProjection=`{alt,caption,credit,crop,hotspot,asset->{url}}`;
-  const cardProjection=`{_id,title,slug,publishedAt,excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
-  const projection=`{_id,_updatedAt,title,slug,publishedAt,excerpt,tags,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
-  const filter=`_type == $type && defined(slug.current) && defined(publishedAt) && dateTime(publishedAt) <= dateTime(now())`;
+  const cardProjection=`{_id,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
+  const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
+  const filter=`_type == $type && defined(slug.current) && dateTime(coalesce(publishedAt,_createdAt)) <= dateTime(now())`;
+  function featuredInsights(posts, options={}) {
+    const featured=posts.filter(p=>p.title&&validSlug(slug(p))).slice(0,3);
+    if(!featured.length)return '<div class="ins-featured-empty"><p>New perspectives are on their way. Check back soon.</p></div>';
+    return `<div class="ins-featured-track" aria-live="polite">${featured.map((p,index)=>{
+      const cover=imageUrl(p.mainImage), href=options.static?`blogs/${slug(p)}/`:`Blog.html?slug=${encodeURIComponent(slug(p))}`;
+      return `<a class="ins-featured${index?'':' is-active'}" data-featured-slide href="${esc(href)}" aria-label="${esc(`Featured article ${index+1} of ${featured.length}: ${p.title}`)}" aria-hidden="${Boolean(index)}" tabindex="${index?-1:0}">${cover?`<img src="${esc(cover)}" alt="${esc(p.mainImage?.alt||'')}" ${index?'loading="lazy"':'fetchpriority="high"'} decoding="async">`:''}<div class="ins-featured-copy"><span class="ins-featured-label">${esc(p.categories?.[0]?.title||'Latest blog')}</span><h2 data-wissen-type="feature-title">${esc(p.title)}</h2><span class="ins-featured-meta">Read article <span aria-hidden="true">&rarr;</span></span></div></a>`;
+    }).join('')}</div><div class="ins-featured-controls" role="group" aria-label="Featured insight controls"${featured.length<2?' hidden':''}><div class="ins-featured-dots" role="tablist" aria-label="Choose featured insight">${featured.map((p,index)=>`<button${index?'':' class="is-active"'} type="button" role="tab" aria-selected="${!index}" tabindex="${index?-1:0}" aria-label="Show featured insight ${index+1}: ${esc(p.title)}"></button>`).join('')}</div></div>`;
+  }
   function insightCards(posts, options={}) {
     return posts.filter(p=>p.title&&validSlug(slug(p))).map(p=>{
       const cover=imageUrl(p.mainImage,800), published=date(p.publishedAt);
@@ -205,14 +213,14 @@ modules["blog-content"] = function(){
   function insightsQuery(config, page=0) {
     const start=Math.max(0,Math.floor(Number(page)||0))*12;
     return {url:`https://${config.projectId}.api.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`,params:{
-      query:`*[${filter} && defined(title) && count(body) > 0] | order(publishedAt desc, _id asc)[${start}...${start+13}]${cardProjection}`,
+      query:`*[${filter} && defined(title) && count(body) > 0] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[${start}...${start+13}]${cardProjection}`,
       perspective:'published','$type':JSON.stringify(config.documentType)
     }};
   }
   function query(config, params={}, cdn=true) {
-    return { url:`https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`, params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(publishedAt desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
+    return { url:`https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`, params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
   }
-  return {esc,safeUrl,imageUrl,plain,slug,validSlug,bodyHtml,render,state,query,projection,filter,shareLinks,selectRelated,insightCards,insightsQuery};
+  return {esc,safeUrl,imageUrl,plain,slug,validSlug,bodyHtml,render,state,query,projection,filter,shareLinks,selectRelated,insightCards,insightsQuery,featuredInsights};
 });
 
 };
@@ -1417,8 +1425,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   const featuredSlider = document.querySelector('.ins-featured-slider');
-  const featuredSlides = [...document.querySelectorAll('[data-featured-slide]')];
-  const featuredDots = [...document.querySelectorAll('.ins-featured-dots button')];
+  let featuredSlides = [...document.querySelectorAll('[data-featured-slide]')];
+  let featuredDots = [...document.querySelectorAll('.ins-featured-dots button')];
   let featuredIndex = 0;
   let touchStartX = 0;
   let featuredTimer;
@@ -1427,7 +1435,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const scheduleFeatured = () => {
     window.clearTimeout(featuredTimer);
     featuredDots.forEach((dot) => dot.classList.remove('is-progressing'));
-    if (document.hidden || reducedMotion.matches || featuredSlides.length < 2) return;
+    if (document.hidden || reducedMotion.matches || featuredSlides.length < 2 || !featuredDots[featuredIndex]) return;
     void featuredDots[featuredIndex].offsetWidth;
     featuredDots[featuredIndex].classList.add('is-progressing');
     featuredTimer = window.setTimeout(() => showFeatured(featuredIndex + 1), featuredDuration);
@@ -1452,7 +1460,16 @@ document.addEventListener('DOMContentLoaded', () => {
     scheduleFeatured();
   };
 
-  featuredDots.forEach((dot, index) => dot.addEventListener('click', () => showFeatured(index)));
+  const connectFeatured = () => {
+    window.clearTimeout(featuredTimer);
+    featuredSlides = [...document.querySelectorAll('[data-featured-slide]')];
+    featuredDots = [...document.querySelectorAll('.ins-featured-dots button')];
+    featuredDots.forEach((dot, index) => dot.addEventListener('click', () => showFeatured(index)));
+    featuredIndex=0;
+    showFeatured(0);
+  };
+  document.addEventListener('insights:featured-updated',connectFeatured);
+  connectFeatured();
   featuredSlider?.addEventListener('keydown', (event) => {
     if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
     event.preventDefault();
@@ -1738,7 +1755,14 @@ modules["insights-cms"] = function(){
         }
         const html=B.insightCards(posts);
         if(nextPage)grid.insertAdjacentHTML('beforeend',html);
-        else grid.innerHTML=html;
+        else {
+          grid.innerHTML=html;
+          const featured=document.querySelector('[data-insights-featured]');
+          if(featured){
+            featured.innerHTML=B.featuredInsights(posts);
+            document.dispatchEvent(new CustomEvent('insights:featured-updated'));
+          }
+        }
         page=nextPage;refreshedAt=Date.now();
         more.hidden=payload.result.length<=12;
         status.textContent=grid.querySelector('[data-insights-blog-card]')?'':'New perspectives are on their way. Check back soon.';
@@ -1756,7 +1780,7 @@ modules["insights-cms"] = function(){
     document.addEventListener('insights:tabchange',refresh);
     document.addEventListener('visibilitychange',refresh);
     window.addEventListener('focus',refresh);
-    refresh();
+    load();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
   else init();
