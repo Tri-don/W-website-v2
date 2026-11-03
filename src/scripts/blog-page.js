@@ -67,7 +67,7 @@
   const params=new URLSearchParams(location.search), slug=params.get('slug');
   if(slug && !B.validSlug(slug)){root.innerHTML=B.state('Article not found.','Explore our insights for more perspectives.');root.setAttribute('aria-busy','false');return;}
   async function fetchPosts(config, options) {
-    const q=B.query(config,options), url=new URL(q.url);
+    const q=B.query(config,options,false), url=new URL(q.url);
     Object.entries(q.params).forEach(([k,v])=>url.searchParams.set(k,v));
     const res=await fetch(url,{signal:AbortSignal.timeout(15000),credentials:'omit'});
     if(!res.ok)throw new Error('Sanity returned '+res.status);

@@ -191,8 +191,22 @@
   const cardProjection=`{_id,title,slug,publishedAt,excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
   const projection=`{_id,_updatedAt,title,slug,publishedAt,excerpt,tags,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
   const filter=`_type == $type && defined(slug.current) && defined(publishedAt) && dateTime(publishedAt) <= dateTime(now())`;
+  function insightCards(posts, options={}) {
+    return posts.filter(p=>p.title&&validSlug(slug(p))).map(p=>{
+      const cover=imageUrl(p.mainImage,800), published=date(p.publishedAt);
+      const href=options.static?`blogs/${slug(p)}/`:`Blog.html?slug=${encodeURIComponent(slug(p))}`;
+      return `<a class="ins-card ins-reveal" data-insights-blog-card data-blog-slug="${esc(slug(p))}" href="${esc(href)}">${cover?`<div class="ins-card-media"><img src="${esc(cover)}" alt="${esc(p.mainImage?.alt||'')}" loading="lazy" decoding="async"></div>`:''}<div class="ins-card-body"><span class="ins-card-meta">${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}${published?`<time class="ins-card-date" datetime="${esc(p.publishedAt)}">${published}</time>`:''}<div class="ins-card-bottom"><span class="ins-card-read">Read article</span><span class="ins-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div></div></a>`;
+    }).join('\n');
+  }
+  function insightsQuery(config, page=0) {
+    const start=Math.max(0,Math.floor(Number(page)||0))*12;
+    return {url:`https://${config.projectId}.api.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`,params:{
+      query:`*[${filter} && defined(title) && count(body) > 0] | order(publishedAt desc, _id asc)[${start}...${start+13}]${cardProjection}`,
+      perspective:'published','$type':JSON.stringify(config.documentType)
+    }};
+  }
   function query(config, params={}, cdn=true) {
     return { url:`https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`, params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(publishedAt desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
   }
-  return {esc,safeUrl,imageUrl,plain,slug,validSlug,bodyHtml,render,state,query,projection,filter,shareLinks,selectRelated};
+  return {esc,safeUrl,imageUrl,plain,slug,validSlug,bodyHtml,render,state,query,projection,filter,shareLinks,selectRelated,insightCards,insightsQuery};
 });

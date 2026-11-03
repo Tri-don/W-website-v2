@@ -6,13 +6,11 @@ const B=require('../src/blog/content.js'), Blog=require('../build_blogs.cjs');
 const read=p=>fs.readFileSync(path.join(ROOT,p),'utf8');
 function write(p,text){const target=path.resolve(OUT,p);if(!target.startsWith(OUT+path.sep))throw new Error('Output path escaped dist');fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,text);}
 function normalize(html){return html.replace(/href="((?:\.\.\/)*)Blog(?:-v[23])?\.html"/g,(_,prefix)=>`href="${prefix}blogs/"`);}
-function card(post, insights=false){
+function card(post){
   const src=B.imageUrl(post.mainImage,800), title=B.esc(post.title), href=`blogs/${B.slug(post)}/`;
   const picture=src?`<img src="${B.esc(src)}" alt="${B.esc(post.mainImage?.alt)}" loading="lazy" decoding="async">`:'';
   const category=B.esc(post.categories?.[0]?.title||'Blog'), description=B.esc(post.excerpt||'');
-  return insights?
-    `<a class="ins-card ins-reveal" href="${href}">${picture?`<div class="ins-card-media">${picture}</div>`:''}<div class="ins-card-body"><span class="ins-card-meta">${category}</span><h3 data-wissen-type="card-title">${title}</h3><p data-wissen-type="card-body">${description}</p><div class="ins-card-bottom"><span class="ins-card-read">Read article</span><span aria-hidden="true">&rarr;</span></div></div></a>`:
-    `<a class="wb-article-card" href="../${href}">${picture?`<figure class="wb-article-card-media">${picture}</figure>`:''}<div><span>${category}</span><h2 data-wissen-type="card-title">${title}</h2><p data-wissen-type="card-body">${description}</p><span class="wb-article-card-read">Read article <span aria-hidden="true">&rarr;</span></span></div></a>`;
+  return `<a class="wb-article-card" href="../${href}">${picture?`<figure class="wb-article-card-media">${picture}</figure>`:''}<div><span>${category}</span><h2 data-wissen-type="card-title">${title}</h2><p data-wissen-type="card-body">${description}</p><span class="wb-article-card-read">Read article <span aria-hidden="true">&rarr;</span></span></div></a>`;
 }
 function archive(posts){
   let html=read('Blog.html');
@@ -46,10 +44,13 @@ async function build(){
   const files=[...new Set(Object.values(manifest.pages).map(p=>p.file))].filter(f=>!/-v\d+\.html$/i.test(f)&&f!=='Blog.html');
   for(const file of files){
     let html=normalize(read(file));
-    if(file==='Insights.html'&&posts.length){
-      const marker=/(<div class="ins-panel" id="panel-blogs"[^>]*>[\s\S]*?<div class="ins-grid">)/;
+    if(file==='Insights.html'){
+      const marker=/<!-- SANITY_BLOGS_START -->[\s\S]*?<!-- SANITY_BLOGS_END -->/;
       if(!marker.test(html))throw new Error('Insights blog panel not found');
-      html=html.replace(marker,(_,open)=>open+'\n'+posts.map(p=>card(p,true)).join('\n'));
+      html=html.replace(marker,()=>`<!-- SANITY_BLOGS_START -->
+          <div class="ins-grid" data-insights-blog-grid aria-busy="false">${B.insightCards(posts.slice(0,12),{static:true})}</div>
+          <div class="ins-blog-controls"><p class="ins-blog-status" data-insights-blog-status role="status">${posts.length?'':'New perspectives are on their way. Check back soon.'}</p><button class="ins-blog-button" type="button" data-insights-blog-retry hidden>Try again</button><button class="ins-blog-button" type="button" data-insights-blog-more hidden>Load more articles</button></div>
+          <!-- SANITY_BLOGS_END -->`);
     }
     write(file,html);
   }

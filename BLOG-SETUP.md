@@ -4,14 +4,15 @@ The existing HTML, CSS and JavaScript website stays in place. The article layout
 
 ## Review the template
 
-- V3 now ends with a Related articles section directly before the footer: up to three image cards and an Explore all insights link. The review preview uses non-clickable, labelled sample cards from `src/blog/related-preview.json`; the live template uses other published Sanity articles and links to their v3 article pages. When no other published articles are available, the live section is omitted. Editors can select related posts in Sanity; published, dated selections appear first, followed by recent articles to fill up to three cards. The current fallback is recency, not category similarity.
-- Open `Blog-v3-preview.html` for the third header design: the title sits over a wide, shaded cover image, with the excerpt and optional author details beneath it. The main content remains left and the contents menu right. V1 and v2 remain available for comparison.
-- `Blog-v3.html` is the live Sanity entry point for v3 and accepts the same slug parameter. V3 includes LinkedIn, X, WhatsApp, email and copy-link controls at both ends of the article, native device sharing where available, print styling and a back-to-top link. Social controls in a local or illustrative preview explain that sharing needs a published article URL; copying the preview link and printing remain available. Copying has a selectable-link fallback when clipboard access is unavailable. Sharing opens a composer or mail application for the reader to complete.
-- Open `Blog-v2-preview.html` to compare the second design: title and introduction beside the cover image, author/sharing row below, article on the left and sticky contents menu on the right. On small screens the image moves below the title and the contents menu above the article.
-- `Blog-v2.html` is the live Sanity entry point for this alternative. It accepts the same `?slug=your-article-slug` parameter. V1 remains the default template for production article exports.
-- Open `Blog-preview.html` for an immediately available layout preview. It contains clearly labelled illustrative copy and an existing Wissen Dark image. It never fetches from or publishes to Sanity.
-- Serve this folder over HTTP and open `Blog.html` for the live Sanity template. Without a slug it displays the latest published article. `Blog.html?slug=your-article-slug` displays a specific article.
-- The Insights hero links to the live template. Existing editorial cards and external articles have been retained.
+`Blog.html` is the selected v3 article layout and live Sanity entry point. Open `Blog.html?slug=your-article-slug` over HTTP for a specific published article, or omit the slug for the latest post. `Blog-preview.html` is the illustrative review page. Generated article pages use the same v3 layout.
+
+## Insights Blogs tab
+
+The Blogs tab in `Insights.html` is sourced exclusively from published Sanity `blogPost` documents. It shows the cover image, category, title, excerpt and publication date, newest first. Drafts and future-dated articles are excluded. The featured hero and other Insights tabs remain separately managed.
+
+`src/scripts/insights-cms.js` queries the public API without credentials when the Blogs tab opens, with 12 articles per page and a Load more button. Returning to the tab or browser window refreshes content after one minute. Live card links use `Blog.html?slug=...`, so newly published posts can open before a static deployment completes. A page already open is refreshed on return or reload; this is not a continuous subscription.
+
+`npm run build` also renders the first 12 Sanity cards into the deployed HTML, replacing the snapshot on each build. The snapshot remains available if the live request fails or JavaScript is disabled. Static article pages, metadata and the sitemap still require a rebuild after editorial changes. Exact website origins must be allowed in Sanity CORS with credential access disabled. Never add a browser token.
 
 The article layout includes a cover image, categories, publish date, estimated reading time, optional author details, a contents menu, reading progress, share/copy actions and up to three further articles. Rich text supports paragraphs, headings, quotations, nested lists, links, images and code blocks. CMS text is escaped and link protocols are filtered before rendering.
 
@@ -19,7 +20,7 @@ No browser or visual review was performed for this continuation, as requested.
 
 ## Connect the editorial workspace
 
-The template is configured for project `zu6gxemo`, public dataset `production`, and document type `blogPost` in `src/blog/config.json`. On 3 November 2026 the blog schema was deployed to the default workspace, and an editing Studio was created at https://wissen-blogs-zu6gxemo.sanity.studio/. The deployed types are Blog post, Blog author and Blog category. No articles or authors were created or published as part of schema setup.
+The template is configured for project `zu6gxemo`, public dataset `production`, and document type `blogPost` in `src/blog/config.json`. On 3 November 2026 the blog schema was deployed to the default workspace, and an editing Studio was created at https://wissen-blogs-zu6gxemo.sanity.studio/. The deployed types are Blog post, Blog author and Blog category. Three labelled demo articles and their author/categories were subsequently published for integration.
 
 The current declarative model is saved in `sanity/schemaTypes/blog-model.json`, with the deployed declaration in `sanity/schema.mcp.txt` and deployment address in `sanity/deployment.json`. `sanity/schemaTypes/blog.js` is a local Studio adapter for a future migration; the active Studio is MCP-managed. Do not create a competing CLI deployment for the same workspace. See `sanity/README.md` for editing instructions.
 
@@ -40,22 +41,6 @@ node build_blogs.cjs --preview-only
 
 The first command rebuilds the shared website assets. The second regenerates only the illustrative review page and makes no Sanity request.
 
-To regenerate the second design's preview:
-
-```powershell
-node build_blogs.cjs --preview-only --v2
-```
-
-V2 uses `src/styles/blog-page-v2.css` and the renderer's `v2` variant. Its styles and live entry point are separate from v1, while the content model, queries and reading controls are shared. Both preview pages use the same illustrative article for comparison.
-
-To regenerate v3:
-
-```powershell
-node build_blogs.cjs --preview-only --v3
-```
-
-V3 inherits v2's reading arrangement and adds `src/styles/blog-page-v3.css`. Its image/header and expanded sharing controls are selected by the renderer's `v3` variant. The production article generator still defaults to v1 until a final design is selected. The preview uses the same existing website image and illustrative article as the earlier versions.
-
 After articles are published, set `siteUrl` in `src/blog/config.json` to the final public site root, including any hosting subdirectory, then run:
 
 ```powershell
@@ -68,15 +53,13 @@ The generator records the pages it owns in `src/blog/generated-pages.json`. Late
 
 ## Publishing status
 
-The schema and editing Studio are deployed in Sanity; the website template and generator are implemented locally. Automatic publication to Hostinger or another host is not configured. That later step must connect a secured Sanity webhook to a build/deployment workflow that runs the generator and publishes its output. Until that exists, generating article files and uploading a complete release are manual steps. The live `Blog.html` view reads published content directly and does not generate hosted files.
-
-The existing Insights cards have not been converted into a Sanity-managed archive, and the website sitemap has not been changed. Those are separate from the article template delivered here.
+The site has a portable static build configured for Vercel through GitHub. `npm run build` produces `dist/`, including the Insights snapshot, blog archive and article pages. A Sanity webhook connected to the host's deployment hook is needed to rebuild those static files on publication. The live Blogs tab and `Blog.html` query published content directly and do not depend on that hook. Hostinger deployment is a separate future hosting change.
 
 ## New editorial fields
 
 Tags appear as topic chips below the article. Image captions and credits appear with their images. Hand-picked related posts take priority over the recent-article fallback; drafts, future-dated posts, the current article and duplicates are excluded. Reading time, heading-based navigation and the updated timestamp are derived automatically.
 
-The static generator uses the optional social sharing image, SEO title/description and no-index flag. Defaults are the cover image, article title and introduction. No-index does not make an article private. The featured flag is saved for future listing integration; it does not currently reorder the existing Insights page.
+The static generator uses the optional social sharing image, SEO title/description and no-index flag. Defaults are the cover image, article title and introduction. No-index does not make an article private. The featured flag does not reorder the Blogs tab; that tab uses publication date.
 
 ## Source files
 

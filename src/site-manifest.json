@@ -158,6 +158,10 @@
     {
       "key": "blog-page",
       "path": "src/scripts/blog-page.js"
+    },
+    {
+      "key": "insights-cms",
+      "path": "src/scripts/insights-cms.js"
     }
   ],
   "pages": {
@@ -297,6 +301,10 @@
       "file": "Insights.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "defer"
         },
@@ -306,6 +314,10 @@
         },
         {
           "key": "site-appearance",
+          "timing": "defer"
+        },
+        {
+          "key": "insights-cms",
           "timing": "defer"
         }
       ]

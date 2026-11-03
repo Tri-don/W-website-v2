@@ -5847,6 +5847,15 @@ body.insights-page:where(html[data-wissen-css~="insights-page"],html[data-wissen
 .ins-card p:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ margin: 0; color: var(--ins-muted); font-size: 15px; line-height: 1.65; }
 .ins-card-bottom:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 28px; }
 .ins-card-read:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ font-size: 13px; }
+.ins-card-date:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ color: var(--ins-muted); font-size: 12px; margin-top: 20px; }
+.ins-blog-controls:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 16px; margin-top: 32px; }
+.ins-blog-status:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ color: var(--ins-muted); font-size: 14px; text-align: center; }
+.ins-blog-status:empty:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ display: none; }
+.ins-blog-button:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ padding: 12px 24px; border: 1px solid var(--ins-line); border-radius: 0; background: var(--ins-panel); color: var(--ins-text); font: inherit; font-size: 14px; cursor: pointer; }
+.ins-blog-button:hover:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ border-color: var(--ins-accent); }
+.ins-blog-button:focus-visible:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *),.ins-card:focus-visible:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ outline: 2px solid var(--ins-accent); outline-offset: 5px; }
+.ins-blog-button:disabled:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ opacity: .6; cursor: wait; }
+.ins-blog-button[hidden]:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ display: none; }
 .ins-card-arrow:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--ins-line); border-radius: 50%; }
 .ins-card-arrow svg:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ width: 17px; transition: transform .25s ease; }
 .ins-card:hover .ins-card-arrow svg:where(html[data-wissen-css~="insights-page"],html[data-wissen-css~="insights-page"] *){ transform: translate(2px, -2px); }

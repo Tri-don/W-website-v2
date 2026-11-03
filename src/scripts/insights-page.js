@@ -72,6 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (key && window.history.replaceState) {
       window.history.replaceState(null, '', `#${key}`);
     }
+    document.dispatchEvent(new CustomEvent('insights:tabchange'));
   };
 
   tabs.forEach((tab, index) => {
@@ -108,7 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }, { threshold: 0.08, rootMargin: '0px 0px -45px 0px' });
 
-    document.querySelectorAll('.ins-reveal').forEach((element) => observer.observe(element));
+    const observeCards = () => {
+      document.querySelectorAll('.ins-grid').forEach(grid => [...grid.children].forEach((card,index) => {
+        card.style.setProperty('--ins-delay', `${Math.min(index * 90,270)}ms`);
+      }));
+      document.querySelectorAll('.ins-reveal:not(.is-visible)').forEach(element => observer.observe(element));
+    };
+    observeCards();
+    document.addEventListener('insights:blogs-updated',observeCards);
   }
 
   const header = document.querySelector('.nv-header');
