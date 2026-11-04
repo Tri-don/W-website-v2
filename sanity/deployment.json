@@ -7,7 +7,11 @@
   "types": [
     "blogAuthor",
     "blogCategory",
-    "blogPost"
-  ]
+    "blogPost",
+    "newsPost",
+    "download",
+    "caseStudy"
+  ],
+  "studioTitle": "Wissen Content",
+  "schemaUpdatedAt": "2026-11-04"
 }
-
