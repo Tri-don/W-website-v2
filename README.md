@@ -4,6 +4,8 @@ Static website with shared HTML, CSS and JavaScript, two comparison pages (`Abou
 
 ## Shared website files
 
+`SANITY-PUBLISHING.md` describes the Sanity-to-GitHub publishing automation. The GitHub Actions workflow builds a downloadable website artifact; live deployment and its Sanity trigger remain inactive until hosting is configured.
+
 For GitHub-to-Vercel deployment and later Hostinger migration, see `VERCEL-SETUP.md`. `npm run build` rebuilds the shared assets, fetches published Sanity posts and creates the portable `dist` directory. The active article design is v3, now saved as `Blog.html`.
 
 - `css/site.css` — the one stylesheet loaded by every page.
