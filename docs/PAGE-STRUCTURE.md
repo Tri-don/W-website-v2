@@ -1,24 +1,19 @@
 # Website page structure
 
-The homepage remains `index.html`. All other active HTML pages are grouped by purpose. Filenames and capitalization are retained inside their new folders.
+The source folders follow the navbar hierarchy. Top-level navigation pages sit beside `index.html`. Service, industry and accelerator pages remain in their corresponding folders.
 
-All paths below are relative to the website root.
-
-| Former root path | Current path |
+| Navbar item | Source page or folder |
 | --- | --- |
-| `About-Us.html` | `company/About-Us.html` |
-| `Application-Development.html` | `services/Application-Development.html` |
-| `Autonomous-Operations.html` | `accelerators/Autonomous-Operations.html` |
-| `Blog.html` | `insights/Blog.html` |
-| `Capital-Markets-Technology.html` | `industries/BFSI/Capital-Markets-Technology.html` |
-| `Career.html` | `company/Career.html` |
-| `Contact-Us.html` | `company/Contact-Us.html` |
-| `Industries-BFSI.html` | `industries/BFSI/Industries-BFSI.html` |
-| `Insights.html` | `insights/Insights.html` |
-| `Responsible-Privacy-Preserving-Financial-AI.html` | `industries/BFSI/Responsible-Privacy-Preserving-Financial-AI.html` |
-| `Risk-Regulatory-Compliance-Engineering.html` | `industries/BFSI/Risk-Regulatory-Compliance-Engineering.html` |
-| `Services-Ai-ML.html` | `services/Services-Ai-ML.html` |
-| `Wealth-Asset-Management-Data-Infrastructure.html` | `industries/BFSI/Wealth-Asset-Management-Data-Infrastructure.html` |
+| Home | `index.html` |
+| About Us | `About-Us.html` |
+| Insights | `Insights.html` |
+| Careers | `Career.html` |
+| Contact Us / Let's talk | `Contact-Us.html` |
+| Services | `services/` |
+| Industries | `industries/` |
+| Accelerators | `accelerators/` |
+| Blog article template | `insights/Blog.html` |
+| Generated published articles | `blogs/<slug>/index.html` |
 
 ## Documentation and configuration
 
@@ -32,11 +27,15 @@ Each page declares `data-wissen-root` on its HTML element. This tells the live C
 
 The shared footer source stores paths relative to the site root. `build_site.py` converts these to the correct relative paths for each destination page. `src/site-manifest.json` selects the active pages and their modules. `scripts/site-paths.cjs` rebases blog templates, archive cards and article pages for the production export.
 
-## Old URL redirects
+## Old URL compatibility
 
-`src/page-routes.json` records the old-to-new mapping. Matching permanent redirects are configured in root `vercel.json`; the checks ensure they stay consistent with the actual files. Redirects take effect only after deployment. No root HTML compatibility copies are kept.
+`src/page-routes.json` records canonical page locations. Entries whose source and destination are identical are directly served root pages; they must never redirect to themselves. Matching permanent redirects in `vercel.json` remain for earlier service, industry, accelerator and blog-template URLs.
 
-When moving to another host, recreate those redirects in that host's server configuration. Uploading only `dist/` will serve the new paths but does not install Vercel redirects on another server. Keep the generated article URLs at `blogs/<slug>/` unchanged.
+The former `company/About-Us.html`, `company/Career.html`, `company/Contact-Us.html` and `insights/Insights.html` locations are recorded in `src/legacy-page-aliases.json`. The static build generates rebased compatibility pages for those paths. The root pages remain the editable source of truth, and compatibility pages are excluded from the sitemap and point their canonical URLs to the root pages.
+
+Compatibility pages are served instead of reversing the previous permanent redirects: a browser may still have a cached root-to-folder redirect, and a reverse redirect would create a loop. Compatibility output keeps both older bookmarks and assets working across hosts while new navigation uses the root URLs.
+
+When moving to another host, upload the complete `dist/` directory, including compatibility pages, and recreate the remaining server redirects in that host's configuration. Generated article URLs stay at `blogs/<slug>/`.
 
 ## Checks
 

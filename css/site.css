@@ -6569,6 +6569,162 @@ html[data-wissen-css~="application-development-hero-v2"] body.ad-page .nv-header
 
 
 
+/* industry-overviews */
+.industry-overview-page .bh-footer .industry-focus:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  font-size: .875rem;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.industry-overview-page .bs-metric:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  text-align: left;
+  gap: 14px;
+}
+.industry-overview-page .bs-metric .bs-number:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  margin: 0;
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  font-size: clamp(2.25rem, 3.8vw, 3.75rem);
+  letter-spacing: -.04em;
+}
+.industry-overview-page .bs-metric .industry-number-long:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  font-size: clamp(1.8rem, 3vw, 2.75rem);
+}
+.industry-overview-page .bs-metric > p:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  margin: 0;
+}
+.industry-overview-page .industry-stat-context:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  font-size: .875rem;
+  line-height: 1.55;
+}
+.industry-overview-page .bs-metric .industry-source:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  margin-top: auto;
+  padding-top: 8px;
+  font-size: .75rem;
+  line-height: 1.5;
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+.industry-overview-page .industry-source a:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.industry-overview-page .industry-section-intro:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  margin-top: 16px;
+  color: var(--muted);
+}
+.industry-overview-page .ss-card-link:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  height: auto;
+}
+.industry-overview-page .ss-results:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  display: grid;
+  gap: 10px;
+}
+.industry-overview-page .ss-results .ss-outcome:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  margin: 0;
+  max-width: none;
+}
+.industry-overview-page .industry-insight-description:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  font-size: .875rem;
+  line-height: 1.55;
+  margin: 16px 0 0;
+}
+.industry-overview-page .wb-feature-copy .industry-insight-description:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  padding-right: 34px;
+}
+.industry-overview-page .industry-insight-action:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  display: inline-flex;
+  margin-top: 16px;
+  font-size: .875rem;
+}
+.industry-overview-page .industry-signoff:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+  margin: 20px auto 0;
+  color: var(--muted);
+}
+@media (min-width: 841px){.industry-overview-page .wb-grid[data-insight-count="4"]:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+}
+@media (max-width: 840px){.industry-overview-page .wb-grid:where(html[data-wissen-css~="industry-overviews"],html[data-wissen-css~="industry-overviews"] *){
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+}
+
+
+
+/* web-applications */
+.wa-page .wa-hero:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){
+  min-height: min(760px, 100svh);
+  height: auto;
+  max-height: none;
+  gap: clamp(100px, 15vh, 190px);
+  padding-top: 136px;
+  padding-bottom: 40px;
+}
+.wa-page .ah-title:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ max-width: 1050px; margin-inline: auto; }
+.wa-page .ah-title em:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ font-family: Georgia, 'Times New Roman', serif; }
+.wa-page .ah-breadcrumb:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ flex-wrap: wrap; }
+.wa-page .ah-footer:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ align-items: center; gap: 40px; }
+.wa-page .ah-footer p:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ max-width: 65ch; }
+.wa-page .wa-hero-art:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ background: #080809; }
+.wa-hero-art .wa-hero-video:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ display: block; width: 100%; height: 100%; object-fit: cover; opacity: .62; }
+.wa-page .wa-hero-art:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *)::after{
+  background: linear-gradient(180deg, #080809 0%, #080809a3 20%, #08080914 50%, #080809c9 76%, #080809 100%);
+}
+.wa-heading:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ display: grid; grid-template-columns: 1.1fr 1fr; gap: clamp(28px, 5vw, 72px); align-items: start; }
+.wa-heading p:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ color: var(--muted); padding-top: 4px; }
+.wa-challenge-grid:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.wa-challenge:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ min-width: 0; padding: clamp(24px, 2.5vw, 36px); border: 1px solid var(--line); background: #101013; }
+.wa-number:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ display: block; color: var(--accent); font-size: 14px; margin-bottom: 30px; }
+.wa-challenge h3:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ margin-bottom: 14px; }
+.wa-challenge p:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ color: #b7b2bf; }
+.wa-page #impact .ai-impact-card:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){
+  min-height: 245px; height: auto; display: flex; flex-direction: column;
+  align-items: flex-start; justify-content: flex-end; text-align: left;
+}
+.wa-page #impact .ai-impact-card h3:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ max-width: 26ch; margin: 0 0 12px; }
+.wa-page #impact .ai-impact-card p:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ max-width: 58ch; margin: 0; }
+.wa-page .ss-heading h2:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ max-width: 1000px; margin-inline: auto; }
+.wa-page #insights:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ scroll-margin-top: 150px; }
+.wa-page .ss-card-link:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ height: 100%; min-height: 0; grid-template-columns: 40% minmax(0, 1fr); }
+.wa-page .ss-copy:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ padding: clamp(22px, 2.5vw, 30px); }
+.wa-page .ss-copy h3:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ margin: 0 0 18px; text-wrap: initial; }
+.wa-page .wa-proof-description:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ color: #b7b2bf; margin-bottom: 24px; }
+.wa-page .ss-results:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ padding-top: 20px; }
+.wa-page .wa-proof-note:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ margin-top: 16px; }
+.wa-page .ss-read-more:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ margin-top: 24px; }
+.wa-page .wa-final:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ min-height: 0; padding-block: clamp(64px, 8vw, 110px); }
+.wa-page .wa-final h2:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ max-width: 23ch; }
+.wa-page .wa-final .m6-cta-description:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ max-width: 65ch; margin: 24px auto 0; }
+@media (max-width: 1000px){.wa-page .wa-hero:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ min-height: 640px; gap: 90px; }
+.wa-heading:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ grid-template-columns: 1fr; gap: 24px; }
+.wa-challenge-grid:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ gap: 14px; }
+
+}
+@media (max-width: 700px){.wa-page .wa-hero:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ min-height: 0; padding-top: 112px; padding-bottom: 32px; gap: 80px; }
+.wa-page .ah-breadcrumb:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ gap: 8px; font-size: 11px; }
+.wa-page .ah-footer:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ flex-direction: column; align-items: flex-start; gap: 24px; }
+.wa-page .ah-footer .ah-button:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ align-self: flex-start; }
+.wa-page .ai-subnav .wrap > span:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ display: none; }
+.wa-page .ai-subnav .wrap > div:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ display: flex; width: 100%; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding-block: 14px; }
+.wa-page .ai-subnav a:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ font-size: 12px; }
+.wa-challenge-grid:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ grid-template-columns: 1fr; }
+.wa-number:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ margin-bottom: 20px; }
+.wa-page #impact .ai-impact-card:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ min-height: 225px; }
+
+}
+@media (max-width: 760px){.wa-page .ss-card-link:where(html[data-wissen-css~="web-applications"],html[data-wissen-css~="web-applications"] *){ grid-template-columns: 1fr; grid-template-rows: 190px 1fr; }
+
+}
+
+
+
 /* Shared website design system */
 /* Shared design system. This is the final layer in css/site.css. */
 html[data-wissen-global] body.wissen-global-type {

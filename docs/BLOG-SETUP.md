@@ -20,7 +20,7 @@ This adapter is enabled only for `index.html`. Other webpages and homepage varia
 
 ## Insights Blogs tab
 
-The Blogs tab in `insights/Insights.html` is sourced exclusively from published Sanity `blogPost` documents. It shows the cover image, category, title, excerpt and publication date, newest first. Drafts and future-dated articles are excluded. The hero slider also uses the newest three Sanity posts. Other Insights tabs remain separately managed.
+The Blogs tab in `Insights.html` is sourced exclusively from published Sanity `blogPost` documents. It shows the cover image, category, title, excerpt and publication date, newest first. Drafts and future-dated articles are excluded. The hero slider also uses the newest three Sanity posts. Other Insights tabs remain separately managed.
 
 `src/scripts/insights-cms.js` queries the public API CDN using credential-free GET requests when the Blogs tab opens, with 12 articles per page and a Load more button. Returning to the tab or browser window refreshes content after one minute. The generated public configuration records exported article slugs. Live cards keep `/blogs/<slug>/` links for those exported articles; only posts awaiting a static rebuild use the `insights/Blog.html?slug=...` fallback. Sharing a known exported article from that fallback uses its static canonical URL. New posts still need a successful rebuild for complete static social previews. A page already open is refreshed on return or reload; this is not a continuous subscription.
 

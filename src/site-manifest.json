@@ -114,6 +114,16 @@
       "key": "service-overviews",
       "path": "src/styles/service-overviews.css",
       "base": "css"
+    },
+    {
+      "key": "industry-overviews",
+      "path": "src/styles/industry-overviews.css",
+      "base": "css"
+    },
+    {
+      "key": "web-applications",
+      "path": "src/styles/web-applications.css",
+      "base": "css"
     }
   ],
   "scripts": [
@@ -180,7 +190,7 @@
   ],
   "pages": {
     "about-us": {
-      "file": "company/About-Us.html",
+      "file": "About-Us.html",
       "scripts": [
         {
           "key": "master",
@@ -248,7 +258,7 @@
       ]
     },
     "career": {
-      "file": "company/Career.html",
+      "file": "Career.html",
       "scripts": [
         {
           "key": "master",
@@ -265,7 +275,7 @@
       ]
     },
     "contact-us": {
-      "file": "company/Contact-Us.html",
+      "file": "Contact-Us.html",
       "scripts": [
         {
           "key": "master",
@@ -324,7 +334,7 @@
       ]
     },
     "insights": {
-      "file": "insights/Insights.html",
+      "file": "Insights.html",
       "scripts": [
         {
           "key": "blog-content",
@@ -482,6 +492,84 @@
         {
           "key": "application-development",
           "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "industries-energy-commodities": {
+      "file": "industries/Energy-Commodities.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "industries-healthcare-life-sciences": {
+      "file": "industries/Healthcare-Life-Sciences.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "industries-manufacturing": {
+      "file": "industries/Manufacturing.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "industries-retail": {
+      "file": "industries/Retail.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "industries-telecom": {
+      "file": "industries/Telecom.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "web-applications": {
+      "file": "services/Application-Development/Web applications.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
         },
         {
           "key": "site-appearance",

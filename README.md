@@ -1,6 +1,6 @@
 # Wissen Technology — Dark website
 
-Static website with 18 active HTML pages, shared CSS/JavaScript and Sanity blog integration. Open `index.html` for a local layout preview; use an HTTP server for CMS-powered features.
+Static website with 23 active HTML pages, shared CSS/JavaScript and Sanity blog integration. Open `index.html` for a local layout preview; use an HTTP server for CMS-powered features.
 
 ## Project structure
 
@@ -8,7 +8,8 @@ Static website with 18 active HTML pages, shared CSS/JavaScript and Sanity blog 
 | --- | --- |
 | `index.html` | Homepage |
 | `services/` | Application Development, AI/ML, Agentic Data Platforms, Intelligent Automation, Cloud and Experience Design |
-| `industries/BFSI/` | BFSI overview and its four subpages |
+| `industries/` | BFSI, Energy & Commodities, Healthcare & Life Sciences, Manufacturing, Retail and Telecom overviews |
+| `industries/BFSI/` | Four BFSI subpages |
 | `accelerators/` | Autonomous Operations |
 | `company/` | About Us, Careers and Contact |
 | `insights/` | Insights landing page and live blog template |

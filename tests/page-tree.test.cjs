@@ -28,16 +28,20 @@ test('moved pages have matching permanent redirects and no root duplicates',()=>
   const redirects=JSON.parse(read('vercel.json')).redirects;
   for(const [old,file] of Object.entries(routes)){
     assert.ok(fs.existsSync(path.join(ROOT,file)),file);
+    if(old===file){
+      assert.ok(!redirects.some(r=>r.source==='/'+file),`Top-level page must be served directly: ${file}`);
+      continue;
+    }
     assert.ok(!fs.existsSync(path.join(ROOT,old)),old);
     assert.ok(redirects.some(r=>r.source==='/'+old&&r.destination==='/'+file&&r.permanent===true),old);
   }
 });
 
 test('article rebasing preserves queries, fragments, external links and nested page depth',()=>{
-  const input='<html data-wissen-root="../"><a href="../company/Contact-Us.html?topic=ai#form">Contact</a><img src="../assets/images/home/brain-poster.jpg"><a href="#title">Top</a><a href="https://example.com/a">External</a>';
+  const input='<html data-wissen-root="../"><a href="../Contact-Us.html?topic=ai#form">Contact</a><img src="../assets/images/home/brain-poster.jpg"><a href="#title">Top</a><a href="https://example.com/a">External</a>';
   const html=rebaseHtml(input,BLOG,'blogs/example/index.html');
   assert.ok(html.includes('data-wissen-root="../../"'));
-  assert.ok(html.includes('href="../../company/Contact-Us.html?topic=ai#form"'));
+  assert.ok(html.includes('href="../../Contact-Us.html?topic=ai#form"'));
   assert.ok(html.includes('src="../../assets/images/home/brain-poster.jpg"'));
   assert.ok(html.includes('href="#title"'));
   assert.ok(html.includes('href="https://example.com/a"'));
@@ -56,8 +60,8 @@ test('browser CMS renderers resolve configuration and card links from every page
       assert.ok(html.includes(`href="${prefix}insights/Blog.html?slug=example"`),html);
       assert.ok(html.includes(`src="${prefix}assets/images/home/brain-poster.jpg"`));
     }
-    assert.ok(B.render(post,[],{variant:'v3'}).includes(`href="${prefix}company/Contact-Us.html"`));
-    assert.ok(B.state('Unavailable','Try again').includes(`href="${prefix}insights/Insights.html"`));
+    assert.ok(B.render(post,[],{variant:'v3'}).includes(`href="${prefix}Contact-Us.html"`));
+    assert.ok(B.state('Unavailable','Try again').includes(`href="${prefix}Insights.html"`));
   }
 });
 
@@ -97,9 +101,15 @@ test('complete static export works offline with nested pages, archive and articl
       require('./scripts/build-static.cjs');`]);
     run(process.env.PYTHON||(process.platform==='win32'?'python':'python3'),['scripts/check-site.py','--dist']);
     const output=file=>fs.readFileSync(path.join(temp,'dist',file),'utf8');
-    assert.ok(output(routes['Insights.html']).includes('href="../blogs/first/"'));
+    assert.ok(output(routes['Insights.html']).includes('href="blogs/first/"'));
     assert.ok(output('blogs/index.html').includes('href="first/"'));
-    assert.ok(output('blogs/first/index.html').includes('href="../../company/Contact-Us.html"'));
+    assert.ok(output('blogs/first/index.html').includes('href="../../Contact-Us.html"'));
+    for(const [legacy,canonical] of Object.entries(require('../src/legacy-page-aliases.json'))){
+      assert.ok(output(canonical).includes('data-wissen-root=""'),canonical);
+      assert.ok(output(legacy).includes('data-wissen-root="../"'),legacy);
+      assert.ok(output(legacy).includes('href="https://example.test/site/'+canonical+'"'),legacy);
+      assert.ok(!output('sitemap.xml').includes('https://example.test/site/'+legacy),legacy);
+    }
     assert.ok(output('blogs/first/index.html').includes('href="../second/"'));
     assert.ok(output('sitemap.xml').includes('https://example.test/site/services/Application-Development.html'));
     assert.ok(!fs.existsSync(path.join(temp,'dist/docs')));

@@ -37,11 +37,6 @@
   ],
   "redirects": [
     {
-      "source": "/About-Us.html",
-      "destination": "/company/About-Us.html",
-      "permanent": true
-    },
-    {
       "source": "/Application-Development.html",
       "destination": "/services/Application-Development.html",
       "permanent": true
@@ -62,23 +57,8 @@
       "permanent": true
     },
     {
-      "source": "/Career.html",
-      "destination": "/company/Career.html",
-      "permanent": true
-    },
-    {
-      "source": "/Contact-Us.html",
-      "destination": "/company/Contact-Us.html",
-      "permanent": true
-    },
-    {
       "source": "/Industries-BFSI.html",
       "destination": "/industries/BFSI.html",
-      "permanent": true
-    },
-    {
-      "source": "/Insights.html",
-      "destination": "/insights/Insights.html",
       "permanent": true
     },
     {

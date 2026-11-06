@@ -21,7 +21,7 @@ In Vercel, choose Add New Project and import `Tri-don/W-website-v2`. Select the 
 
 Enable Vercel's system environment variables. The build uses `VERCEL_PROJECT_PRODUCTION_URL` for canonical URLs and the sitemap when `SITE_URL` is unset. An explicit `SITE_URL` takes precedence and should be the final site root, for example `https://your-domain.example/`. Do not set the example as a real value. A Sanity token is not needed for the current public dataset. For a future private dataset, provide a read-only `SANITY_API_READ_TOKEN` as a build secret; it is never written into public output.
 
-The 13 former root `.html` paths redirect to their new folder paths through the permanent redirects in `vercel.json`. See `docs/PAGE-STRUCTURE.md` for the mapping. Deploy the source configuration with the build; those server redirects are not embedded in the static HTML. Blogs are generated at `/blogs/<slug>/`, with a listing at `/blogs/`. The build adds published Sanity cards to the existing Insights blog grid and retains its earlier editorial links. `insights/Blog.html` remains a live read-only article entry point, while generated article pages contain their content without JavaScript.
+Former root service, industry, accelerator and blog-template paths redirect through `vercel.json`. About Us, Insights, Careers and Contact Us are served directly beside the homepage. See `docs/PAGE-STRUCTURE.md` for the mapping. Deploy the source configuration with the build; those server redirects are not embedded in the static HTML. Blogs are generated at `/blogs/<slug>/`, with a listing at `/blogs/`. The build fills the Insights Blogs tab exclusively with published Sanity cards. The former nested landing-page URLs are served by generated compatibility pages. `insights/Blog.html` remains a live read-only article entry point, while generated article pages contain their content without JavaScript.
 
 The build publishes only website pages, assets, compiled CSS/JS and the small public Sanity configuration. It excludes schema sources, environment files, Git metadata and layout previews. Drafts and future-dated articles are excluded. The three demo articles retain their no-index metadata; they are sample content.
 
@@ -64,9 +64,3 @@ npm run build
 ```
 
 The output is reproducible. Do not commit `dist` or credentials. A failed Sanity query or invalid article stops the build so it cannot silently publish an incomplete release.
-
-## Navigation deployment checks
-
-Folder paths must match Git's filename casing exactly. In particular, the BFSI subpages are under `industries/BFSI/`. Windows can resolve a lowercase `bfsi` reference, while the Linux deployment fails. The page-tree checks compare manifest paths against Git to catch this before deployment.
-
-`build_site.py` marks the shared script as deferred on every source page, allowing the browser to parse page content during a slow script download. The first-visit intro is skipped when that script arrives late and is released when returning from the browser's back/forward cache.

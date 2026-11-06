@@ -6,6 +6,7 @@ const B=require('../src/blog/content.js'), Blog=require('../build_blogs.cjs');
 const HomeBlog=require('../src/blog/home-cards.js');
 const {BLOG,INSIGHTS,rebaseHtml,normalize}=require('./site-paths.cjs');
 const {publicAssets}=require('./public-assets.cjs');
+const legacyPages=require('../src/legacy-page-aliases.json');
 const read=p=>fs.readFileSync(path.join(ROOT,p),'utf8');
 function write(p,text){const target=path.resolve(OUT,p);if(!target.startsWith(OUT+path.sep))throw new Error('Output path escaped dist');fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,text);}
 function card(post){
@@ -74,6 +75,16 @@ async function build(){
   }
   // Keep the accepted v3 shell for parameter-based links and manual CMS checks.
   write(BLOG,normalize(read(BLOG),BLOG));
+  // Serve legacy nested URLs without redirecting them back into cached permanent redirects.
+  // Rebase each compatibility page so relative assets and live CMS reads still work.
+  for(const [legacy,canonical] of Object.entries(legacyPages)){
+    let html=rebaseHtml(fs.readFileSync(path.join(OUT,canonical),'utf8'),canonical,legacy);
+    const canonicalUrl=Blog.config.siteUrl?new URL(canonical,Blog.config.siteUrl).href:
+      path.posix.relative(path.posix.dirname(legacy),canonical);
+    html=html.replace(/<link\b[^>]*rel=["']canonical["'][^>]*>/gi,'');
+    html=html.replace('</head>',()=>`<link rel="canonical" href="${B.esc(canonicalUrl)}"></head>`);
+    write(legacy,html);
+  }
   write('blogs/index.html',archiveHtml);
   for(const page of pages)write(page.file,page.html);
   // This is a strict allowlist. Tokens, schema sources and environment files are never copied.

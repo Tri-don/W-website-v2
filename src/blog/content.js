@@ -10,7 +10,7 @@
   function localHtml(markup) {
     const prefix=typeof document==='undefined'?'':document.documentElement?.dataset.wissenRoot||'';
     if(!prefix)return markup;
-    return markup.replace(/\b(href|src|poster)="((?:assets|blogs|services|industries|accelerators|company|insights)\/[^"]*)"/g,
+    return markup.replace(/\b(href|src|poster)="((?:(?:assets|blogs|services|industries|accelerators|company|insights)\/|(?:About-Us|Career|Contact-Us|Insights)\.html)[^"]*)"/g,
       (_,attr,value)=>`${attr}="${prefix}${value}"`);
   }
   function sitePath(value) {
@@ -171,7 +171,7 @@
     const relatedCards=selectRelated(post,related,options.preview);
     const cover=imageUrl(post.mainImage);
     const v3Header=v3?`<section class="wb-hero wb-v3-hero" data-wissen-hero="true"><div class="wrap">
-      <div class="wb-v3-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="insights/Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
+      <div class="wb-v3-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
       <header class="wb-v3-stage${cover?'':' wb-v3-no-cover'}">
         ${cover?`<img class="wb-v3-image" src="${esc(cover)}" alt="${esc(post.mainImage.alt)}" fetchpriority="high" decoding="async">`:''}
         <div class="wb-v3-title-block"><div class="wb-meta">${(post.categories||[]).map(c=>`<span>${esc(c.title)}</span>`).join('')}${published?`<time datetime="${esc(post.publishedAt)}">${published}</time>`:''}<span>${minutes} min read</span></div>
@@ -183,7 +183,7 @@
       ${shareToolbar(post,options)}
     </div></section>`:'';
     const v2Header=v2?`<section class="wb-hero wb-v2-hero" data-wissen-hero="true"><div class="wrap">
-      <div class="wb-v2-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="insights/Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
+      <div class="wb-v2-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
       <div class="wb-v2-lead${imageUrl(post.mainImage)?'':' wb-v2-no-cover'}">
         <div class="wb-v2-intro">
           <div class="wb-meta">${(post.categories||[]).map(c=>`<span>${esc(c.title)}</span>`).join('')}${published?`<time datetime="${esc(post.publishedAt)}">${published}</time>`:''}<span>${minutes} min read</span></div>
@@ -193,10 +193,10 @@
         </div>
         ${image(post.mainImage,'wb-cover wb-v2-cover',true)}
       </div>
-      <div class="wb-byline wb-v2-byline">${authorImg?`<img src="${esc(authorImg)}" alt="" width="42" height="42">`:''}${author?`<div><strong>${esc(author.name)}</strong>${author.role?`<span>${esc(author.role)}</span>`:''}</div>`:''}<a class="wb-v2-all" href="insights/Insights.html">&larr; All insights</a><div class="wb-share"><a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(options.url||'')}" data-blog-share target="_blank" rel="noopener noreferrer" aria-label="Share article on LinkedIn">in</a><button type="button" data-blog-copy>Copy link</button><span class="wb-sr" data-copy-status role="status"></span></div></div>
+      <div class="wb-byline wb-v2-byline">${authorImg?`<img src="${esc(authorImg)}" alt="" width="42" height="42">`:''}${author?`<div><strong>${esc(author.name)}</strong>${author.role?`<span>${esc(author.role)}</span>`:''}</div>`:''}<a class="wb-v2-all" href="Insights.html">&larr; All insights</a><div class="wb-share"><a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(options.url||'')}" data-blog-share target="_blank" rel="noopener noreferrer" aria-label="Share article on LinkedIn">in</a><button type="button" data-blog-copy>Copy link</button><span class="wb-sr" data-copy-status role="status"></span></div></div>
     </div></section>`:'';
     return (v3?v3Header:v2?v2Header:`<section class="wb-hero" data-wissen-hero="true"><div class="wrap">
-      <nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="insights/Insights.html">Insights</a><span aria-hidden="true">/</span><a href="insights/Blog.html">Blogs</a></nav>
+      <nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><a href="insights/Blog.html">Blogs</a></nav>
       ${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content, not a published article</p>':''}
       <div class="wb-meta">${(post.categories||[]).map(c=>`<span>${esc(c.title)}</span>`).join('')}${published?`<time datetime="${esc(post.publishedAt)}">${published}</time>`:''}<span>${minutes} min read</span></div>
       <h1 id="blog-title" data-wissen-type="hero-title">${esc(post.title)}</h1>
@@ -205,17 +205,17 @@
       ${image(post.mainImage,'wb-cover',true)}
     </div></section>`)+`
     <section class="wb-reading"${v2||v3?' id="blog-content" tabindex="-1"':''}><div class="wrap wb-reading-grid">
-      <aside class="wb-aside">${toc.length?`<nav aria-label="In this article"><p>In this article</p><ol>${toc.map(h=>`<li><a href="#${h.id}" data-blog-toc>${esc(h.text)}</a></li>`).join('')}</ol></nav>`:''}<a class="wb-back" href="insights/Insights.html">&larr; All insights</a></aside>
+      <aside class="wb-aside">${toc.length?`<nav aria-label="In this article"><p>In this article</p><ol>${toc.map(h=>`<li><a href="#${h.id}" data-blog-toc>${esc(h.text)}</a></li>`).join('')}</ol></nav>`:''}<a class="wb-back" href="Insights.html">&larr; All insights</a></aside>
       <article class="wb-prose" aria-labelledby="blog-title">${body.html}
       ${post.tags?.length?`<ul class="wb-tags" aria-label="Article tags">${[...new Set(post.tags.filter(t=>typeof t==='string'&&t.trim()))].map(t=>`<li>${esc(t)}</li>`).join('')}</ul>`:''}
       ${author?.bio?`<div class="wb-author"><p>About the author</p><h2>${esc(author.name)}</h2><p>${esc(author.bio)}</p></div>`:''}
       ${v3?`<div class="wb-v3-article-end">${shareToolbar(post,options)}<a class="wb-v3-back-top" href="#blog-title">Back to top <span aria-hidden="true">&uarr;</span></a></div>`:''}
-      <div class="wb-end"><p>Have a challenge in mind?</p><a class="ui-text" href="company/Contact-Us.html">Let’s talk <span aria-hidden="true">↗</span></a></div></article>
+      <div class="wb-end"><p>Have a challenge in mind?</p><a class="ui-text" href="Contact-Us.html">Let’s talk <span aria-hidden="true">↗</span></a></div></article>
     </div></section>
-    ${relatedCards.length?`<section class="wb-related" aria-labelledby="blog-related-title"><div class="wrap"><div class="wb-related-heading"><h2 id="blog-related-title" data-wissen-type="section-title">${v3?'Related <em>articles.</em>':'Keep <em>exploring.</em>'}</h2>${v3?`<a class="wb-related-all" href="insights/Insights.html">Explore all insights <span aria-hidden="true">&rarr;</span></a>`:''}</div><div class="wb-related-grid">${relatedCards.map(p=>`<${options.preview?'article':'a'} class="wb-article-card"${options.preview?'':` href="${esc(link(p))}"`}>${image(p.mainImage,'wb-article-card-media')}<div><span>${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}<span class="wb-article-card-read">${options.preview?'Sample article':'Read article <span aria-hidden="true">&rarr;</span>'}</span></div></${options.preview?'article':'a'}>`).join('')}</div></div></section>`:''}`;
+    ${relatedCards.length?`<section class="wb-related" aria-labelledby="blog-related-title"><div class="wrap"><div class="wb-related-heading"><h2 id="blog-related-title" data-wissen-type="section-title">${v3?'Related <em>articles.</em>':'Keep <em>exploring.</em>'}</h2>${v3?`<a class="wb-related-all" href="Insights.html">Explore all insights <span aria-hidden="true">&rarr;</span></a>`:''}</div><div class="wb-related-grid">${relatedCards.map(p=>`<${options.preview?'article':'a'} class="wb-article-card"${options.preview?'':` href="${esc(link(p))}"`}>${image(p.mainImage,'wb-article-card-media')}<div><span>${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}<span class="wb-article-card-read">${options.preview?'Sample article':'Read article <span aria-hidden="true">&rarr;</span>'}</span></div></${options.preview?'article':'a'}>`).join('')}</div></div></section>`:''}`;
   }
   function state(title, message, retry=false) {
-    return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="insights/Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
+    return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
   }
   const imageProjection=`{alt,caption,credit,crop,hotspot,asset->{url}}`;
   const cardProjection=`{_id,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;

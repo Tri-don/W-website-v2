@@ -85,7 +85,7 @@ test('deployment policy blocks scripts, frames and form posts outside the approv
   assert.equal(headers['X-Frame-Options'],'DENY');
   assert.ok(!policy.includes(new URL(B.endpoint(Blog.config)).origin));
   assert.ok(policy.includes(new URL(B.endpoint(Blog.config,true)).origin));
-  const form=fs.readFileSync(path.join(__dirname,'../company/Contact-Us.html'),'utf8').match(/<form\b[^>]*>/)[0];
+  const form=fs.readFileSync(path.join(__dirname,'../Contact-Us.html'),'utf8').match(/<form\b[^>]*>/)[0];
   assert.ok(form.includes('method="post"'));
 });
 
@@ -107,7 +107,7 @@ test('public browser queries use credential-free CDN reads and never mutation en
 });
 
 test('inactive form is disabled in HTML and cannot send, store or read entered values',()=>{
-  const html=fs.readFileSync(path.join(__dirname,'../company/Contact-Us.html'),'utf8');
+  const html=fs.readFileSync(path.join(__dirname,'../Contact-Us.html'),'utf8');
   const markup=html.match(/<form\b[^>]*id="contact-form"[^>]*>[\s\S]*?<\/form>/)[0];
   assert.ok(markup.includes('data-form-mode="disabled"'));
   assert.ok(!/\baction\s*=/i.test(markup));

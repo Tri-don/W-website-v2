@@ -84,7 +84,7 @@ Final checks completed:
 
 ## About Us spacing review
 
-The subsequent spacing trial applies to `company/About-Us.html` only. Standard section-edge padding is exactly half the shared values: 48px desktop, 40px tablet and 32px mobile. Hero-copy and outer footer padding are also halved. Borders are unchanged; About Us already has no dividers between its main sections. The other 12 pages retain the shared spacing above.
+The subsequent spacing trial applies to `About-Us.html` only. Standard section-edge padding is exactly half the shared values: 48px desktop, 40px tablet and 32px mobile. Hero-copy and outer footer padding are also halved. Borders are unchanged; About Us already has no dividers between its main sections. The other 12 pages retain the shared spacing above.
 
 The trial lives in `src/styles/about-spacing-trial.css` and remains part of the one merged stylesheet. Its page guard confines it to About Us until the user approves a wider rollout. Computed padding was compared before/after at desktop, tablet and mobile widths; the other pages' padding and borders and all JavaScript remain unchanged.
 
@@ -114,16 +114,16 @@ Category headings have clearer contrast and footer links use 14px type, a 1.55 l
 
 ## Pages
 
-- company/About-Us.html
+- About-Us.html
 - About-Us-v2.html — comparison version
 - services/Application-Development.html
 - accelerators/Autonomous-Operations.html
 - industries/BFSI/Capital-Markets-Technology.html
-- company/Career.html
-- company/Contact-Us.html
+- Career.html
+- Contact-Us.html
 - index.html
 - industries/BFSI/Industries-BFSI.html
-- insights/Insights.html
+- Insights.html
 - industries/BFSI/Responsible-Privacy-Preserving-Financial-AI.html
 - industries/BFSI/Risk-Regulatory-Compliance-Engineering.html
 - services/Services-Ai-ML.html
