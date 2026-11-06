@@ -4,6 +4,7 @@ from html.parser import HTMLParser
 from urllib.parse import unquote, urlsplit
 import html
 import json
+import os
 import re
 import sys
 
@@ -23,6 +24,8 @@ def check(value, owner, base):
     if url.scheme or url.netloc or not url.path:
         return
     target = (ROOT if url.path.startswith('/') else base) / unquote(url.path).lstrip('/')
+    # Preserve the URL's spelling: resolve() can silently repair casing on Windows.
+    lexical = Path(os.path.abspath(target))
     target = target.resolve()
     checked += 1
     label = owner.relative_to(ROOT).as_posix()
@@ -33,7 +36,7 @@ def check(value, owner, base):
         errors.add(f'{label}: missing {value}')
         return
     current = ROOT
-    for part in target.relative_to(ROOT).parts:
+    for part in lexical.relative_to(ROOT).parts:
         if part not in {p.name for p in current.iterdir()}:
             errors.add(f'{label}: filename capitalization mismatch: {value}')
             return

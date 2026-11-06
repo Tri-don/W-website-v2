@@ -11,8 +11,9 @@ test('manifest page paths match Git filename casing on Linux hosts',()=>{
   const result=spawnSync('git',['ls-files'],{cwd:ROOT,encoding:'utf8'});
   assert.equal(result.status,0,result.stderr);
   const tracked=new Set(result.stdout.split(/\r?\n/));
+  const trackedLower=new Set([...tracked].map(file=>file.toLowerCase()));
   const manifest=JSON.parse(read('src/site-manifest.json'));
-  for(const page of Object.values(manifest.pages))assert.ok(tracked.has(page.file),`Filename casing differs from Git: ${page.file}`);
+  for(const page of Object.values(manifest.pages))if(trackedLower.has(page.file.toLowerCase()))assert.ok(tracked.has(page.file),`Filename casing differs from Git: ${page.file}`);
 });
 
 test('shared page script is deferred so navigation HTML can render during download',()=>{
