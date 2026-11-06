@@ -50,7 +50,7 @@ For date-only visibility changes in the future, a build is still required after 
 ## Move to Hostinger later
 
 1. Set `SITE_URL` to the intended Hostinger site URL and run `npm run build` on a machine with Node.js 22+ and Python 3.
-2. Upload the contents of `dist` to the chosen website root, normally `public_html`. Keep all page folders, including `services/`, `industries/bfsi/`, `accelerators/`, `company/`, `insights/` and `blogs/<slug>/index.html`. Recreate the old-page redirects in the new host configuration before switching traffic; `vercel.json` rules apply only on Vercel.
+2. Upload the contents of `dist` to the chosen website root, normally `public_html`. Keep all page folders, including `services/`, `industries/BFSI/`, `accelerators/`, `company/`, `insights/` and `blogs/<slug>/index.html`. Recreate the old-page redirects in the new host configuration before switching traffic; `vercel.json` rules apply only on Vercel.
 3. Update DNS when ready. Retain existing article slugs and paths to preserve links.
 4. Replace the Sanity deploy-hook destination with the Hostinger build/upload automation. Remove or disable the old Vercel hook after the switch.
 
@@ -64,3 +64,9 @@ npm run build
 ```
 
 The output is reproducible. Do not commit `dist` or credentials. A failed Sanity query or invalid article stops the build so it cannot silently publish an incomplete release.
+
+## Navigation deployment checks
+
+Folder paths must match Git's filename casing exactly. In particular, the BFSI subpages are under `industries/BFSI/`. Windows can resolve a lowercase `bfsi` reference, while the Linux deployment fails. The page-tree checks compare manifest paths against Git to catch this before deployment.
+
+`build_site.py` marks the shared script as deferred on every source page, allowing the browser to parse page content during a slow script download. The first-visit intro is skipped when that script arrives late and is released when returning from the browser's back/forward cache.

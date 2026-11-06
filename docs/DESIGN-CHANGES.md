@@ -118,16 +118,16 @@ Category headings have clearer contrast and footer links use 14px type, a 1.55 l
 - About-Us-v2.html — comparison version
 - services/Application-Development.html
 - accelerators/Autonomous-Operations.html
-- industries/bfsi/Capital-Markets-Technology.html
+- industries/BFSI/Capital-Markets-Technology.html
 - company/Career.html
 - company/Contact-Us.html
 - index.html
-- industries/bfsi/Industries-BFSI.html
+- industries/BFSI/Industries-BFSI.html
 - insights/Insights.html
-- industries/bfsi/Responsible-Privacy-Preserving-Financial-AI.html
-- industries/bfsi/Risk-Regulatory-Compliance-Engineering.html
+- industries/BFSI/Responsible-Privacy-Preserving-Financial-AI.html
+- industries/BFSI/Risk-Regulatory-Compliance-Engineering.html
 - services/Services-Ai-ML.html
-- industries/bfsi/Wealth-Asset-Management-Data-Infrastructure.html
+- industries/BFSI/Wealth-Asset-Management-Data-Infrastructure.html
 
 ## About Us footer follow-up
 
@@ -214,7 +214,7 @@ The Difference controller also falls back to natural flow if enlarged heading/bo
 
 Centering verification passed 72 chapter/layout cases across both homepage versions, including 1280x720, wide desktop, tablet, mobile and short landscape windows. The pinned composition is centered within 2px of the navbar-excluded viewport center; all four chapter transitions remain functional. 200% text tests switch to readable natural flow and restore pinning when text returns to normal, without script errors.
 
-The original orbiting rings and soft glow are restored behind the Ready to transform what's next CTA on index.html, index-v2.html and industries/bfsi/Industries-BFSI.html. The current section gradient/spacing remains; the existing reduced-motion rule still stops the orbit animation when requested. Other closing CTA backgrounds retain their current treatment.
+The original orbiting rings and soft glow are restored behind the Ready to transform what's next CTA on index.html, index-v2.html and industries/BFSI/Industries-BFSI.html. The current section gradient/spacing remains; the existing reduced-motion rule still stops the orbit animation when requested. Other closing CTA backgrounds retain their current treatment.
 
 ## AI journey challenges layout repair
 

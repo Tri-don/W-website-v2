@@ -10,15 +10,15 @@ All paths below are relative to the website root.
 | `Application-Development.html` | `services/Application-Development.html` |
 | `Autonomous-Operations.html` | `accelerators/Autonomous-Operations.html` |
 | `Blog.html` | `insights/Blog.html` |
-| `Capital-Markets-Technology.html` | `industries/bfsi/Capital-Markets-Technology.html` |
+| `Capital-Markets-Technology.html` | `industries/BFSI/Capital-Markets-Technology.html` |
 | `Career.html` | `company/Career.html` |
 | `Contact-Us.html` | `company/Contact-Us.html` |
-| `Industries-BFSI.html` | `industries/bfsi/Industries-BFSI.html` |
+| `Industries-BFSI.html` | `industries/BFSI/Industries-BFSI.html` |
 | `Insights.html` | `insights/Insights.html` |
-| `Responsible-Privacy-Preserving-Financial-AI.html` | `industries/bfsi/Responsible-Privacy-Preserving-Financial-AI.html` |
-| `Risk-Regulatory-Compliance-Engineering.html` | `industries/bfsi/Risk-Regulatory-Compliance-Engineering.html` |
+| `Responsible-Privacy-Preserving-Financial-AI.html` | `industries/BFSI/Responsible-Privacy-Preserving-Financial-AI.html` |
+| `Risk-Regulatory-Compliance-Engineering.html` | `industries/BFSI/Risk-Regulatory-Compliance-Engineering.html` |
 | `Services-Ai-ML.html` | `services/Services-Ai-ML.html` |
-| `Wealth-Asset-Management-Data-Infrastructure.html` | `industries/bfsi/Wealth-Asset-Management-Data-Infrastructure.html` |
+| `Wealth-Asset-Management-Data-Infrastructure.html` | `industries/BFSI/Wealth-Asset-Management-Data-Infrastructure.html` |
 
 ## Documentation and configuration
 

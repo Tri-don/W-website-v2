@@ -8,7 +8,7 @@ Static website with 18 active HTML pages, shared CSS/JavaScript and Sanity blog 
 | --- | --- |
 | `index.html` | Homepage |
 | `services/` | Application Development, AI/ML, Agentic Data Platforms, Intelligent Automation, Cloud and Experience Design |
-| `industries/bfsi/` | BFSI overview and its four subpages |
+| `industries/BFSI/` | BFSI overview and its four subpages |
 | `accelerators/` | Autonomous Operations |
 | `company/` | About Us, Careers and Contact |
 | `insights/` | Insights landing page and live blog template |

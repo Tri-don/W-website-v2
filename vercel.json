@@ -58,7 +58,7 @@
     },
     {
       "source": "/Capital-Markets-Technology.html",
-      "destination": "/industries/bfsi/Capital-Markets-Technology.html",
+      "destination": "/industries/BFSI/Capital-Markets-Technology.html",
       "permanent": true
     },
     {
@@ -83,12 +83,12 @@
     },
     {
       "source": "/Responsible-Privacy-Preserving-Financial-AI.html",
-      "destination": "/industries/bfsi/Responsible-Privacy-Preserving-Financial-AI.html",
+      "destination": "/industries/BFSI/Responsible-Privacy-Preserving-Financial-AI.html",
       "permanent": true
     },
     {
       "source": "/Risk-Regulatory-Compliance-Engineering.html",
-      "destination": "/industries/bfsi/Risk-Regulatory-Compliance-Engineering.html",
+      "destination": "/industries/BFSI/Risk-Regulatory-Compliance-Engineering.html",
       "permanent": true
     },
     {
@@ -98,7 +98,7 @@
     },
     {
       "source": "/Wealth-Asset-Management-Data-Infrastructure.html",
-      "destination": "/industries/bfsi/Wealth-Asset-Management-Data-Infrastructure.html",
+      "destination": "/industries/BFSI/Wealth-Asset-Management-Data-Infrastructure.html",
       "permanent": true
     },
     {
@@ -107,7 +107,7 @@
       "permanent": true
     },
     {
-      "source": "/industries/bfsi/Industries-BFSI.html",
+      "source": "/industries/BFSI/Industries-BFSI.html",
       "destination": "/industries/BFSI.html",
       "permanent": true
     }

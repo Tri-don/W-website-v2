@@ -7,6 +7,22 @@ const routes=require('../src/page-routes.json');
 const {BLOG,rebaseHtml,normalize}=require('../scripts/site-paths.cjs');
 const read=file=>fs.readFileSync(path.join(ROOT,file),'utf8');
 
+test('manifest page paths match Git filename casing on Linux hosts',()=>{
+  const result=spawnSync('git',['ls-files'],{cwd:ROOT,encoding:'utf8'});
+  assert.equal(result.status,0,result.stderr);
+  const tracked=new Set(result.stdout.split(/\r?\n/));
+  const manifest=JSON.parse(read('src/site-manifest.json'));
+  for(const page of Object.values(manifest.pages))assert.ok(tracked.has(page.file),`Filename casing differs from Git: ${page.file}`);
+});
+
+test('shared page script is deferred so navigation HTML can render during download',()=>{
+  const manifest=JSON.parse(read('src/site-manifest.json'));
+  for(const page of Object.values(manifest.pages)){
+    const tag=read(page.file).match(/<script\b[^>]*src="[^"]*js\/site\.js"[^>]*>/)?.[0];
+    assert.ok(tag&&/\bdefer\b/.test(tag),page.file);
+  }
+});
+
 test('moved pages have matching permanent redirects and no root duplicates',()=>{
   const redirects=JSON.parse(read('vercel.json')).redirects;
   for(const [old,file] of Object.entries(routes)){

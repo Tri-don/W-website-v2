@@ -2,8 +2,9 @@
 (()=>{
  let first=false;
  try{first=sessionStorage.getItem('wissen-site-visited')!=='1';sessionStorage.setItem('wissen-site-visited','1')}catch{first=!window.name.includes('wissen-site-visited');if(first)window.name+=' wissen-site-visited'}
- window.wissenFirstVisit=first;
- if(!first||matchMedia('(prefers-reduced-motion: reduce)').matches||location.hash){document.documentElement.classList.add('no-site-loader','intro-started');document.addEventListener('DOMContentLoaded',()=>document.querySelector('.m3-loader')?.remove(),{once:true})}
+ // Do not cover content with an intro after a slow script download.
+ window.wissenFirstVisit=first&&performance.now()<1500;
+ if(!window.wissenFirstVisit||matchMedia('(prefers-reduced-motion: reduce)').matches||location.hash){document.documentElement.classList.add('no-site-loader','intro-started');document.addEventListener('DOMContentLoaded',()=>document.querySelector('.m3-loader')?.remove(),{once:true})}
 })();
 (() => {
  const root=document.documentElement;
@@ -19,6 +20,7 @@
   setTimeout(()=>document.querySelector('.m3-loader')?.remove(),900);
  };
  timer=setTimeout(finish,3500);
+ window.addEventListener('pageshow',event=>{if(event.persisted)finish();});
  document.addEventListener('DOMContentLoaded',()=>{
   if(started)return;
   const start=performance.now();

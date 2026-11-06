@@ -235,7 +235,7 @@
       ]
     },
     "capital-markets-technology": {
-      "file": "industries/bfsi/Capital-Markets-Technology.html",
+      "file": "industries/BFSI/Capital-Markets-Technology.html",
       "scripts": [
         {
           "key": "master",
@@ -349,7 +349,7 @@
       ]
     },
     "responsible-privacy-preserving-financial-ai": {
-      "file": "industries/bfsi/Responsible-Privacy-Preserving-Financial-AI.html",
+      "file": "industries/BFSI/Responsible-Privacy-Preserving-Financial-AI.html",
       "scripts": [
         {
           "key": "master",
@@ -362,7 +362,7 @@
       ]
     },
     "risk-regulatory-compliance-engineering": {
-      "file": "industries/bfsi/Risk-Regulatory-Compliance-Engineering.html",
+      "file": "industries/BFSI/Risk-Regulatory-Compliance-Engineering.html",
       "scripts": [
         {
           "key": "master",
@@ -388,7 +388,7 @@
       ]
     },
     "wealth-asset-management-data-infrastructure": {
-      "file": "industries/bfsi/Wealth-Asset-Management-Data-Infrastructure.html",
+      "file": "industries/BFSI/Wealth-Asset-Management-Data-Infrastructure.html",
       "scripts": [
         {
           "key": "master",
