@@ -1,6 +1,7 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),vm=require('node:vm');
 const H=require('../src/blog/home-cards.js');
+const B=require('../src/blog/content.js');
 const post=(slug,extra={})=>({_id:slug,title:slug,slug:{current:slug},publishedAt:'2026-11-03T00:00:00Z',...extra});
 
 test('centre card uses Featured and sides use newest other posts without duplicates',()=>{
@@ -27,7 +28,7 @@ test('cards preserve homepage layout, safe CMS content, and article routes',()=>
   assert.ok(html.includes('&lt;script&gt;unsafe&lt;/script&gt;'));
   assert.ok(!html.includes('<script>'));
   assert.ok(html.includes('Data &amp; AI'));
-  assert.ok(html.includes('Blog.html?slug=featured'));
+  assert.ok(html.includes('insights/Blog.html?slug=featured'));
   assert.ok(snapshot.includes('href="blogs/featured/"'));
   assert.ok(html.includes('wb-home-art'));
   assert.ok(!html.includes('<img'));
@@ -35,14 +36,14 @@ test('cards preserve homepage layout, safe CMS content, and article routes',()=>
 });
 
 test('browser refresh updates cards, keeps snapshot on failure, and retries safely',async()=>{
-  const config={projectId:'example',dataset:'production',apiVersion:'2026-11-03',documentType:'blogPost'};
+  const config={projectId:'example',dataset:'production',apiVersion:'2026-11-03',documentType:'blogPost',articleSlugs:['newest','second','third']};
   let now=100000,payload={featured:null,latest:[post('newest'),post('second'),post('third')]},fail=false;
   const listeners={},requests=[];
   const grid={innerHTML:'<a data-home-blog-card>Previous snapshot</a>',dataset:{},setAttribute(){},querySelector(){return this.innerHTML.includes('data-home-blog-card')?{}:null;}};
   const status={textContent:''},retry={hidden:true,addEventListener:(type,fn)=>listeners.retry=fn};
   const section={querySelector:selector=>({'[data-home-blog-grid]':grid,'[data-home-blog-status]':status,'[data-home-blog-retry]':retry}[selector])};
   const document={readyState:'complete',hidden:false,querySelector:()=>section,addEventListener:(type,fn)=>listeners[type]=fn};
-  const context={document,window:{WissenHomeBlog:H,addEventListener:(type,fn)=>listeners[type]=fn},URL,AbortSignal,
+  const context={document,window:{WissenBlog:B,WissenHomeBlog:H,addEventListener:(type,fn)=>listeners[type]=fn},URL,AbortSignal,
     Date:class extends Date{static now(){return now;}},fetch:async(url,options)=>{
       requests.push({url:String(url),options});
       if(fail)throw Error('offline');
@@ -54,6 +55,10 @@ test('browser refresh updates cards, keeps snapshot on failure, and retries safe
   assert.equal(grid.dataset.cardCount,'3');
   assert.equal(requests[0].options.credentials,'same-origin');
   assert.equal(requests[1].options.credentials,'omit');
+  assert.equal(new URL(requests[1].url).hostname,'example.apicdn.sanity.io');
+  assert.equal(requests[1].options.method,'GET');
+  assert.equal(requests[1].options.redirect,'error');
+  assert.ok(grid.innerHTML.includes('href="blogs/newest/"'));
   assert.equal(retry.hidden,true);
   assert.equal(status.textContent,'');
   payload={featured:null,latest:[post('just-published')]};now+=61000;listeners.focus();await settle();

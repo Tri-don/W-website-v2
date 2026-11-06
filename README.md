@@ -1,46 +1,73 @@
 # Wissen Technology — Dark website
 
-Static website with shared HTML, CSS and JavaScript, two comparison pages (`About-Us-v2.html` and `index-v2.html`), and a Sanity-ready blog template. Open `index.html` locally or serve the folder with any static web server. The generated assets are included, so viewing and hosting the existing site require no build step or npm installation. The live blog template needs HTTP serving; see `BLOG-SETUP.md` for its content model, preview and article generation steps.
+Static website with 18 active HTML pages, shared CSS/JavaScript and Sanity blog integration. Open `index.html` for a local layout preview; use an HTTP server for CMS-powered features.
 
-## Shared website files
+## Project structure
 
-`SANITY-PUBLISHING.md` describes the Sanity-to-GitHub publishing automation. The GitHub Actions workflow builds a downloadable website artifact; live deployment and its Sanity trigger remain inactive until hosting is configured.
+| Location | Purpose |
+| --- | --- |
+| `index.html` | Homepage |
+| `services/` | Application Development, AI/ML, Agentic Data Platforms, Intelligent Automation, Cloud and Experience Design |
+| `industries/bfsi/` | BFSI overview and its four subpages |
+| `accelerators/` | Autonomous Operations |
+| `company/` | About Us, Careers and Contact |
+| `insights/` | Insights landing page and live blog template |
+| `docs/` | Setup guides, design history and page migration notes |
+| `assets/images/home/` | Homepage-specific images |
+| `assets/images/services/` | Broad service illustrations |
+| `assets/images/service-application-development/` | Application Development page |
+| `assets/images/service-ai-ml/` | AI/ML page |
+| `assets/images/industries/` | Industry imagery shared across pages |
+| `assets/images/insights/` | Editorial imagery and publication logos |
+| `assets/images/success-stories/` | Success story images |
+| `assets/images/about-us/` | Leadership, events, culture and certifications |
+| `assets/images/careers/` | Career page imagery and icons |
+| `assets/images/shared/` | Brand, partner logos and reusable shapes |
+| `assets/videos/home/` | Homepage video loops |
+| `assets/videos/industry-bfsi/` | BFSI hero video |
+| `assets/videos/service-ai-ml/` | AI/ML hero video |
+| `assets/fonts/` | Local fonts |
+| `src/styles/`, `src/scripts/` | Editable CSS and JavaScript modules |
+| `src/partials/` | Shared HTML, including footer |
+| `src/site-manifest.json` | Active pages and their module selection |
+| `src/page-routes.json` | Old root filenames mapped to their current paths |
+| `css/site.css`, `js/site.js` | Generated global bundles loaded by pages |
+| `sanity/`, `src/blog/` | CMS schemas, configuration and article templates |
+| `scripts/`, `tests/` | Production build and checks |
+| `Bin/cleanup-2026-11-05/` | Recoverable local archive; excluded from Git and deployment |
 
-For GitHub-to-Vercel deployment and later Hostinger migration, see `VERCEL-SETUP.md`. `npm run build` rebuilds the shared assets, fetches published Sanity posts and creates the portable `dist` directory. The active article design is v3, now saved as `Blog.html`.
+Shared assets live in one broad-use folder rather than being duplicated for every page. Create a new page-specific media folder when adding assets unique to that page.
 
-- `css/site.css` — the one stylesheet loaded by every page.
-- `js/site.js` — the one script loaded by every page.
-- `assets/` — local fonts, images, video and other media.
+## Editing
 
-Keep these paths and filename capitalization intact when copying the site. The holiday graphic/exporter is excluded from this website update; deleted pages have not been restored.
+Edit the source modules, then run `npm run build:assets` (or `python build_site.py`) to regenerate the global bundles and shared footers. Do not edit generated bundles directly.
 
-## Editing and rebuilding
+- Shared typography, spacing and background: `src/styles/global-system.css`.
+- Shared footer: `src/partials/footer.html` and `src/styles/footer.css`.
+- Component behavior and appearance: the relevant module in `src/scripts/` or `src/styles/`.
+- Preserve HTML `data-wissen-type` roles and `data-wissen-root` metadata used by the build and CMS renderer. The root value is empty on the homepage, `../` one folder down, and `../../` two folders down.
+- Register new pages and modules in `src/site-manifest.json`.
 
-- Edit `src/styles/global-system.css` for shared typography, section spacing and backgrounds.
-- Edit `src/partials/footer.html` for shared footer content and `src/styles/footer.css` for its appearance.
-- Edit the relevant source module in `src/styles/` or `src/scripts/` for other component changes.
-- Run `python build_site.py` from this folder to refresh the footer on every page and regenerate both served assets. The build uses Python's standard library.
-- `src/site-manifest.json` preserves per-page module selection and script timing. CSS module guards and namespaced animations prevent styles from leaking across templates.
-- HTML files contain explicit `data-wissen-type` roles. Keep those roles when editing content. New pages need the manifest/root metadata and the two shared asset links.
+The existing shared bundle structure is retained. Page guards preserve component styling and script timing across different templates.
 
-Read `DESIGN-CHANGES.md` for the complete design change list and page inventory. The latest rollout includes browser checks; earlier notes saying browser checks were skipped are superseded by this review.
+## Validation and production build
 
-All 15 pages now use compact section spacing (48px desktop / 40px tablet / 32px mobile) and the continuous irregular dark-charcoal gradient formerly previewed on About Us v2. Section boundary dividers are removed; card/control borders and the approved footer policy divider remain. `src/styles/global-system.css` owns the shared appearance. `src/styles/about-spacing-trial.css` now retains only About Us hero, Events and certification refinements.
+- `npm run check`: local references, Linux filename casing, JavaScript syntax, CMS card behavior, redirects and a complete static export with local fixture content. The fixture export runs in a temporary folder without contacting Sanity.
+- `npm run build:assets`: rebuild shared local assets without fetching CMS content.
+- `npm run build`: fetch published Sanity posts and build portable output in `dist/`; requires CMS network access and Python 3.
 
-`src/scripts/site-appearance.js` measures each page's hero edge so the continuous background meets it seamlessly as the viewport or content changes. It is included in the same `js/site.js` bundle. Both About Us files now use the shared gradient.
+Hosting can serve the generated `dist/` folder. See [BLOG-SETUP.md](docs/BLOG-SETUP.md), [SANITY-PUBLISHING.md](docs/SANITY-PUBLISHING.md) and [VERCEL-SETUP.md](docs/VERCEL-SETUP.md) for CMS and deployment configuration. The contact form retains its placeholder submission behavior.
 
-## Review coverage
+See [PAGE-STRUCTURE.md](docs/PAGE-STRUCTURE.md) for all moved pages and old-URL redirects.
 
-The review covers desktop, tablet and mobile layouts, mapped typography, section backgrounds, text enlargement/spacing stress cases and navigation. Copy, anchor destinations, images and form fields are preserved. This is not a full WCAG audit.
+See [SECURITY-REVIEW.md](docs/SECURITY-REVIEW.md) for security changes, the deployment header policy, automated coverage and checks that still require live access. The export rejects unexpected media files and symlinks; generated bundles are copied explicitly.
 
-The contact form retains its existing client-side validation and placeholder submission behavior; connecting a submission endpoint is a separate integration task.
+The contact form is deliberately disabled until a protected backend is configured. See [FORM-INTEGRATION.md](docs/FORM-INTEGRATION.md) for the required server-to-server delivery boundary and release checks. Public browser CMS requests use credential-free CDN reads. The generated public configuration lists exported article slugs so live cards preserve their stable static article URLs.
 
-All 15 pages use the same footer: Industries, Services, Accelerators and Company, a full-width black background, dim policy divider, copyright beside the policy links, and the smaller marquee ending flush at the page bottom. The old footers have been replaced. Footer padding is consistent across pages (96px desktop / 80px tablet / 64px mobile inside the black panel) independently of section spacing.
+## Git and archive policy
 
-The shared template is rendered into each static HTML page by the build, including page-specific current-link states. All pages still load only `css/site.css` and `js/site.js`. The earlier About Us footer trial has been consolidated into `src/styles/footer.css`; its old trial file and flags are removed.
+Commit the active HTML, source modules, generated shared bundles, active assets, configuration and lockfile together. Keep `Bin/`, `dist/`, dependencies, caches, logs and environment secrets out of Git. `.gitignore`, `.vercelignore` and `.gitattributes` define these policies and text line endings.
 
-`index-v2.html` saves the full-viewport hero with the stats anchored at its bottom. The main `index.html` restores the original separate hero/scale arrangement from before that preview. Their shared section spacing, gradient and footer remain current. The versioned layout is isolated in the home-scale-preview style/script modules.
+The archive contains preview/comparison pages, superseded modules, unused media and prior generated output. `asset-moves.json` inside the archive records original paths, destinations and SHA-256 hashes. Archived pages are historical references and may need their module entries and relative paths restored before running them.
 
-The Difference section on both homepage versions is an exception to standard vertical padding: its complete composition centers within the viewport below the measured navbar. Chapter pinning falls back to natural flow on short windows or when enlarged text cannot fit. The shared navbar measurement is in `src/scripts/home-difference-centering.js`.
-
-The AI/ML and four BFSI subpage challenge timelines share `src/styles/journey-timeline.css`. BFSI subpage service-card alignment fixes are in `src/styles/bfsi-subpages.css`. Their Application Development submenu links now target existing service anchors.
+No commit or push is performed by the cleanup. Review with `git status --short` and `git diff` before committing.

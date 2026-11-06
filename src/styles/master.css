@@ -1769,13 +1769,13 @@ html[data-site-page="bfsi"] body :is(.bs-intro,.bs-metric--center,.bs-metric--ri
  width:260px;height:260px;border:0;border-radius:0;box-shadow:none;
  background-repeat:no-repeat;background-position:center;background-size:contain;
 }
-html[data-site-page="bfsi"] body .bs-intro::before{background-image:url('../assets/images/abstract-bands-triangle.svg')}
-html[data-site-page="bfsi"] body .bs-metric--center::before{background-image:url('../assets/images/abstract-bands-square.svg');right:-100px;top:-55px}
-html[data-site-page="bfsi"] body .bs-metric--right::before{background-image:url('../assets/images/abstract-bands-hexagon.svg')}
-html[data-site-page="bfsi"] body .be-card:nth-child(1)::before{background-image:url('../assets/images/abstract-bands-square.svg');right:-110px;top:-85px}
-html[data-site-page="bfsi"] body .be-card:nth-child(2)::before{background-image:url('../assets/images/abstract-bands-hexagon.svg')}
-html[data-site-page="bfsi"] body .be-card:nth-child(3)::before{background-image:url('../assets/images/abstract-bands-triangle.svg')}
-html[data-site-page="bfsi"] body .be-card:nth-child(4)::before{background-image:url('../assets/images/abstract-bands-angled.svg');transform:none}
+html[data-site-page="bfsi"] body .bs-intro::before{background-image:url('../assets/images/shared/abstract/abstract-bands-triangle.svg')}
+html[data-site-page="bfsi"] body .bs-metric--center::before{background-image:url('../assets/images/shared/abstract/abstract-bands-square.svg');right:-100px;top:-55px}
+html[data-site-page="bfsi"] body .bs-metric--right::before{background-image:url('../assets/images/shared/abstract/abstract-bands-hexagon.svg')}
+html[data-site-page="bfsi"] body .be-card:nth-child(1)::before{background-image:url('../assets/images/shared/abstract/abstract-bands-square.svg');right:-110px;top:-85px}
+html[data-site-page="bfsi"] body .be-card:nth-child(2)::before{background-image:url('../assets/images/shared/abstract/abstract-bands-hexagon.svg')}
+html[data-site-page="bfsi"] body .be-card:nth-child(3)::before{background-image:url('../assets/images/shared/abstract/abstract-bands-triangle.svg')}
+html[data-site-page="bfsi"] body .be-card:nth-child(4)::before{background-image:url('../assets/images/shared/abstract/abstract-bands-angled.svg');transform:none}
 html[data-site-page="bfsi"] body .be-card::after{content:none}
 @media(hover:hover) and (pointer:fine){
  html[data-site-page="bfsi"] body .be-card:nth-child(4):hover::before{transform:translate(-12px,-8px) scale(1.08)}
@@ -2044,19 +2044,19 @@ html[data-site-page="ai"] body .ai-impact-card::before{
 }
 html[data-site-page="ai"] body .ai-impact-card::after{content:none}
 html[data-site-page="ai"] body .ai-impact-card:nth-child(1)::before{
- background-image:url('../assets/images/abstract-bands-square.svg');
+ background-image:url('../assets/images/shared/abstract/abstract-bands-square.svg');
  right:-10%;top:-16%;bottom:auto;left:auto;rotate:28deg;
 }
 html[data-site-page="ai"] body .ai-impact-card:nth-child(2)::before{
- background-image:url('../assets/images/abstract-bands-hexagon.svg');
+ background-image:url('../assets/images/shared/abstract/abstract-bands-hexagon.svg');
  left:-8%;top:-12%;right:auto;bottom:auto;rotate:-16deg;
 }
 html[data-site-page="ai"] body .ai-impact-card:nth-child(3)::before{
- background-image:url('../assets/images/abstract-bands-triangle.svg');
+ background-image:url('../assets/images/shared/abstract/abstract-bands-triangle.svg');
  right:-8%;top:-8%;bottom:auto;left:auto;rotate:-22deg;
 }
 html[data-site-page="ai"] body .ai-impact-card:nth-child(4)::before{
- background-image:url('../assets/images/abstract-bands-angled.svg');
+ background-image:url('../assets/images/shared/abstract/abstract-bands-angled.svg');
  left:12%;top:-30%;right:auto;bottom:auto;rotate:22deg;
 }
 @media(hover:hover) and (pointer:fine){
@@ -2155,7 +2155,7 @@ html[data-site-page="ai"] body .ah-footer p{
 
 /* Customer Engagement: circular bands with the same placement and hover motion. */
 html[data-site-page="ai"] body .ai-impact-card:nth-child(4)::before{
- background-image:url('../assets/images/abstract-bands-circle.svg');rotate:0deg;
+ background-image:url('../assets/images/shared/abstract/abstract-bands-circle.svg');rotate:0deg;
 }
 
 

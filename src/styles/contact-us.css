@@ -43,6 +43,7 @@ body.contact-page { margin: 0; background: var(--ct-bg); color: var(--ct-text); 
 .ct-consent a { color: #d5c5ef; }
 .ct-form-footer { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
 .ct-submit { min-height: 42px; height: auto; padding: 10px 16px; border: 0; font-size: 13px; }
+.ct-submit:disabled { opacity: .55; cursor: not-allowed; }
 .ct-form-status { max-width: 340px; margin: 0; color: var(--ct-muted); font-size: 12px; line-height: 1.55; }
 .contact-page .wg { border-top: 0; }
 

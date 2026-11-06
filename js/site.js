@@ -10,15 +10,39 @@ modules["blog-content"] = function(){
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  // Renderer output uses site-root paths in Node and page-relative paths in the browser.
+  function localHtml(markup) {
+    const prefix=typeof document==='undefined'?'':document.documentElement?.dataset.wissenRoot||'';
+    if(!prefix)return markup;
+    return markup.replace(/\b(href|src|poster)="((?:assets|blogs|services|industries|accelerators|company|insights)\/[^"]*)"/g,
+      (_,attr,value)=>`${attr}="${prefix}${value}"`);
+  }
+  function sitePath(value) {
+    return (typeof document==='undefined'?'':document.documentElement?.dataset.wissenRoot||'')+value;
+  }
   function safeUrl(v) {
-    if (typeof v !== 'string' || /[\u0000-\u0020\\]/.test(v)) return '';
-    if (/^(https?:\/\/|mailto:)/i.test(v) || /^(#|\/(?!\/)|assets\/)/.test(v)) return v;
+    if (typeof v !== 'string' || /[\u0000-\u0020\u007f\\]/.test(v)) return '';
+    if (/^https?:\/\//i.test(v)) {
+      try {
+        const url=new URL(v);
+        return url.hostname&&!url.username&&!url.password?v:'';
+      } catch { return ''; }
+    }
+    if (/^mailto:/i.test(v) && !/%(?:0[ad]|00)/i.test(v)) return v;
+    if (/^(#|\/(?!\/)|assets\/)/.test(v)) return v;
     return '';
   }
   function imageUrl(image, width = 1600) {
     const raw = image?.asset?.url || image?.url || '';
-    if (!safeUrl(raw) || /^mailto:|^#/i.test(raw)) return '';
-    if (!raw.startsWith('https://cdn.sanity.io/images/')) return raw;
+    if (!safeUrl(raw)) return '';
+    // Local media and Sanity's image CDN are the only supported CMS image sources.
+    if (/^\/?assets\/images\//.test(raw)) {
+      try {
+        const decoded=decodeURIComponent(raw);
+        return /(?:^|\/)\.{1,2}(?:\/|$)|[\\\u0000-\u0020\u007f]/.test(decoded)?'':raw;
+      } catch { return ''; }
+    }
+    if (!raw.startsWith('https://cdn.sanity.io/images/')) return '';
     const url = new URL(raw);
     url.searchParams.set('w', String(width)); url.searchParams.set('auto', 'format');
     url.searchParams.set('fit', 'max');
@@ -32,7 +56,13 @@ modules["blog-content"] = function(){
   }
   const plain = blocks => (blocks || []).filter(b=>b._type==='block').map(b=>(b.children||[]).map(s=>s.text||'').join('')).join(' ');
   const slug = p => p?.slug?.current || '';
-  const validSlug = s => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s);
+  const validSlug = s => typeof s==='string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s);
+  function articleHref(post,options={}) {
+    const value=slug(post);
+    if(!validSlug(value))return '#';
+    const exported=options.static===true||(Array.isArray(options.articleSlugs)&&options.articleSlugs.includes(value));
+    return exported?`blogs/${value}/`:`insights/Blog.html?slug=${encodeURIComponent(value)}`;
+  }
   function date(v) {
     const d = new Date(v);
     return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric', timeZone:'UTC'});
@@ -58,7 +88,7 @@ modules["blog-content"] = function(){
         let out = esc(s.text).replace(/\n/g, '<br>');
         for (const m of s.marks || []) {
           const tags = {strong:'strong',em:'em',code:'code',underline:'u','strike-through':'s'};
-          if (tags[m]) out = `<${tags[m]}>${out}</${tags[m]}>`;
+          if (Object.hasOwn(tags,m)) out = `<${tags[m]}>${out}</${tags[m]}>`;
           else {
             const def = (block.markDefs||[]).find(d=>d._key===m);
             const href = def?._type==='link' && safeUrl(def.href);
@@ -76,7 +106,7 @@ modules["blog-content"] = function(){
       if (b._type === 'codeBlock') return `<pre><code>${esc(b.code)}</code></pre>`;
       if (b._type !== 'block') throw new Error('Unsupported article block: '+b._type);
       const style = b.style || 'normal', allowed = {normal:'p',h2:'h2',h3:'h3',h4:'h4',blockquote:'blockquote'};
-      const tag = allowed[style] || 'p';
+      const tag = Object.hasOwn(allowed,style)?allowed[style]:'p';
       let id = '';
       if (/^h[234]$/.test(tag)) {
         let base = (b.children||[]).map(s=>s.text||'').join('').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'section';
@@ -138,14 +168,14 @@ modules["blog-content"] = function(){
   }
   function render(post, related=[], options={}) {
     const body=bodyHtml(post.body), author=post.author, minutes=Math.max(1,Math.ceil(plain(post.body).split(/\s+/).filter(Boolean).length/220));
-    const v2=options.variant==='v2', v3=options.variant==='v3', entry='Blog.html';
-    const link = p => options.static ? `blogs/${slug(p)}/` : `${entry}?slug=${encodeURIComponent(slug(p))}`;
+    const v2=options.variant==='v2', v3=options.variant==='v3', entry='insights/Blog.html';
+    const link = p => articleHref(p,options);
     const authorImg=imageUrl(author?.image,160), published=date(post.publishedAt);
     const toc=body.headings.filter(h=>h.level!=='h4');
     const relatedCards=selectRelated(post,related,options.preview);
     const cover=imageUrl(post.mainImage);
     const v3Header=v3?`<section class="wb-hero wb-v3-hero" data-wissen-hero="true"><div class="wrap">
-      <div class="wb-v3-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
+      <div class="wb-v3-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="insights/Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
       <header class="wb-v3-stage${cover?'':' wb-v3-no-cover'}">
         ${cover?`<img class="wb-v3-image" src="${esc(cover)}" alt="${esc(post.mainImage.alt)}" fetchpriority="high" decoding="async">`:''}
         <div class="wb-v3-title-block"><div class="wb-meta">${(post.categories||[]).map(c=>`<span>${esc(c.title)}</span>`).join('')}${published?`<time datetime="${esc(post.publishedAt)}">${published}</time>`:''}<span>${minutes} min read</span></div>
@@ -157,7 +187,7 @@ modules["blog-content"] = function(){
       ${shareToolbar(post,options)}
     </div></section>`:'';
     const v2Header=v2?`<section class="wb-hero wb-v2-hero" data-wissen-hero="true"><div class="wrap">
-      <div class="wb-v2-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
+      <div class="wb-v2-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="insights/Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
       <div class="wb-v2-lead${imageUrl(post.mainImage)?'':' wb-v2-no-cover'}">
         <div class="wb-v2-intro">
           <div class="wb-meta">${(post.categories||[]).map(c=>`<span>${esc(c.title)}</span>`).join('')}${published?`<time datetime="${esc(post.publishedAt)}">${published}</time>`:''}<span>${minutes} min read</span></div>
@@ -167,10 +197,10 @@ modules["blog-content"] = function(){
         </div>
         ${image(post.mainImage,'wb-cover wb-v2-cover',true)}
       </div>
-      <div class="wb-byline wb-v2-byline">${authorImg?`<img src="${esc(authorImg)}" alt="" width="42" height="42">`:''}${author?`<div><strong>${esc(author.name)}</strong>${author.role?`<span>${esc(author.role)}</span>`:''}</div>`:''}<a class="wb-v2-all" href="Insights.html">&larr; All insights</a><div class="wb-share"><a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(options.url||'')}" data-blog-share target="_blank" rel="noopener noreferrer" aria-label="Share article on LinkedIn">in</a><button type="button" data-blog-copy>Copy link</button><span class="wb-sr" data-copy-status role="status"></span></div></div>
+      <div class="wb-byline wb-v2-byline">${authorImg?`<img src="${esc(authorImg)}" alt="" width="42" height="42">`:''}${author?`<div><strong>${esc(author.name)}</strong>${author.role?`<span>${esc(author.role)}</span>`:''}</div>`:''}<a class="wb-v2-all" href="insights/Insights.html">&larr; All insights</a><div class="wb-share"><a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(options.url||'')}" data-blog-share target="_blank" rel="noopener noreferrer" aria-label="Share article on LinkedIn">in</a><button type="button" data-blog-copy>Copy link</button><span class="wb-sr" data-copy-status role="status"></span></div></div>
     </div></section>`:'';
     return (v3?v3Header:v2?v2Header:`<section class="wb-hero" data-wissen-hero="true"><div class="wrap">
-      <nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><a href="Blog.html">Blogs</a></nav>
+      <nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="insights/Insights.html">Insights</a><span aria-hidden="true">/</span><a href="insights/Blog.html">Blogs</a></nav>
       ${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content, not a published article</p>':''}
       <div class="wb-meta">${(post.categories||[]).map(c=>`<span>${esc(c.title)}</span>`).join('')}${published?`<time datetime="${esc(post.publishedAt)}">${published}</time>`:''}<span>${minutes} min read</span></div>
       <h1 id="blog-title" data-wissen-type="hero-title">${esc(post.title)}</h1>
@@ -179,48 +209,52 @@ modules["blog-content"] = function(){
       ${image(post.mainImage,'wb-cover',true)}
     </div></section>`)+`
     <section class="wb-reading"${v2||v3?' id="blog-content" tabindex="-1"':''}><div class="wrap wb-reading-grid">
-      <aside class="wb-aside">${toc.length?`<nav aria-label="In this article"><p>In this article</p><ol>${toc.map(h=>`<li><a href="#${h.id}" data-blog-toc>${esc(h.text)}</a></li>`).join('')}</ol></nav>`:''}<a class="wb-back" href="Insights.html">&larr; All insights</a></aside>
+      <aside class="wb-aside">${toc.length?`<nav aria-label="In this article"><p>In this article</p><ol>${toc.map(h=>`<li><a href="#${h.id}" data-blog-toc>${esc(h.text)}</a></li>`).join('')}</ol></nav>`:''}<a class="wb-back" href="insights/Insights.html">&larr; All insights</a></aside>
       <article class="wb-prose" aria-labelledby="blog-title">${body.html}
       ${post.tags?.length?`<ul class="wb-tags" aria-label="Article tags">${[...new Set(post.tags.filter(t=>typeof t==='string'&&t.trim()))].map(t=>`<li>${esc(t)}</li>`).join('')}</ul>`:''}
       ${author?.bio?`<div class="wb-author"><p>About the author</p><h2>${esc(author.name)}</h2><p>${esc(author.bio)}</p></div>`:''}
       ${v3?`<div class="wb-v3-article-end">${shareToolbar(post,options)}<a class="wb-v3-back-top" href="#blog-title">Back to top <span aria-hidden="true">&uarr;</span></a></div>`:''}
-      <div class="wb-end"><p>Have a challenge in mind?</p><a class="ui-text" href="Contact-Us.html">Let’s talk <span aria-hidden="true">↗</span></a></div></article>
+      <div class="wb-end"><p>Have a challenge in mind?</p><a class="ui-text" href="company/Contact-Us.html">Let’s talk <span aria-hidden="true">↗</span></a></div></article>
     </div></section>
-    ${relatedCards.length?`<section class="wb-related" aria-labelledby="blog-related-title"><div class="wrap"><div class="wb-related-heading"><h2 id="blog-related-title" data-wissen-type="section-title">${v3?'Related <em>articles.</em>':'Keep <em>exploring.</em>'}</h2>${v3?`<a class="wb-related-all" href="Insights.html">Explore all insights <span aria-hidden="true">&rarr;</span></a>`:''}</div><div class="wb-related-grid">${relatedCards.map(p=>`<${options.preview?'article':'a'} class="wb-article-card"${options.preview?'':` href="${esc(link(p))}"`}>${image(p.mainImage,'wb-article-card-media')}<div><span>${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}<span class="wb-article-card-read">${options.preview?'Sample article':'Read article <span aria-hidden="true">&rarr;</span>'}</span></div></${options.preview?'article':'a'}>`).join('')}</div></div></section>`:''}`;
+    ${relatedCards.length?`<section class="wb-related" aria-labelledby="blog-related-title"><div class="wrap"><div class="wb-related-heading"><h2 id="blog-related-title" data-wissen-type="section-title">${v3?'Related <em>articles.</em>':'Keep <em>exploring.</em>'}</h2>${v3?`<a class="wb-related-all" href="insights/Insights.html">Explore all insights <span aria-hidden="true">&rarr;</span></a>`:''}</div><div class="wb-related-grid">${relatedCards.map(p=>`<${options.preview?'article':'a'} class="wb-article-card"${options.preview?'':` href="${esc(link(p))}"`}>${image(p.mainImage,'wb-article-card-media')}<div><span>${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}<span class="wb-article-card-read">${options.preview?'Sample article':'Read article <span aria-hidden="true">&rarr;</span>'}</span></div></${options.preview?'article':'a'}>`).join('')}</div></div></section>`:''}`;
   }
   function state(title, message, retry=false) {
-    return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
+    return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="insights/Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
   }
   const imageProjection=`{alt,caption,credit,crop,hotspot,asset->{url}}`;
   const cardProjection=`{_id,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
   const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
   const filter=`_type == $type && defined(slug.current) && dateTime(coalesce(publishedAt,_createdAt)) <= dateTime(now())`;
+  function endpoint(config,cdn=false) {
+    if(!config||typeof config.projectId!=='string'||typeof config.dataset!=='string'||typeof config.apiVersion!=='string'||!/^[a-z0-9]+$/.test(config.projectId)||!/^[a-z0-9][a-z0-9_-]*$/.test(config.dataset)||!/^\d{4}-\d{2}-\d{2}$/.test(config.apiVersion))throw new Error('Invalid Sanity configuration');
+    return `https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`;
+  }
   function featuredInsights(posts, options={}) {
     const featured=posts.filter(p=>p.title&&validSlug(slug(p))).slice(0,3);
     if(!featured.length)return '<div class="ins-featured-empty"><p>New perspectives are on their way. Check back soon.</p></div>';
     return `<div class="ins-featured-track" aria-live="polite">${featured.map((p,index)=>{
-      const cover=imageUrl(p.mainImage), href=options.static?`blogs/${slug(p)}/`:`Blog.html?slug=${encodeURIComponent(slug(p))}`;
+      const cover=imageUrl(p.mainImage), href=articleHref(p,options);
       return `<a class="ins-featured${index?'':' is-active'}" data-featured-slide href="${esc(href)}" aria-label="${esc(`Featured article ${index+1} of ${featured.length}: ${p.title}`)}" aria-hidden="${Boolean(index)}" tabindex="${index?-1:0}">${cover?`<img src="${esc(cover)}" alt="${esc(p.mainImage?.alt||'')}" ${index?'loading="lazy"':'fetchpriority="high"'} decoding="async">`:''}<div class="ins-featured-copy"><span class="ins-featured-label">${esc(p.categories?.[0]?.title||'Latest blog')}</span><h2 data-wissen-type="feature-title">${esc(p.title)}</h2><span class="ins-featured-meta">Read article <span aria-hidden="true">&rarr;</span></span></div></a>`;
     }).join('')}</div><div class="ins-featured-controls" role="group" aria-label="Featured insight controls"${featured.length<2?' hidden':''}><div class="ins-featured-dots" role="tablist" aria-label="Choose featured insight">${featured.map((p,index)=>`<button${index?'':' class="is-active"'} type="button" role="tab" aria-selected="${!index}" tabindex="${index?-1:0}" aria-label="Show featured insight ${index+1}: ${esc(p.title)}"></button>`).join('')}</div></div>`;
   }
   function insightCards(posts, options={}) {
     return posts.filter(p=>p.title&&validSlug(slug(p))).map(p=>{
       const cover=imageUrl(p.mainImage,800), published=date(p.publishedAt);
-      const href=options.static?`blogs/${slug(p)}/`:`Blog.html?slug=${encodeURIComponent(slug(p))}`;
+      const href=articleHref(p,options);
       return `<a class="ins-card ins-reveal" data-insights-blog-card data-blog-slug="${esc(slug(p))}" href="${esc(href)}">${cover?`<div class="ins-card-media"><img src="${esc(cover)}" alt="${esc(p.mainImage?.alt||'')}" loading="lazy" decoding="async"></div>`:''}<div class="ins-card-body"><span class="ins-card-meta">${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}${published?`<time class="ins-card-date" datetime="${esc(p.publishedAt)}">${published}</time>`:''}<div class="ins-card-bottom"><span class="ins-card-read">Read article</span><span class="ins-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div></div></a>`;
     }).join('\n');
   }
   function insightsQuery(config, page=0) {
     const start=Math.max(0,Math.floor(Number(page)||0))*12;
-    return {url:`https://${config.projectId}.api.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`,params:{
+    return {url:endpoint(config,true),params:{
       query:`*[${filter} && defined(title) && count(body) > 0] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[${start}...${start+13}]${cardProjection}`,
       perspective:'published','$type':JSON.stringify(config.documentType)
     }};
   }
   function query(config, params={}, cdn=true) {
-    return { url:`https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`, params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
+    return { url:endpoint(config,cdn), params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
   }
-  return {esc,safeUrl,imageUrl,plain,slug,validSlug,bodyHtml,render,state,query,projection,filter,shareLinks,selectRelated,insightCards,insightsQuery,featuredInsights};
+  return {localHtml,sitePath,esc,safeUrl,imageUrl,plain,slug,validSlug,articleHref,bodyHtml,endpoint,render:(...args)=>localHtml(render(...args)),state:(...args)=>localHtml(state(...args)),query,projection,filter,shareLinks,selectRelated,insightCards:(...args)=>localHtml(insightCards(...args)),insightsQuery,featuredInsights:(...args)=>localHtml(featuredInsights(...args))};
 });
 
 };
@@ -1403,17 +1437,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const status = document.querySelector('#contact-form-status');
   if (!form || !status) return;
 
+  // No form backend is configured. Keep this closed even if markup is changed accidentally.
+  form.querySelectorAll('input, textarea, select, button[type="submit"]').forEach(control => { control.disabled = true; });
+  const unavailable = 'Online enquiries are currently unavailable. Please try again later.';
+  status.textContent = unavailable;
+
   form.addEventListener('submit', (event) => {
     event.preventDefault();
-    form.classList.add('was-validated');
-    status.textContent = '';
-
-    if (!form.checkValidity()) {
-      form.reportValidity();
-      return;
-    }
-
-    status.textContent = 'Form complete. Submission will be enabled when the CMS endpoint is connected.';
+    // Never fetch, navigate, store field values, or write to the CMS from this disabled form.
+    status.textContent = unavailable;
   });
 });
 
@@ -1570,25 +1602,6 @@ modules["site-appearance"] = function(){
 })();
 
 };
-modules["home-scale-preview"] = function(){
-/* Reserve the scale row's actual height at the bottom of the viewport-sized hero. */
-(() => {
-  if (document.documentElement.dataset.wissenScalePreview !== 'raised') return;
-  const scale = document.getElementById('scale');
-  if (!scale) return;
-  let previousHeight = -1;
-  const update = () => {
-    const height = scale.getBoundingClientRect().height;
-    if (Math.abs(height - previousHeight) < .1) return;
-    previousHeight = height;
-    document.body.style.setProperty('--wissen-scale-height', height + 'px');
-  };
-  new ResizeObserver(update).observe(scale);
-  update();
-  document.fonts.ready.then(update);
-})();
-
-};
 modules["home-difference-centering"] = function(){
 /* Keep the Difference composition centered in the viewport below the visible nav. */
 (() => {
@@ -1614,14 +1627,20 @@ modules["blog-page"] = function(){
   const root=document.querySelector('[data-blog-root]'); if(!root)return;
   const B=window.WissenBlog;
   const variant=document.documentElement.dataset.blogVariant||'v1';
-  function enhance() {
+  function enhance(config) {
     const hero=root.querySelector('[data-wissen-hero]');
     if(hero){
       const measure=()=>document.body.style.setProperty('--wissen-hero-height',Math.max(0,hero.getBoundingClientRect().bottom-document.body.getBoundingClientRect().top)+'px');
       measure();
       if('ResizeObserver' in window)new ResizeObserver(measure).observe(hero);
     }
-    const canonical=document.querySelector('link[rel="canonical"]');
+    let canonical=document.querySelector('link[rel="canonical"]');
+    const requestedSlug=new URLSearchParams(location.search).get('slug');
+    if(!canonical&&B.validSlug(requestedSlug)&&Array.isArray(config?.articleSlugs)&&config.articleSlugs.includes(requestedSlug)){
+      canonical=document.createElement('link');canonical.rel='canonical';
+      canonical.href=new URL(B.sitePath(B.articleHref({slug:{current:requestedSlug}},config)),location.href).href;
+      document.head.append(canonical);
+    }
     const shareLocation=new URL(canonical?.href||location.href);shareLocation.hash='';
     const shareUrl=shareLocation.href, title=root.querySelector('#blog-title')?.textContent||document.title;
     const linksForSharing=B.shareLinks(title,shareUrl);
@@ -1678,9 +1697,9 @@ modules["blog-page"] = function(){
   const params=new URLSearchParams(location.search), slug=params.get('slug');
   if(slug && !B.validSlug(slug)){root.innerHTML=B.state('Article not found.','Explore our insights for more perspectives.');root.setAttribute('aria-busy','false');return;}
   async function fetchPosts(config, options) {
-    const q=B.query(config,options,false), url=new URL(q.url);
+    const q=B.query(config,options,true), url=new URL(q.url);
     Object.entries(q.params).forEach(([k,v])=>url.searchParams.set(k,v));
-    const res=await fetch(url,{signal:AbortSignal.timeout(15000),credentials:'omit'});
+    const res=await fetch(url,{method:'GET',redirect:'error',signal:AbortSignal.timeout(15000),credentials:'omit'});
     if(!res.ok)throw new Error('Sanity returned '+res.status);
     const payload=await res.json();
     if(!Array.isArray(payload.result))throw new Error('Invalid Sanity response');
@@ -1689,20 +1708,20 @@ modules["blog-page"] = function(){
   async function load() {
     root.setAttribute('aria-busy','true');
     try {
-      const cfgResponse=await fetch('src/blog/config.json'); if(!cfgResponse.ok)throw new Error('Blog configuration unavailable');
+      const cfgResponse=await fetch(window.WissenBlog.sitePath('src/blog/config.json')); if(!cfgResponse.ok)throw new Error('Blog configuration unavailable');
       const config=await cfgResponse.json();
       const posts=await fetchPosts(config,slug?{slug}:{});
       if(!posts.length) { root.innerHTML=B.state(slug?'Article not found.':'Our next perspective is on its way.',slug?'This article may have moved or is no longer published.':'New articles will appear here once published. Explore our insights in the meantime.'); return; }
-      const post=posts[0]; root.innerHTML=B.render(post,posts.slice(1),{url:location.href,variant});
+      const post=posts[0]; root.innerHTML=B.render(post,posts.slice(1),{url:location.href,variant,articleSlugs:config.articleSlugs});
       document.title=(post.seo?.title||post.title)+' | Wissen Technology';
       document.querySelector('meta[name="description"]')?.setAttribute('content',post.seo?.description||post.excerpt||'');
       const robots=document.querySelector('meta[name="robots"]'); if(robots)robots.content='noindex,follow';
-      enhance();
+      enhance(config);
       if(slug){
         // A related-content failure should never hide a successfully loaded article.
         fetchPosts(config,{excludeSlug:slug}).then(related=>{
           const template=document.createElement('template');
-          template.innerHTML=B.render(post,related,{url:location.href,variant});
+          template.innerHTML=B.render(post,related,{url:location.href,variant,articleSlugs:config.articleSlugs});
           const section=template.content.querySelector('.wb-related');
           if(section){
             const current=root.querySelector('.wb-related');
@@ -1739,13 +1758,13 @@ modules["insights-cms"] = function(){
       try {
         if(!config){
           // Preserve same-site preview authentication; Sanity requests below still omit credentials.
-          const response=await fetch('src/blog/config.json',{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
+          const response=await fetch(window.WissenBlog.sitePath('src/blog/config.json'),{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
           if(!response.ok)throw new Error('Configuration unavailable');
           config=await response.json();
         }
         const q=B.insightsQuery(config,nextPage), url=new URL(q.url);
         Object.entries(q.params).forEach(([key,value])=>url.searchParams.set(key,value));
-        const response=await fetch(url,{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(15000)});
+        const response=await fetch(url,{method:'GET',credentials:'omit',redirect:'error',signal:AbortSignal.timeout(15000)});
         if(!response.ok)throw new Error('Articles unavailable');
         const payload=await response.json();
         if(!Array.isArray(payload.result))throw new Error('Invalid articles');
@@ -1754,13 +1773,13 @@ modules["insights-cms"] = function(){
           const existing=new Set([...grid.querySelectorAll('[data-blog-slug]')].map(card=>card.dataset.blogSlug));
           posts=posts.filter(post=>!existing.has(B.slug(post)));
         }
-        const html=B.insightCards(posts);
+        const html=B.insightCards(posts,{articleSlugs:config.articleSlugs});
         if(nextPage)grid.insertAdjacentHTML('beforeend',html);
         else {
           grid.innerHTML=html;
           const featured=document.querySelector('[data-insights-featured]');
           if(featured){
-            featured.innerHTML=B.featuredInsights(posts);
+            featured.innerHTML=B.featuredInsights(posts,{articleSlugs:config.articleSlugs});
             document.dispatchEvent(new CustomEvent('insights:featured-updated'));
           }
         }
@@ -1822,7 +1841,7 @@ modules["home-blog-cards"] = function(){
   }
   function render(data,options={}){
     return select(data).map(({post,featured})=>{
-      const slug=B.slug(post),href=options.static?`blogs/${slug}/`:`Blog.html?slug=${encodeURIComponent(slug)}`;
+      const slug=B.slug(post),href=B.articleHref(post,options);
       const category=`<span class="wb-category">${B.esc(post.categories?.[0]?.title||'Blog')}</span>`;
       const title=`<h3 id="home-blog-${slug}" data-wissen-type="card-title">${B.esc(post.title)}</h3>`;
       return `<a class="wb-card ${featured?'wb-feature':'wb-standard'}" data-home-blog-card data-blog-slug="${B.esc(slug)}" href="${B.esc(href)}" aria-labelledby="home-blog-${slug}">${featured?`<div class="wb-feature-photo"><svg class="wb-mask-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><clipPath id="wb-home-cms-mask" clipPathUnits="objectBoundingBox">${polygons.split('|').map(points=>`<polygon points="${points}"/>`).join('')}</clipPath></defs></svg><div class="wb-mask-photo">${photo(post)}</div></div><div class="wb-feature-copy">${category}${title}${published(post)}${arrow}</div>`:`<div class="wb-card-top">${category}${arrow}</div>${title}${published(post)}<div class="wb-photo-frame">${photo(post)}</div>`}</a>`;
@@ -1832,12 +1851,12 @@ modules["home-blog-cards"] = function(){
     const projection='{_id,title,slug,featured,"publishedAt":coalesce(publishedAt,_createdAt),mainImage{alt,crop,hotspot,asset->{url}},categories[]->{title}}';
     const filter=`${B.filter} && defined(title) && count(body) > 0`;
     const order=' | order(coalesce(publishedAt,_createdAt) desc, _id asc)';
-    return {url:`https://${config.projectId}.api.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`,params:{
+    return {url:B.endpoint(config,true),params:{
       query:`{"featured":*[${filter} && featured == true]${order}[0]${projection},"latest":*[${filter}]${order}[0...3]${projection}}`,
       perspective:'published','$type':JSON.stringify(config.documentType)
     }};
   }
-  return {select,fromPosts,render,query};
+  return {select,fromPosts,render:(...args)=>B.localHtml(render(...args)),query};
 });
 
 };
@@ -1856,19 +1875,19 @@ modules["home-blog-cms"] = function(){
       status.textContent=hasCards()?'':'Loading articles...';
       try {
         if(!config){
-          const res=await fetch('src/blog/config.json',{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
+          const res=await fetch(window.WissenBlog.sitePath('src/blog/config.json'),{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
           if(!res.ok)throw new Error('Blog settings unavailable');
           config=await res.json();
         }
         const q=H.query(config),url=new URL(q.url);
         Object.entries(q.params).forEach(([key,value])=>url.searchParams.set(key,value));
-        const res=await fetch(url,{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(15000)});
+        const res=await fetch(url,{method:'GET',credentials:'omit',redirect:'error',signal:AbortSignal.timeout(15000)});
         if(!res.ok)throw new Error('Blog articles unavailable');
         const {result}=await res.json();
         if(!result||!Array.isArray(result.latest))throw new Error('Invalid blog response');
         const next=JSON.stringify(result);
         if(next!==signature){
-          grid.innerHTML=H.render(result);
+          grid.innerHTML=H.render(result,{articleSlugs:config.articleSlugs});
           grid.dataset.cardCount=String(H.select(result).length);
           signature=next;
         }
@@ -1891,7 +1910,7 @@ modules["home-blog-cms"] = function(){
 })();
 
 };
-const page = {"about-us":{"file":"About-Us.html","scripts":[{"key":"master","timing":"head"},{"key":"about-v2","timing":"defer"},{"key":"about-scroll","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"application-development":{"file":"Application-Development.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"autonomous-operations":{"file":"Autonomous-Operations.html","scripts":[{"key":"master","timing":"head"},{"key":"autonomous-operations","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"capital-markets-technology":{"file":"Capital-Markets-Technology.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"career":{"file":"Career.html","scripts":[{"key":"master","timing":"defer"},{"key":"career","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"contact-us":{"file":"Contact-Us.html","scripts":[{"key":"master","timing":"defer"},{"key":"contact-us","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"index":{"file":"index.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-difference-centering","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}]},"industries-bfsi":{"file":"Industries-BFSI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"insights":{"file":"Insights.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"defer"},{"key":"insights-page","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"insights-cms","timing":"defer"}]},"responsible-privacy-preserving-financial-ai":{"file":"Responsible-Privacy-Preserving-Financial-AI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"risk-regulatory-compliance-engineering":{"file":"Risk-Regulatory-Compliance-Engineering.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"services-ai-ml":{"file":"Services-Ai-ML.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"wealth-asset-management-data-infrastructure":{"file":"Wealth-Asset-Management-Data-Infrastructure.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"about-us-v2":{"file":"About-Us-v2.html","scripts":[{"key":"master","timing":"head"},{"key":"about-v2","timing":"defer"},{"key":"about-scroll","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"index-v2":{"file":"index-v2.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-scale-preview","timing":"defer"},{"key":"home-difference-centering","timing":"defer"}]},"blog-v3":{"file":"Blog.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"blog-page","timing":"defer"}]}};
+const page = {"about-us":{"file":"company/About-Us.html","scripts":[{"key":"master","timing":"head"},{"key":"about-v2","timing":"defer"},{"key":"about-scroll","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"application-development":{"file":"services/Application-Development.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"autonomous-operations":{"file":"accelerators/Autonomous-Operations.html","scripts":[{"key":"master","timing":"head"},{"key":"autonomous-operations","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"capital-markets-technology":{"file":"industries/bfsi/Capital-Markets-Technology.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"career":{"file":"company/Career.html","scripts":[{"key":"master","timing":"defer"},{"key":"career","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"contact-us":{"file":"company/Contact-Us.html","scripts":[{"key":"master","timing":"defer"},{"key":"contact-us","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"index":{"file":"index.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-difference-centering","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}]},"industries-bfsi":{"file":"industries/BFSI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"insights":{"file":"insights/Insights.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"defer"},{"key":"insights-page","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"insights-cms","timing":"defer"}]},"responsible-privacy-preserving-financial-ai":{"file":"industries/bfsi/Responsible-Privacy-Preserving-Financial-AI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"risk-regulatory-compliance-engineering":{"file":"industries/bfsi/Risk-Regulatory-Compliance-Engineering.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"services-ai-ml":{"file":"services/AI & ML/AI applications.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"wealth-asset-management-data-infrastructure":{"file":"industries/bfsi/Wealth-Asset-Management-Data-Infrastructure.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"blog-v3":{"file":"insights/Blog.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"blog-page","timing":"defer"}]},"agentic-data-platforms":{"file":"services/Agentic-Data-Platforms.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"cloud":{"file":"services/Cloud.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"experience-design":{"file":"services/Experience-Design.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"intelligent-automation":{"file":"services/Intelligent-Automation.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]}};
 const config = page[document.documentElement.dataset.wissenPage];
 if(!config)return;
 const delayed=[];

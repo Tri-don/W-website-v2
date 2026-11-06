@@ -5,6 +5,7 @@
   "engines": {"node": "22.x"},
   "scripts": {
     "build": "node scripts/build-static.cjs",
-    "build:assets": "python build_site.py"
+    "build:assets": "python build_site.py",
+    "check": "python scripts/check-site.py && node --check js/site.js && node --test tests/home-blog.test.cjs tests/page-tree.test.cjs tests/security.test.cjs"
   }
 }

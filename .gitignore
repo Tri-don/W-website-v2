@@ -10,3 +10,7 @@ dist/
 __pycache__/
 src/blog/generated-pages.json
 blogs/
+insights/Blog-preview.html
+
+# Recoverable local archive
+Bin/

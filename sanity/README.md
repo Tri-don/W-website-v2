@@ -44,7 +44,7 @@ No sample records or uploaded assets were created as part of this schema update.
 
 Image fields include alternative text, caption, credit, cropping and hotspot settings. Related posts are selected as references, with the website showing up to three published, dated articles. SEO supports an optional sharing image and no-index flag.
 
-The active managed schema uses declarative fields and Sanity's built-in type validation. It does not enforce the function-based required/length/custom validation rules in the future local adapter. Editors should supply title, slug, introduction, publication date, article body and appropriate image alternative text. The website filters or rejects incomplete exportable posts as described in BLOG-SETUP.md.
+The active managed schema uses declarative fields and Sanity's built-in type validation. It does not enforce the function-based required/length/custom validation rules in the future local adapter. Editors should supply title, slug, introduction, publication date, article body and appropriate image alternative text. The website filters or rejects incomplete exportable posts as described in docs/BLOG-SETUP.md.
 
 `schemaTypes/blog.js` is a local Studio adapter with additional validation and preview configuration. There is no local Studio application or CLI configuration here. Do not deploy that adapter over the managed workspace as a separate source without an explicit migration. Future managed schema updates must also redeploy the managed Studio so its editor picks up the changes.
 

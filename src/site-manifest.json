@@ -66,11 +66,6 @@
       "base": "css"
     },
     {
-      "key": "home-scale-preview",
-      "path": "src/styles/home-scale-preview.css",
-      "base": "css"
-    },
-    {
       "key": "journey-timeline",
       "path": "src/styles/journey-timeline.css",
       "base": "css"
@@ -108,6 +103,16 @@
     {
       "key": "home-blog-cms",
       "path": "src/styles/home-blog-cms.css",
+      "base": "css"
+    },
+    {
+      "key": "application-development-hero-v2",
+      "path": "src/styles/application-development-hero-v2.css",
+      "base": "css"
+    },
+    {
+      "key": "service-overviews",
+      "path": "src/styles/service-overviews.css",
       "base": "css"
     }
   ],
@@ -153,10 +158,6 @@
       "path": "src/scripts/site-appearance.js"
     },
     {
-      "key": "home-scale-preview",
-      "path": "src/scripts/home-scale-preview.js"
-    },
-    {
       "key": "home-difference-centering",
       "path": "src/scripts/home-difference-centering.js"
     },
@@ -179,7 +180,7 @@
   ],
   "pages": {
     "about-us": {
-      "file": "About-Us.html",
+      "file": "company/About-Us.html",
       "scripts": [
         {
           "key": "master",
@@ -200,7 +201,7 @@
       ]
     },
     "application-development": {
-      "file": "Application-Development.html",
+      "file": "services/Application-Development.html",
       "scripts": [
         {
           "key": "master",
@@ -217,7 +218,7 @@
       ]
     },
     "autonomous-operations": {
-      "file": "Autonomous-Operations.html",
+      "file": "accelerators/Autonomous-Operations.html",
       "scripts": [
         {
           "key": "master",
@@ -234,7 +235,7 @@
       ]
     },
     "capital-markets-technology": {
-      "file": "Capital-Markets-Technology.html",
+      "file": "industries/bfsi/Capital-Markets-Technology.html",
       "scripts": [
         {
           "key": "master",
@@ -247,7 +248,7 @@
       ]
     },
     "career": {
-      "file": "Career.html",
+      "file": "company/Career.html",
       "scripts": [
         {
           "key": "master",
@@ -264,7 +265,7 @@
       ]
     },
     "contact-us": {
-      "file": "Contact-Us.html",
+      "file": "company/Contact-Us.html",
       "scripts": [
         {
           "key": "master",
@@ -310,7 +311,7 @@
       ]
     },
     "industries-bfsi": {
-      "file": "Industries-BFSI.html",
+      "file": "industries/BFSI.html",
       "scripts": [
         {
           "key": "master",
@@ -323,7 +324,7 @@
       ]
     },
     "insights": {
-      "file": "Insights.html",
+      "file": "insights/Insights.html",
       "scripts": [
         {
           "key": "blog-content",
@@ -348,7 +349,7 @@
       ]
     },
     "responsible-privacy-preserving-financial-ai": {
-      "file": "Responsible-Privacy-Preserving-Financial-AI.html",
+      "file": "industries/bfsi/Responsible-Privacy-Preserving-Financial-AI.html",
       "scripts": [
         {
           "key": "master",
@@ -361,7 +362,7 @@
       ]
     },
     "risk-regulatory-compliance-engineering": {
-      "file": "Risk-Regulatory-Compliance-Engineering.html",
+      "file": "industries/bfsi/Risk-Regulatory-Compliance-Engineering.html",
       "scripts": [
         {
           "key": "master",
@@ -374,7 +375,7 @@
       ]
     },
     "services-ai-ml": {
-      "file": "Services-Ai-ML.html",
+      "file": "services/AI & ML/AI applications.html",
       "scripts": [
         {
           "key": "master",
@@ -387,7 +388,7 @@
       ]
     },
     "wealth-asset-management-data-infrastructure": {
-      "file": "Wealth-Asset-Management-Data-Infrastructure.html",
+      "file": "industries/bfsi/Wealth-Asset-Management-Data-Infrastructure.html",
       "scripts": [
         {
           "key": "master",
@@ -395,54 +396,12 @@
         },
         {
           "key": "site-appearance",
-          "timing": "defer"
-        }
-      ]
-    },
-    "about-us-v2": {
-      "file": "About-Us-v2.html",
-      "scripts": [
-        {
-          "key": "master",
-          "timing": "head"
-        },
-        {
-          "key": "about-v2",
-          "timing": "defer"
-        },
-        {
-          "key": "about-scroll",
-          "timing": "defer"
-        },
-        {
-          "key": "site-appearance",
-          "timing": "defer"
-        }
-      ]
-    },
-    "index-v2": {
-      "file": "index-v2.html",
-      "scripts": [
-        {
-          "key": "master",
-          "timing": "head"
-        },
-        {
-          "key": "site-appearance",
-          "timing": "defer"
-        },
-        {
-          "key": "home-scale-preview",
-          "timing": "defer"
-        },
-        {
-          "key": "home-difference-centering",
           "timing": "defer"
         }
       ]
     },
     "blog-v3": {
-      "file": "Blog.html",
+      "file": "insights/Blog.html",
       "scripts": [
         {
           "key": "blog-content",
@@ -458,6 +417,74 @@
         },
         {
           "key": "blog-page",
+          "timing": "defer"
+        }
+      ]
+    },
+    "agentic-data-platforms": {
+      "file": "services/Agentic-Data-Platforms.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "application-development",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "cloud": {
+      "file": "services/Cloud.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "application-development",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "experience-design": {
+      "file": "services/Experience-Design.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "application-development",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
+          "timing": "defer"
+        }
+      ]
+    },
+    "intelligent-automation": {
+      "file": "services/Intelligent-Automation.html",
+      "scripts": [
+        {
+          "key": "master",
+          "timing": "head"
+        },
+        {
+          "key": "application-development",
+          "timing": "defer"
+        },
+        {
+          "key": "site-appearance",
           "timing": "defer"
         }
       ]

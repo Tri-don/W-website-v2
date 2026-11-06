@@ -8,3 +8,6 @@ handoff
 sanity
 *.log
 *-preview.html
+
+# Recoverable local archive
+Bin/

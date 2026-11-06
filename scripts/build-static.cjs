@@ -4,24 +4,23 @@ const fs=require('node:fs'), path=require('node:path'), {spawnSync}=require('nod
 const ROOT=path.resolve(__dirname,'..'), OUT=path.resolve(ROOT,'dist');
 const B=require('../src/blog/content.js'), Blog=require('../build_blogs.cjs');
 const HomeBlog=require('../src/blog/home-cards.js');
+const {BLOG,INSIGHTS,rebaseHtml,normalize}=require('./site-paths.cjs');
+const {publicAssets}=require('./public-assets.cjs');
 const read=p=>fs.readFileSync(path.join(ROOT,p),'utf8');
 function write(p,text){const target=path.resolve(OUT,p);if(!target.startsWith(OUT+path.sep))throw new Error('Output path escaped dist');fs.mkdirSync(path.dirname(target),{recursive:true});fs.writeFileSync(target,text);}
-function normalize(html){return html.replace(/href="((?:\.\.\/)*)Blog(?:-v[23])?\.html"/g,(_,prefix)=>`href="${prefix}blogs/"`);}
 function card(post){
   const src=B.imageUrl(post.mainImage,800), title=B.esc(post.title), href=`blogs/${B.slug(post)}/`;
   const picture=src?`<img src="${B.esc(src)}" alt="${B.esc(post.mainImage?.alt)}" loading="lazy" decoding="async">`:'';
   const category=B.esc(post.categories?.[0]?.title||'Blog'), description=B.esc(post.excerpt||'');
-  return `<a class="wb-article-card" href="../${href}">${picture?`<figure class="wb-article-card-media">${picture}</figure>`:''}<div><span>${category}</span><h2 data-wissen-type="card-title">${title}</h2><p data-wissen-type="card-body">${description}</p><span class="wb-article-card-read">Read article <span aria-hidden="true">&rarr;</span></span></div></a>`;
+  return `<a class="wb-article-card" href="${href}">${picture?`<figure class="wb-article-card-media">${picture}</figure>`:''}<div><span>${category}</span><h2 data-wissen-type="card-title">${title}</h2><p data-wissen-type="card-body">${description}</p><span class="wb-article-card-read">Read article <span aria-hidden="true">&rarr;</span></span></div></a>`;
 }
 function archive(posts){
-  let html=read('Blog.html');
-  const main=`<main id="main"><section class="wb-hero" data-wissen-hero="true"><div class="wrap"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><span>Blogs</span></nav><h1 data-wissen-type="hero-title">Ideas for what <em>comes next.</em></h1><p class="wb-deck" data-wissen-type="hero-body">Perspectives on engineering, data and the technology shaping enterprise.</p></div></section><section class="wb-related"><div class="wrap">${posts.length?`<div class="wb-related-grid" aria-label="Blog articles">${posts.map(p=>card(p)).join('')}</div>`:'<p>New perspectives are on their way. Visit our insights for more.</p>'}</div></section></main>`;
-  html=html.replace(/<main id="main"[^>]*>[\s\S]*?<\/main>/,()=>main);
+  let html=rebaseHtml(read(BLOG),BLOG,'blogs/index.html');
+  const main=`<main id="main"><section class="wb-hero" data-wissen-hero="true"><div class="wrap"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="${INSIGHTS}">Insights</a><span aria-hidden="true">/</span><span>Blogs</span></nav><h1 data-wissen-type="hero-title">Ideas for what <em>comes next.</em></h1><p class="wb-deck" data-wissen-type="hero-body">Perspectives on engineering, data and the technology shaping enterprise.</p></div></section><section class="wb-related"><div class="wrap">${posts.length?`<div class="wb-related-grid" aria-label="Blog articles">${posts.map(p=>card(p)).join('')}</div>`:'<p>New perspectives are on their way. Visit our insights for more.</p>'}</div></section></main>`;
+  html=html.replace(/<main id="main"[^>]*>[\s\S]*?<\/main>/,()=>rebaseHtml(main,'index.html','blogs/index.html'));
   html=html.replace(/<title>[\s\S]*?<\/title>/,'<title>Blogs | Wissen Technology</title>');
   html=html.replace(/<meta name="robots"[^>]*>/,'<meta name="robots" content="index,follow">');
-  if(Blog.config.siteUrl)html=html.replace('</head>',`<link rel="canonical" href="${B.esc(new URL('blogs/',Blog.config.siteUrl).href)}"></head>`);
-  // The archive is one folder below the site root; its card links were already rebased.
-  html=html.replace(/\b(href|src|poster)="([^"#][^"]*)"/g,(m,attr,value)=>/^(?:[a-z][a-z0-9+.-]*:|\/|\.\.\/)/i.test(value)?m:`${attr}="../${value}"`);
+  if(Blog.config.siteUrl)html=html.replace('</head>',()=>`<link rel="canonical" href="${B.esc(new URL('blogs/',Blog.config.siteUrl).href)}"></head>`);
   return html;
 }
 async function build(){
@@ -33,18 +32,24 @@ async function build(){
   const pages=posts.map(post=>{
     const slug=B.slug(post);
     if(!B.validSlug(slug)||seen.has(slug)||!post.title||!Array.isArray(post.body)||!post.body.length)throw new Error('Incomplete or duplicate blog article: '+slug);
-    seen.add(slug);return {file:`blogs/${slug}/index.html`,html:normalize(Blog.page(post,posts.filter(p=>p._id!==post._id)))};
+    const file=`blogs/${slug}/index.html`;
+    seen.add(slug);return {file,html:normalize(Blog.page(post,posts.filter(p=>p._id!==post._id)),file)};
   });
   const archiveHtml=archive(posts);
+  // Validate media before replacing output; hidden secrets and active HTML are not media.
+  const media=publicAssets(ROOT);
   // Only this fixed, generated directory may be replaced; never follow a symlink.
   if(path.dirname(OUT)!==ROOT||path.basename(OUT)!=='dist')throw new Error('Unexpected output directory');
   if(fs.existsSync(OUT)&&fs.lstatSync(OUT).isSymbolicLink())throw new Error('dist must not be a symlink');
   fs.rmSync(OUT,{recursive:true,force:true});fs.mkdirSync(OUT,{recursive:true});
-  for(const directory of ['assets','css','js'])fs.cpSync(path.join(ROOT,directory),path.join(OUT,directory),{recursive:true});
+  for(const file of [...media,'css/site.css','js/site.js']){
+    const target=path.join(OUT,file);
+    fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(path.join(ROOT,file),target);
+  }
   const manifest=JSON.parse(read('src/site-manifest.json'));
-  const files=[...new Set(Object.values(manifest.pages).map(p=>p.file))].filter(f=>!/-v\d+\.html$/i.test(f)&&f!=='Blog.html');
+  const files=[...new Set(Object.values(manifest.pages).map(p=>p.file))].filter(f=>!/-v\d+\.html$/i.test(f)&&f!==BLOG);
   for(const file of files){
-    let html=normalize(read(file));
+    let html=normalize(read(file),file);
     if(file==='index.html'){
       const marker=/<!-- SANITY_HOME_BLOGS_START -->[\s\S]*?<!-- SANITY_HOME_BLOGS_END -->/;
       if(!marker.test(html))throw new Error('Homepage blog section not found');
@@ -54,26 +59,26 @@ async function build(){
         <div class="wb-home-controls"><p class="wb-home-status" data-home-blog-status role="status">${count?'':'New perspectives are on their way. Check back soon.'}</p><button class="wb-home-retry" type="button" data-home-blog-retry hidden>Try again</button></div>
         <!-- SANITY_HOME_BLOGS_END -->`);
     }
-    if(file==='Insights.html'){
+    if(file===INSIGHTS){
       const featuredMarker=/<!-- SANITY_FEATURED_START -->[\s\S]*?<!-- SANITY_FEATURED_END -->/;
       if(!featuredMarker.test(html))throw new Error('Insights featured panel not found');
-      html=html.replace(featuredMarker,()=>`<!-- SANITY_FEATURED_START -->${B.featuredInsights(posts,{static:true})}<!-- SANITY_FEATURED_END -->`);
+      html=html.replace(featuredMarker,()=>`<!-- SANITY_FEATURED_START -->${rebaseHtml(B.featuredInsights(posts,{static:true}),'index.html',file)}<!-- SANITY_FEATURED_END -->`);
       const marker=/<!-- SANITY_BLOGS_START -->[\s\S]*?<!-- SANITY_BLOGS_END -->/;
       if(!marker.test(html))throw new Error('Insights blog panel not found');
       html=html.replace(marker,()=>`<!-- SANITY_BLOGS_START -->
-          <div class="ins-grid" data-insights-blog-grid aria-busy="false">${B.insightCards(posts.slice(0,12),{static:true})}</div>
+          <div class="ins-grid" data-insights-blog-grid aria-busy="false">${rebaseHtml(B.insightCards(posts.slice(0,12),{static:true}),'index.html',file)}</div>
           <div class="ins-blog-controls"><p class="ins-blog-status" data-insights-blog-status role="status">${posts.length?'':'New perspectives are on their way. Check back soon.'}</p><button class="ins-blog-button" type="button" data-insights-blog-retry hidden>Try again</button><button class="ins-blog-button" type="button" data-insights-blog-more hidden>Load more articles</button></div>
           <!-- SANITY_BLOGS_END -->`);
     }
     write(file,html);
   }
   // Keep the accepted v3 shell for parameter-based links and manual CMS checks.
-  write('Blog.html',normalize(read('Blog.html')));
+  write(BLOG,normalize(read(BLOG),BLOG));
   write('blogs/index.html',archiveHtml);
   for(const page of pages)write(page.file,page.html);
   // This is a strict allowlist. Tokens, schema sources and environment files are never copied.
   const cfg=Blog.config;
-  write('src/blog/config.json',JSON.stringify({projectId:cfg.projectId,dataset:cfg.dataset,apiVersion:cfg.apiVersion,documentType:cfg.documentType,templateVariant:cfg.templateVariant,siteUrl:cfg.siteUrl||''},null,2));
+  write('src/blog/config.json',JSON.stringify({projectId:cfg.projectId,dataset:cfg.dataset,apiVersion:cfg.apiVersion,documentType:cfg.documentType,templateVariant:cfg.templateVariant,siteUrl:cfg.siteUrl||'',articleSlugs:posts.map(B.slug)},null,2));
   const base=cfg.siteUrl;
   if(base){
     const paths=[...files.filter(f=>f!=='index.html'),'','blogs/',...posts.filter(p=>!p.seo?.noIndex).map(p=>'blogs/'+B.slug(p)+'/')];

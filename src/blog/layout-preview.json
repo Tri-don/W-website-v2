@@ -4,7 +4,7 @@
   "slug":{"current":"building-enterprise-ai-that-earns-trust"},
   "excerpt":"The path from a promising prototype to a dependable business capability starts with the right engineering questions.",
   "categories":[{"title":"AI & Engineering"}],
-  "mainImage":{"url":"assets/images/brain-poster.jpg","alt":"Neural network artwork from the Wissen Dark website"},
+  "mainImage":{"url":"assets/images/home/brain-poster.jpg","alt":"Neural network artwork from the Wissen Dark website"},
   "body":[
     {"_type":"block","children":[{"_type":"span","text":"A successful demonstration is a beginning. Bringing AI into an enterprise means designing for the people, processes and constraints that will surround it every day."}]},
     {"_type":"block","style":"h2","children":[{"_type":"span","text":"Start with the business decision"}]},

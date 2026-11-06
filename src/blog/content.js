@@ -6,15 +6,39 @@
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
   'use strict';
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  // Renderer output uses site-root paths in Node and page-relative paths in the browser.
+  function localHtml(markup) {
+    const prefix=typeof document==='undefined'?'':document.documentElement?.dataset.wissenRoot||'';
+    if(!prefix)return markup;
+    return markup.replace(/\b(href|src|poster)="((?:assets|blogs|services|industries|accelerators|company|insights)\/[^"]*)"/g,
+      (_,attr,value)=>`${attr}="${prefix}${value}"`);
+  }
+  function sitePath(value) {
+    return (typeof document==='undefined'?'':document.documentElement?.dataset.wissenRoot||'')+value;
+  }
   function safeUrl(v) {
-    if (typeof v !== 'string' || /[\u0000-\u0020\\]/.test(v)) return '';
-    if (/^(https?:\/\/|mailto:)/i.test(v) || /^(#|\/(?!\/)|assets\/)/.test(v)) return v;
+    if (typeof v !== 'string' || /[\u0000-\u0020\u007f\\]/.test(v)) return '';
+    if (/^https?:\/\//i.test(v)) {
+      try {
+        const url=new URL(v);
+        return url.hostname&&!url.username&&!url.password?v:'';
+      } catch { return ''; }
+    }
+    if (/^mailto:/i.test(v) && !/%(?:0[ad]|00)/i.test(v)) return v;
+    if (/^(#|\/(?!\/)|assets\/)/.test(v)) return v;
     return '';
   }
   function imageUrl(image, width = 1600) {
     const raw = image?.asset?.url || image?.url || '';
-    if (!safeUrl(raw) || /^mailto:|^#/i.test(raw)) return '';
-    if (!raw.startsWith('https://cdn.sanity.io/images/')) return raw;
+    if (!safeUrl(raw)) return '';
+    // Local media and Sanity's image CDN are the only supported CMS image sources.
+    if (/^\/?assets\/images\//.test(raw)) {
+      try {
+        const decoded=decodeURIComponent(raw);
+        return /(?:^|\/)\.{1,2}(?:\/|$)|[\\\u0000-\u0020\u007f]/.test(decoded)?'':raw;
+      } catch { return ''; }
+    }
+    if (!raw.startsWith('https://cdn.sanity.io/images/')) return '';
     const url = new URL(raw);
     url.searchParams.set('w', String(width)); url.searchParams.set('auto', 'format');
     url.searchParams.set('fit', 'max');
@@ -28,7 +52,13 @@
   }
   const plain = blocks => (blocks || []).filter(b=>b._type==='block').map(b=>(b.children||[]).map(s=>s.text||'').join('')).join(' ');
   const slug = p => p?.slug?.current || '';
-  const validSlug = s => /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s);
+  const validSlug = s => typeof s==='string' && /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(s);
+  function articleHref(post,options={}) {
+    const value=slug(post);
+    if(!validSlug(value))return '#';
+    const exported=options.static===true||(Array.isArray(options.articleSlugs)&&options.articleSlugs.includes(value));
+    return exported?`blogs/${value}/`:`insights/Blog.html?slug=${encodeURIComponent(value)}`;
+  }
   function date(v) {
     const d = new Date(v);
     return Number.isNaN(d.getTime()) ? '' : d.toLocaleDateString('en-GB', {day:'numeric',month:'long',year:'numeric', timeZone:'UTC'});
@@ -54,7 +84,7 @@
         let out = esc(s.text).replace(/\n/g, '<br>');
         for (const m of s.marks || []) {
           const tags = {strong:'strong',em:'em',code:'code',underline:'u','strike-through':'s'};
-          if (tags[m]) out = `<${tags[m]}>${out}</${tags[m]}>`;
+          if (Object.hasOwn(tags,m)) out = `<${tags[m]}>${out}</${tags[m]}>`;
           else {
             const def = (block.markDefs||[]).find(d=>d._key===m);
             const href = def?._type==='link' && safeUrl(def.href);
@@ -72,7 +102,7 @@
       if (b._type === 'codeBlock') return `<pre><code>${esc(b.code)}</code></pre>`;
       if (b._type !== 'block') throw new Error('Unsupported article block: '+b._type);
       const style = b.style || 'normal', allowed = {normal:'p',h2:'h2',h3:'h3',h4:'h4',blockquote:'blockquote'};
-      const tag = allowed[style] || 'p';
+      const tag = Object.hasOwn(allowed,style)?allowed[style]:'p';
       let id = '';
       if (/^h[234]$/.test(tag)) {
         let base = (b.children||[]).map(s=>s.text||'').join('').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'section';
@@ -134,14 +164,14 @@
   }
   function render(post, related=[], options={}) {
     const body=bodyHtml(post.body), author=post.author, minutes=Math.max(1,Math.ceil(plain(post.body).split(/\s+/).filter(Boolean).length/220));
-    const v2=options.variant==='v2', v3=options.variant==='v3', entry='Blog.html';
-    const link = p => options.static ? `blogs/${slug(p)}/` : `${entry}?slug=${encodeURIComponent(slug(p))}`;
+    const v2=options.variant==='v2', v3=options.variant==='v3', entry='insights/Blog.html';
+    const link = p => articleHref(p,options);
     const authorImg=imageUrl(author?.image,160), published=date(post.publishedAt);
     const toc=body.headings.filter(h=>h.level!=='h4');
     const relatedCards=selectRelated(post,related,options.preview);
     const cover=imageUrl(post.mainImage);
     const v3Header=v3?`<section class="wb-hero wb-v3-hero" data-wissen-hero="true"><div class="wrap">
-      <div class="wb-v3-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
+      <div class="wb-v3-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="insights/Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
       <header class="wb-v3-stage${cover?'':' wb-v3-no-cover'}">
         ${cover?`<img class="wb-v3-image" src="${esc(cover)}" alt="${esc(post.mainImage.alt)}" fetchpriority="high" decoding="async">`:''}
         <div class="wb-v3-title-block"><div class="wb-meta">${(post.categories||[]).map(c=>`<span>${esc(c.title)}</span>`).join('')}${published?`<time datetime="${esc(post.publishedAt)}">${published}</time>`:''}<span>${minutes} min read</span></div>
@@ -153,7 +183,7 @@
       ${shareToolbar(post,options)}
     </div></section>`:'';
     const v2Header=v2?`<section class="wb-hero wb-v2-hero" data-wissen-hero="true"><div class="wrap">
-      <div class="wb-v2-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
+      <div class="wb-v2-topline"><nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="insights/Insights.html">Insights</a><span aria-hidden="true">/</span><a href="${entry}">Blogs</a></nav>${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content</p>':''}</div>
       <div class="wb-v2-lead${imageUrl(post.mainImage)?'':' wb-v2-no-cover'}">
         <div class="wb-v2-intro">
           <div class="wb-meta">${(post.categories||[]).map(c=>`<span>${esc(c.title)}</span>`).join('')}${published?`<time datetime="${esc(post.publishedAt)}">${published}</time>`:''}<span>${minutes} min read</span></div>
@@ -163,10 +193,10 @@
         </div>
         ${image(post.mainImage,'wb-cover wb-v2-cover',true)}
       </div>
-      <div class="wb-byline wb-v2-byline">${authorImg?`<img src="${esc(authorImg)}" alt="" width="42" height="42">`:''}${author?`<div><strong>${esc(author.name)}</strong>${author.role?`<span>${esc(author.role)}</span>`:''}</div>`:''}<a class="wb-v2-all" href="Insights.html">&larr; All insights</a><div class="wb-share"><a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(options.url||'')}" data-blog-share target="_blank" rel="noopener noreferrer" aria-label="Share article on LinkedIn">in</a><button type="button" data-blog-copy>Copy link</button><span class="wb-sr" data-copy-status role="status"></span></div></div>
+      <div class="wb-byline wb-v2-byline">${authorImg?`<img src="${esc(authorImg)}" alt="" width="42" height="42">`:''}${author?`<div><strong>${esc(author.name)}</strong>${author.role?`<span>${esc(author.role)}</span>`:''}</div>`:''}<a class="wb-v2-all" href="insights/Insights.html">&larr; All insights</a><div class="wb-share"><a href="https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(options.url||'')}" data-blog-share target="_blank" rel="noopener noreferrer" aria-label="Share article on LinkedIn">in</a><button type="button" data-blog-copy>Copy link</button><span class="wb-sr" data-copy-status role="status"></span></div></div>
     </div></section>`:'';
     return (v3?v3Header:v2?v2Header:`<section class="wb-hero" data-wissen-hero="true"><div class="wrap">
-      <nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="Insights.html">Insights</a><span aria-hidden="true">/</span><a href="Blog.html">Blogs</a></nav>
+      <nav class="wb-breadcrumb" aria-label="Breadcrumb"><a href="insights/Insights.html">Insights</a><span aria-hidden="true">/</span><a href="insights/Blog.html">Blogs</a></nav>
       ${options.preview?'<p class="wb-preview-note">Layout preview &middot; Illustrative content, not a published article</p>':''}
       <div class="wb-meta">${(post.categories||[]).map(c=>`<span>${esc(c.title)}</span>`).join('')}${published?`<time datetime="${esc(post.publishedAt)}">${published}</time>`:''}<span>${minutes} min read</span></div>
       <h1 id="blog-title" data-wissen-type="hero-title">${esc(post.title)}</h1>
@@ -175,46 +205,50 @@
       ${image(post.mainImage,'wb-cover',true)}
     </div></section>`)+`
     <section class="wb-reading"${v2||v3?' id="blog-content" tabindex="-1"':''}><div class="wrap wb-reading-grid">
-      <aside class="wb-aside">${toc.length?`<nav aria-label="In this article"><p>In this article</p><ol>${toc.map(h=>`<li><a href="#${h.id}" data-blog-toc>${esc(h.text)}</a></li>`).join('')}</ol></nav>`:''}<a class="wb-back" href="Insights.html">&larr; All insights</a></aside>
+      <aside class="wb-aside">${toc.length?`<nav aria-label="In this article"><p>In this article</p><ol>${toc.map(h=>`<li><a href="#${h.id}" data-blog-toc>${esc(h.text)}</a></li>`).join('')}</ol></nav>`:''}<a class="wb-back" href="insights/Insights.html">&larr; All insights</a></aside>
       <article class="wb-prose" aria-labelledby="blog-title">${body.html}
       ${post.tags?.length?`<ul class="wb-tags" aria-label="Article tags">${[...new Set(post.tags.filter(t=>typeof t==='string'&&t.trim()))].map(t=>`<li>${esc(t)}</li>`).join('')}</ul>`:''}
       ${author?.bio?`<div class="wb-author"><p>About the author</p><h2>${esc(author.name)}</h2><p>${esc(author.bio)}</p></div>`:''}
       ${v3?`<div class="wb-v3-article-end">${shareToolbar(post,options)}<a class="wb-v3-back-top" href="#blog-title">Back to top <span aria-hidden="true">&uarr;</span></a></div>`:''}
-      <div class="wb-end"><p>Have a challenge in mind?</p><a class="ui-text" href="Contact-Us.html">Let’s talk <span aria-hidden="true">↗</span></a></div></article>
+      <div class="wb-end"><p>Have a challenge in mind?</p><a class="ui-text" href="company/Contact-Us.html">Let’s talk <span aria-hidden="true">↗</span></a></div></article>
     </div></section>
-    ${relatedCards.length?`<section class="wb-related" aria-labelledby="blog-related-title"><div class="wrap"><div class="wb-related-heading"><h2 id="blog-related-title" data-wissen-type="section-title">${v3?'Related <em>articles.</em>':'Keep <em>exploring.</em>'}</h2>${v3?`<a class="wb-related-all" href="Insights.html">Explore all insights <span aria-hidden="true">&rarr;</span></a>`:''}</div><div class="wb-related-grid">${relatedCards.map(p=>`<${options.preview?'article':'a'} class="wb-article-card"${options.preview?'':` href="${esc(link(p))}"`}>${image(p.mainImage,'wb-article-card-media')}<div><span>${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}<span class="wb-article-card-read">${options.preview?'Sample article':'Read article <span aria-hidden="true">&rarr;</span>'}</span></div></${options.preview?'article':'a'}>`).join('')}</div></div></section>`:''}`;
+    ${relatedCards.length?`<section class="wb-related" aria-labelledby="blog-related-title"><div class="wrap"><div class="wb-related-heading"><h2 id="blog-related-title" data-wissen-type="section-title">${v3?'Related <em>articles.</em>':'Keep <em>exploring.</em>'}</h2>${v3?`<a class="wb-related-all" href="insights/Insights.html">Explore all insights <span aria-hidden="true">&rarr;</span></a>`:''}</div><div class="wb-related-grid">${relatedCards.map(p=>`<${options.preview?'article':'a'} class="wb-article-card"${options.preview?'':` href="${esc(link(p))}"`}>${image(p.mainImage,'wb-article-card-media')}<div><span>${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}<span class="wb-article-card-read">${options.preview?'Sample article':'Read article <span aria-hidden="true">&rarr;</span>'}</span></div></${options.preview?'article':'a'}>`).join('')}</div></div></section>`:''}`;
   }
   function state(title, message, retry=false) {
-    return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
+    return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="insights/Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
   }
   const imageProjection=`{alt,caption,credit,crop,hotspot,asset->{url}}`;
   const cardProjection=`{_id,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
   const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
   const filter=`_type == $type && defined(slug.current) && dateTime(coalesce(publishedAt,_createdAt)) <= dateTime(now())`;
+  function endpoint(config,cdn=false) {
+    if(!config||typeof config.projectId!=='string'||typeof config.dataset!=='string'||typeof config.apiVersion!=='string'||!/^[a-z0-9]+$/.test(config.projectId)||!/^[a-z0-9][a-z0-9_-]*$/.test(config.dataset)||!/^\d{4}-\d{2}-\d{2}$/.test(config.apiVersion))throw new Error('Invalid Sanity configuration');
+    return `https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`;
+  }
   function featuredInsights(posts, options={}) {
     const featured=posts.filter(p=>p.title&&validSlug(slug(p))).slice(0,3);
     if(!featured.length)return '<div class="ins-featured-empty"><p>New perspectives are on their way. Check back soon.</p></div>';
     return `<div class="ins-featured-track" aria-live="polite">${featured.map((p,index)=>{
-      const cover=imageUrl(p.mainImage), href=options.static?`blogs/${slug(p)}/`:`Blog.html?slug=${encodeURIComponent(slug(p))}`;
+      const cover=imageUrl(p.mainImage), href=articleHref(p,options);
       return `<a class="ins-featured${index?'':' is-active'}" data-featured-slide href="${esc(href)}" aria-label="${esc(`Featured article ${index+1} of ${featured.length}: ${p.title}`)}" aria-hidden="${Boolean(index)}" tabindex="${index?-1:0}">${cover?`<img src="${esc(cover)}" alt="${esc(p.mainImage?.alt||'')}" ${index?'loading="lazy"':'fetchpriority="high"'} decoding="async">`:''}<div class="ins-featured-copy"><span class="ins-featured-label">${esc(p.categories?.[0]?.title||'Latest blog')}</span><h2 data-wissen-type="feature-title">${esc(p.title)}</h2><span class="ins-featured-meta">Read article <span aria-hidden="true">&rarr;</span></span></div></a>`;
     }).join('')}</div><div class="ins-featured-controls" role="group" aria-label="Featured insight controls"${featured.length<2?' hidden':''}><div class="ins-featured-dots" role="tablist" aria-label="Choose featured insight">${featured.map((p,index)=>`<button${index?'':' class="is-active"'} type="button" role="tab" aria-selected="${!index}" tabindex="${index?-1:0}" aria-label="Show featured insight ${index+1}: ${esc(p.title)}"></button>`).join('')}</div></div>`;
   }
   function insightCards(posts, options={}) {
     return posts.filter(p=>p.title&&validSlug(slug(p))).map(p=>{
       const cover=imageUrl(p.mainImage,800), published=date(p.publishedAt);
-      const href=options.static?`blogs/${slug(p)}/`:`Blog.html?slug=${encodeURIComponent(slug(p))}`;
+      const href=articleHref(p,options);
       return `<a class="ins-card ins-reveal" data-insights-blog-card data-blog-slug="${esc(slug(p))}" href="${esc(href)}">${cover?`<div class="ins-card-media"><img src="${esc(cover)}" alt="${esc(p.mainImage?.alt||'')}" loading="lazy" decoding="async"></div>`:''}<div class="ins-card-body"><span class="ins-card-meta">${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}${published?`<time class="ins-card-date" datetime="${esc(p.publishedAt)}">${published}</time>`:''}<div class="ins-card-bottom"><span class="ins-card-read">Read article</span><span class="ins-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div></div></a>`;
     }).join('\n');
   }
   function insightsQuery(config, page=0) {
     const start=Math.max(0,Math.floor(Number(page)||0))*12;
-    return {url:`https://${config.projectId}.api.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`,params:{
+    return {url:endpoint(config,true),params:{
       query:`*[${filter} && defined(title) && count(body) > 0] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[${start}...${start+13}]${cardProjection}`,
       perspective:'published','$type':JSON.stringify(config.documentType)
     }};
   }
   function query(config, params={}, cdn=true) {
-    return { url:`https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`, params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
+    return { url:endpoint(config,cdn), params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
   }
-  return {esc,safeUrl,imageUrl,plain,slug,validSlug,bodyHtml,render,state,query,projection,filter,shareLinks,selectRelated,insightCards,insightsQuery,featuredInsights};
+  return {localHtml,sitePath,esc,safeUrl,imageUrl,plain,slug,validSlug,articleHref,bodyHtml,endpoint,render:(...args)=>localHtml(render(...args)),state:(...args)=>localHtml(state(...args)),query,projection,filter,shareLinks,selectRelated,insightCards:(...args)=>localHtml(insightCards(...args)),insightsQuery,featuredInsights:(...args)=>localHtml(featuredInsights(...args))};
 });

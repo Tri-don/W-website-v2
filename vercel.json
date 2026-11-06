@@ -8,9 +8,108 @@
     {
       "source": "/(.*)",
       "headers": [
-        {"key": "X-Content-Type-Options", "value": "nosniff"},
-        {"key": "Referrer-Policy", "value": "strict-origin-when-cross-origin"}
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; style-src-attr 'unsafe-inline'; img-src 'self' data: https://cdn.sanity.io; font-src 'self'; media-src 'self'; connect-src 'self' https://zu6gxemo.apicdn.sanity.io; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "camera=(), microphone=(), geolocation=(), payment=(), usb=()"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000"
+        }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/About-Us.html",
+      "destination": "/company/About-Us.html",
+      "permanent": true
+    },
+    {
+      "source": "/Application-Development.html",
+      "destination": "/services/Application-Development.html",
+      "permanent": true
+    },
+    {
+      "source": "/Autonomous-Operations.html",
+      "destination": "/accelerators/Autonomous-Operations.html",
+      "permanent": true
+    },
+    {
+      "source": "/Blog.html",
+      "destination": "/insights/Blog.html",
+      "permanent": true
+    },
+    {
+      "source": "/Capital-Markets-Technology.html",
+      "destination": "/industries/bfsi/Capital-Markets-Technology.html",
+      "permanent": true
+    },
+    {
+      "source": "/Career.html",
+      "destination": "/company/Career.html",
+      "permanent": true
+    },
+    {
+      "source": "/Contact-Us.html",
+      "destination": "/company/Contact-Us.html",
+      "permanent": true
+    },
+    {
+      "source": "/Industries-BFSI.html",
+      "destination": "/industries/BFSI.html",
+      "permanent": true
+    },
+    {
+      "source": "/Insights.html",
+      "destination": "/insights/Insights.html",
+      "permanent": true
+    },
+    {
+      "source": "/Responsible-Privacy-Preserving-Financial-AI.html",
+      "destination": "/industries/bfsi/Responsible-Privacy-Preserving-Financial-AI.html",
+      "permanent": true
+    },
+    {
+      "source": "/Risk-Regulatory-Compliance-Engineering.html",
+      "destination": "/industries/bfsi/Risk-Regulatory-Compliance-Engineering.html",
+      "permanent": true
+    },
+    {
+      "source": "/Services-Ai-ML.html",
+      "destination": "/services/AI & ML/AI applications.html",
+      "permanent": true
+    },
+    {
+      "source": "/Wealth-Asset-Management-Data-Infrastructure.html",
+      "destination": "/industries/bfsi/Wealth-Asset-Management-Data-Infrastructure.html",
+      "permanent": true
+    },
+    {
+      "source": "/services/Services-Ai-ML.html",
+      "destination": "/services/AI & ML/AI applications.html",
+      "permanent": true
+    },
+    {
+      "source": "/industries/bfsi/Industries-BFSI.html",
+      "destination": "/industries/BFSI.html",
+      "permanent": true
     }
   ]
 }

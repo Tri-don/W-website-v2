@@ -31,7 +31,7 @@
   }
   function render(data,options={}){
     return select(data).map(({post,featured})=>{
-      const slug=B.slug(post),href=options.static?`blogs/${slug}/`:`Blog.html?slug=${encodeURIComponent(slug)}`;
+      const slug=B.slug(post),href=B.articleHref(post,options);
       const category=`<span class="wb-category">${B.esc(post.categories?.[0]?.title||'Blog')}</span>`;
       const title=`<h3 id="home-blog-${slug}" data-wissen-type="card-title">${B.esc(post.title)}</h3>`;
       return `<a class="wb-card ${featured?'wb-feature':'wb-standard'}" data-home-blog-card data-blog-slug="${B.esc(slug)}" href="${B.esc(href)}" aria-labelledby="home-blog-${slug}">${featured?`<div class="wb-feature-photo"><svg class="wb-mask-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><clipPath id="wb-home-cms-mask" clipPathUnits="objectBoundingBox">${polygons.split('|').map(points=>`<polygon points="${points}"/>`).join('')}</clipPath></defs></svg><div class="wb-mask-photo">${photo(post)}</div></div><div class="wb-feature-copy">${category}${title}${published(post)}${arrow}</div>`:`<div class="wb-card-top">${category}${arrow}</div>${title}${published(post)}<div class="wb-photo-frame">${photo(post)}</div>`}</a>`;
@@ -41,10 +41,10 @@
     const projection='{_id,title,slug,featured,"publishedAt":coalesce(publishedAt,_createdAt),mainImage{alt,crop,hotspot,asset->{url}},categories[]->{title}}';
     const filter=`${B.filter} && defined(title) && count(body) > 0`;
     const order=' | order(coalesce(publishedAt,_createdAt) desc, _id asc)';
-    return {url:`https://${config.projectId}.api.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`,params:{
+    return {url:B.endpoint(config,true),params:{
       query:`{"featured":*[${filter} && featured == true]${order}[0]${projection},"latest":*[${filter}]${order}[0...3]${projection}}`,
       perspective:'published','$type':JSON.stringify(config.documentType)
     }};
   }
-  return {select,fromPosts,render,query};
+  return {select,fromPosts,render:(...args)=>B.localHtml(render(...args)),query};
 });

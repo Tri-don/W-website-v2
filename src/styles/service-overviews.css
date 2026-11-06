@@ -1,0 +1,12 @@
+/* Small content-count adjustments within the shared service-page layout. */
+@media (min-width: 1280px) {
+  .ad-page .ad-services-grid[data-service-count="6"] {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.ad-page .ad-ref-proposition-copy > p + p {
+  margin-top: 16px;
+}
+.ad-page .m6-case-metrics > p {
+  min-width: 0;
+}

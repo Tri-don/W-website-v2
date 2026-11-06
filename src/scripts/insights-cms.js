@@ -16,13 +16,13 @@
       try {
         if(!config){
           // Preserve same-site preview authentication; Sanity requests below still omit credentials.
-          const response=await fetch('src/blog/config.json',{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
+          const response=await fetch(window.WissenBlog.sitePath('src/blog/config.json'),{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
           if(!response.ok)throw new Error('Configuration unavailable');
           config=await response.json();
         }
         const q=B.insightsQuery(config,nextPage), url=new URL(q.url);
         Object.entries(q.params).forEach(([key,value])=>url.searchParams.set(key,value));
-        const response=await fetch(url,{credentials:'omit',cache:'no-store',signal:AbortSignal.timeout(15000)});
+        const response=await fetch(url,{method:'GET',credentials:'omit',redirect:'error',signal:AbortSignal.timeout(15000)});
         if(!response.ok)throw new Error('Articles unavailable');
         const payload=await response.json();
         if(!Array.isArray(payload.result))throw new Error('Invalid articles');
@@ -31,13 +31,13 @@
           const existing=new Set([...grid.querySelectorAll('[data-blog-slug]')].map(card=>card.dataset.blogSlug));
           posts=posts.filter(post=>!existing.has(B.slug(post)));
         }
-        const html=B.insightCards(posts);
+        const html=B.insightCards(posts,{articleSlugs:config.articleSlugs});
         if(nextPage)grid.insertAdjacentHTML('beforeend',html);
         else {
           grid.innerHTML=html;
           const featured=document.querySelector('[data-insights-featured]');
           if(featured){
-            featured.innerHTML=B.featuredInsights(posts);
+            featured.innerHTML=B.featuredInsights(posts,{articleSlugs:config.articleSlugs});
             document.dispatchEvent(new CustomEvent('insights:featured-updated'));
           }
         }

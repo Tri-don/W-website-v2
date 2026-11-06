@@ -3,14 +3,20 @@
   const root=document.querySelector('[data-blog-root]'); if(!root)return;
   const B=window.WissenBlog;
   const variant=document.documentElement.dataset.blogVariant||'v1';
-  function enhance() {
+  function enhance(config) {
     const hero=root.querySelector('[data-wissen-hero]');
     if(hero){
       const measure=()=>document.body.style.setProperty('--wissen-hero-height',Math.max(0,hero.getBoundingClientRect().bottom-document.body.getBoundingClientRect().top)+'px');
       measure();
       if('ResizeObserver' in window)new ResizeObserver(measure).observe(hero);
     }
-    const canonical=document.querySelector('link[rel="canonical"]');
+    let canonical=document.querySelector('link[rel="canonical"]');
+    const requestedSlug=new URLSearchParams(location.search).get('slug');
+    if(!canonical&&B.validSlug(requestedSlug)&&Array.isArray(config?.articleSlugs)&&config.articleSlugs.includes(requestedSlug)){
+      canonical=document.createElement('link');canonical.rel='canonical';
+      canonical.href=new URL(B.sitePath(B.articleHref({slug:{current:requestedSlug}},config)),location.href).href;
+      document.head.append(canonical);
+    }
     const shareLocation=new URL(canonical?.href||location.href);shareLocation.hash='';
     const shareUrl=shareLocation.href, title=root.querySelector('#blog-title')?.textContent||document.title;
     const linksForSharing=B.shareLinks(title,shareUrl);
@@ -67,9 +73,9 @@
   const params=new URLSearchParams(location.search), slug=params.get('slug');
   if(slug && !B.validSlug(slug)){root.innerHTML=B.state('Article not found.','Explore our insights for more perspectives.');root.setAttribute('aria-busy','false');return;}
   async function fetchPosts(config, options) {
-    const q=B.query(config,options,false), url=new URL(q.url);
+    const q=B.query(config,options,true), url=new URL(q.url);
     Object.entries(q.params).forEach(([k,v])=>url.searchParams.set(k,v));
-    const res=await fetch(url,{signal:AbortSignal.timeout(15000),credentials:'omit'});
+    const res=await fetch(url,{method:'GET',redirect:'error',signal:AbortSignal.timeout(15000),credentials:'omit'});
     if(!res.ok)throw new Error('Sanity returned '+res.status);
     const payload=await res.json();
     if(!Array.isArray(payload.result))throw new Error('Invalid Sanity response');
@@ -78,20 +84,20 @@
   async function load() {
     root.setAttribute('aria-busy','true');
     try {
-      const cfgResponse=await fetch('src/blog/config.json'); if(!cfgResponse.ok)throw new Error('Blog configuration unavailable');
+      const cfgResponse=await fetch(window.WissenBlog.sitePath('src/blog/config.json')); if(!cfgResponse.ok)throw new Error('Blog configuration unavailable');
       const config=await cfgResponse.json();
       const posts=await fetchPosts(config,slug?{slug}:{});
       if(!posts.length) { root.innerHTML=B.state(slug?'Article not found.':'Our next perspective is on its way.',slug?'This article may have moved or is no longer published.':'New articles will appear here once published. Explore our insights in the meantime.'); return; }
-      const post=posts[0]; root.innerHTML=B.render(post,posts.slice(1),{url:location.href,variant});
+      const post=posts[0]; root.innerHTML=B.render(post,posts.slice(1),{url:location.href,variant,articleSlugs:config.articleSlugs});
       document.title=(post.seo?.title||post.title)+' | Wissen Technology';
       document.querySelector('meta[name="description"]')?.setAttribute('content',post.seo?.description||post.excerpt||'');
       const robots=document.querySelector('meta[name="robots"]'); if(robots)robots.content='noindex,follow';
-      enhance();
+      enhance(config);
       if(slug){
         // A related-content failure should never hide a successfully loaded article.
         fetchPosts(config,{excludeSlug:slug}).then(related=>{
           const template=document.createElement('template');
-          template.innerHTML=B.render(post,related,{url:location.href,variant});
+          template.innerHTML=B.render(post,related,{url:location.href,variant,articleSlugs:config.articleSlugs});
           const section=template.content.querySelector('.wb-related');
           if(section){
             const current=root.querySelector('.wb-related');
