@@ -51,13 +51,14 @@ async function build(){
   const files=[...new Set(Object.values(manifest.pages).map(p=>p.file))].filter(f=>!/-v\d+\.html$/i.test(f)&&f!==BLOG);
   for(const file of files){
     let html=normalize(read(file),file);
-    if(file==='index.html'){
+    const sectionConfig=Object.values(manifest.pages).find(page=>page.file===file)?.blogSection;
+    if(sectionConfig){
       const marker=/<!-- SANITY_HOME_BLOGS_START -->[\s\S]*?<!-- SANITY_HOME_BLOGS_END -->/;
-      if(!marker.test(html))throw new Error('Homepage blog section not found');
-      const data=HomeBlog.fromPosts(posts),count=HomeBlog.select(data).length;
+      if(!marker.test(html))throw new Error('CMS blog section not found: '+file);
+      const data=HomeBlog.fromPosts(posts,sectionConfig),count=HomeBlog.select(data,sectionConfig).length;
       html=html.replace(marker,()=>`<!-- SANITY_HOME_BLOGS_START -->
-        <div class="wb-grid" data-home-blog-grid data-card-count="${count}" aria-busy="false">${HomeBlog.render(data,{static:true})}</div>
-        <div class="wb-home-controls"><p class="wb-home-status" data-home-blog-status role="status">${count?'':'New perspectives are on their way. Check back soon.'}</p><button class="wb-home-retry" type="button" data-home-blog-retry hidden>Try again</button></div>
+        <div class="wb-grid" data-home-blog-grid data-card-count="${count}" aria-busy="false">${rebaseHtml(HomeBlog.render(data,{...sectionConfig,static:true}),'index.html',file)}</div>
+        <div class="wb-home-controls"><p class="wb-home-status" data-home-blog-status role="status">${count?'':HomeBlog.emptyMessage(sectionConfig)}</p><button class="wb-home-retry" type="button" data-home-blog-retry hidden>Try again</button></div>
         <!-- SANITY_HOME_BLOGS_END -->`);
     }
     if(file===INSIGHTS){

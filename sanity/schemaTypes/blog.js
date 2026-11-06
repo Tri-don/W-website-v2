@@ -18,7 +18,7 @@ function prepare(field,path){
   if(path==='blogPost.publishedAt')out.validation=r=>r.required();
   if(path==='blogPost.excerpt')out.validation=r=>r.required().max(300);
   if(path==='blogPost.body')out.validation=r=>r.required().min(1);
-  if(path==='blogPost.categories'||path==='blogPost.tags')out.validation=r=>r.unique();
+  if(path==='blogPost.categories'||path==='blogPost.tags'||path==='blogPost.industries'||path==='blogPost.services')out.validation=r=>r.unique();
   if(path==='blogPost.relatedArticles')out.validation=r=>r.unique().max(3);
   if(path==='blogPost.seo.title')out.validation=r=>r.max(70).warning();
   if(path==='blogPost.seo.description')out.validation=r=>r.max(160).warning();

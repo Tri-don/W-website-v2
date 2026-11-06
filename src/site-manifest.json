@@ -193,6 +193,14 @@
       "file": "About-Us.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
@@ -207,12 +215,25 @@
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {}
     },
     "application-development": {
       "file": "services/Application-Development.html",
       "scripts": [
+        {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
         {
           "key": "master",
           "timing": "head"
@@ -224,8 +245,15 @@
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "service": "application-development"
+      }
     },
     "autonomous-operations": {
       "file": "accelerators/Autonomous-Operations.html",
@@ -248,14 +276,29 @@
       "file": "industries/BFSI/Capital-Markets-Technology.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "bfsi-fintech"
+      }
     },
     "career": {
       "file": "Career.html",
@@ -318,11 +361,20 @@
           "key": "home-blog-cms",
           "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {}
     },
     "industries-bfsi": {
       "file": "industries/BFSI.html",
       "scripts": [
+        {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
         {
           "key": "master",
           "timing": "head"
@@ -330,8 +382,15 @@
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "bfsi-fintech"
+      }
     },
     "insights": {
       "file": "Insights.html",
@@ -362,53 +421,113 @@
       "file": "industries/BFSI/Responsible-Privacy-Preserving-Financial-AI.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "bfsi-fintech"
+      }
     },
     "risk-regulatory-compliance-engineering": {
       "file": "industries/BFSI/Risk-Regulatory-Compliance-Engineering.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "bfsi-fintech"
+      }
     },
     "services-ai-ml": {
       "file": "services/AI & ML/AI applications.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "service": "ai-ml"
+      }
     },
     "wealth-asset-management-data-infrastructure": {
       "file": "industries/BFSI/Wealth-Asset-Management-Data-Infrastructure.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "bfsi-fintech"
+      }
     },
     "blog-v3": {
       "file": "insights/Blog.html",
@@ -435,6 +554,14 @@
       "file": "services/Agentic-Data-Platforms.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
@@ -445,13 +572,28 @@
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "service": "agentic-data-platforms"
+      }
     },
     "cloud": {
       "file": "services/Cloud.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
@@ -462,13 +604,28 @@
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "service": "cloud"
+      }
     },
     "experience-design": {
       "file": "services/Experience-Design.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
@@ -479,13 +636,28 @@
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "service": "experience-design"
+      }
     },
     "intelligent-automation": {
       "file": "services/Intelligent-Automation.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
@@ -496,86 +668,183 @@
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "service": "intelligent-automation"
+      }
     },
     "industries-energy-commodities": {
       "file": "industries/Energy-Commodities.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "energy-commodities"
+      }
     },
     "industries-healthcare-life-sciences": {
       "file": "industries/Healthcare-Life-Sciences.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "healthcare-life-sciences"
+      }
     },
     "industries-manufacturing": {
       "file": "industries/Manufacturing.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "manufacturing"
+      }
     },
     "industries-retail": {
       "file": "industries/Retail.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "retail"
+      }
     },
     "industries-telecom": {
       "file": "industries/Telecom.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "industry": "telecom"
+      }
     },
     "web-applications": {
       "file": "services/Application-Development/Web applications.html",
       "scripts": [
         {
+          "key": "blog-content",
+          "timing": "head"
+        },
+        {
+          "key": "home-blog-cards",
+          "timing": "head"
+        },
+        {
           "key": "master",
           "timing": "head"
         },
         {
           "key": "site-appearance",
           "timing": "defer"
+        },
+        {
+          "key": "home-blog-cms",
+          "timing": "defer"
         }
-      ]
+      ],
+      "blogSection": {
+        "service": "application-development"
+      }
     }
   },
   "footer_template": "src/partials/footer.html"

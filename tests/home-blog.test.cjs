@@ -4,6 +4,21 @@ const H=require('../src/blog/home-cards.js');
 const B=require('../src/blog/content.js');
 const post=(slug,extra={})=>({_id:slug,title:slug,slug:{current:slug},publishedAt:'2026-11-03T00:00:00Z',...extra});
 
+test('page filters apply before featured selection and slicing without unrelated fallbacks',()=>{
+  const posts=[post('unrelated',{featured:true}),post('cloud',{services:['cloud']}),post('both',{industries:['telecom','retail'],services:['cloud','ai-ml']}),post('telecom',{industries:['telecom']})];
+  assert.deepEqual(H.select(H.fromPosts(posts,{industry:'telecom'})).map(c=>c.post._id).sort(),['both','telecom']);
+  assert.deepEqual(H.select(H.fromPosts(posts,{service:'cloud'})).map(c=>c.post._id).sort(),['both','cloud']);
+  assert.deepEqual(H.select(H.fromPosts(posts,{industry:'telecom',service:'cloud'})).map(c=>c.post._id),['both']);
+  assert.deepEqual(H.select(H.fromPosts(posts,{service:'experience-design'})),[]);
+  assert.equal(H.render({featured:posts[0],latest:posts},{service:'experience-design'}),'');
+  const config={projectId:'example',dataset:'production',apiVersion:'2026-11-03',documentType:'blogPost'};
+  const q=H.query(config,{industry:'telecom',service:'cloud'});
+  assert.equal(q.params.$industry,'"telecom"');assert.equal(q.params.$service,'"cloud"');
+  assert.equal(q.params.query.split('$industry in industries').length-1,2);
+  assert.equal(q.params.query.split('$service in services').length-1,2);
+  assert.ok(!H.query(config).params.query.includes('$industry'));
+});
+
 test('centre card uses Featured and sides use newest other posts without duplicates',()=>{
   const old=post('featured',{featured:true,publishedAt:'2026-10-01T00:00:00Z'});
   const latest=post('newest',{publishedAt:'2026-11-03T08:00:00Z'}),second=post('second'),third=post('third',{publishedAt:'2026-11-02T00:00:00Z'});
@@ -37,11 +52,11 @@ test('cards preserve homepage layout, safe CMS content, and article routes',()=>
 
 test('browser refresh updates cards, keeps snapshot on failure, and retries safely',async()=>{
   const config={projectId:'example',dataset:'production',apiVersion:'2026-11-03',documentType:'blogPost',articleSlugs:['newest','second','third']};
-  let now=100000,payload={featured:null,latest:[post('newest'),post('second'),post('third')]},fail=false;
+  let now=100000,payload={featured:null,latest:['newest','second','third'].map(slug=>post(slug,{services:['cloud']}))},fail=false;
   const listeners={},requests=[];
   const grid={innerHTML:'<a data-home-blog-card>Previous snapshot</a>',dataset:{},setAttribute(){},querySelector(){return this.innerHTML.includes('data-home-blog-card')?{}:null;}};
   const status={textContent:''},retry={hidden:true,addEventListener:(type,fn)=>listeners.retry=fn};
-  const section={querySelector:selector=>({'[data-home-blog-grid]':grid,'[data-home-blog-status]':status,'[data-home-blog-retry]':retry}[selector])};
+  const section={dataset:{blogService:'cloud'},querySelector:selector=>({'[data-home-blog-grid]':grid,'[data-home-blog-status]':status,'[data-home-blog-retry]':retry}[selector])};
   const document={readyState:'complete',hidden:false,querySelector:()=>section,addEventListener:(type,fn)=>listeners[type]=fn};
   const context={document,window:{WissenBlog:B,WissenHomeBlog:H,addEventListener:(type,fn)=>listeners[type]=fn},URL,AbortSignal,
     Date:class extends Date{static now(){return now;}},fetch:async(url,options)=>{
@@ -56,14 +71,16 @@ test('browser refresh updates cards, keeps snapshot on failure, and retries safe
   assert.equal(requests[0].options.credentials,'same-origin');
   assert.equal(requests[1].options.credentials,'omit');
   assert.equal(new URL(requests[1].url).hostname,'example.apicdn.sanity.io');
+  assert.equal(new URL(requests[1].url).searchParams.get('$service'),'"cloud"');
   assert.equal(requests[1].options.method,'GET');
   assert.equal(requests[1].options.redirect,'error');
   assert.ok(grid.innerHTML.includes('href="blogs/newest/"'));
   assert.equal(retry.hidden,true);
   assert.equal(status.textContent,'');
-  payload={featured:null,latest:[post('just-published')]};now+=61000;listeners.focus();await settle();
+  payload={featured:post('unrelated-featured',{featured:true}),latest:[post('just-published',{services:['cloud']}),post('unrelated')]};now+=61000;listeners.focus();await settle();
   assert.equal(grid.dataset.cardCount,'1');
   assert.ok(grid.innerHTML.includes('just-published'));
+  assert.ok(!grid.innerHTML.includes('unrelated'));
   assert.ok(!grid.innerHTML.includes('slug=second'));
   const previous=grid.innerHTML;
   fail=true;now+=61000;listeners.focus();await settle();
@@ -73,5 +90,5 @@ test('browser refresh updates cards, keeps snapshot on failure, and retries safe
   assert.equal(grid.innerHTML,'');
   assert.equal(grid.dataset.cardCount,'0');
   assert.equal(retry.hidden,true);
-  assert.match(status.textContent,/Check back soon/);
+  assert.match(status.textContent,/Explore all blogs/);
 });

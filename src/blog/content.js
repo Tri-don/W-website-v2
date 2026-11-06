@@ -219,7 +219,7 @@
   }
   const imageProjection=`{alt,caption,credit,crop,hotspot,asset->{url}}`;
   const cardProjection=`{_id,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
-  const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
+  const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,industries,services,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
   const filter=`_type == $type && defined(slug.current) && dateTime(coalesce(publishedAt,_createdAt)) <= dateTime(now())`;
   function endpoint(config,cdn=false) {
     if(!config||typeof config.projectId!=='string'||typeof config.dataset!=='string'||typeof config.apiVersion!=='string'||!/^[a-z0-9]+$/.test(config.projectId)||!/^[a-z0-9][a-z0-9_-]*$/.test(config.dataset)||!/^\d{4}-\d{2}-\d{2}$/.test(config.apiVersion))throw new Error('Invalid Sanity configuration');

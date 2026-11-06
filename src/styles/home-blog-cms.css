@@ -1,4 +1,4 @@
-/* Apply this adapter to the homepage only while the section is under review. */
+/* Shared homepage card layout, including filtered industry and service sections. */
 .wb-home-cms .wb-category { min-width: 0; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .wb-home-cms .wb-card-top .wb-category { max-width: calc(100% - 48px); }
 .wb-home-cms .wb-card h3 { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 3; overflow: hidden; overflow-wrap: anywhere; }

@@ -223,7 +223,7 @@ modules["blog-content"] = function(){
   }
   const imageProjection=`{alt,caption,credit,crop,hotspot,asset->{url}}`;
   const cardProjection=`{_id,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
-  const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
+  const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,industries,services,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
   const filter=`_type == $type && defined(slug.current) && dateTime(coalesce(publishedAt,_createdAt)) <= dateTime(now())`;
   function endpoint(config,cdn=false) {
     if(!config||typeof config.projectId!=='string'||typeof config.dataset!=='string'||typeof config.apiVersion!=='string'||!/^[a-z0-9]+$/.test(config.projectId)||!/^[a-z0-9][a-z0-9_-]*$/.test(config.dataset)||!/^\d{4}-\d{2}-\d{2}$/.test(config.apiVersion))throw new Error('Invalid Sanity configuration');
@@ -1810,7 +1810,7 @@ modules["insights-cms"] = function(){
 
 };
 modules["home-blog-cards"] = function(){
-/* Homepage card adapter: shared by the live page and the static build. */
+/* Shared blog section: the same selection and cards in the browser and static build. */
 (function(root,factory){
   if(typeof module==='object'&&module.exports)module.exports=factory(require('./content.js'));
   else root.WissenHomeBlog=factory(root.WissenBlog);
@@ -1819,18 +1819,25 @@ modules["home-blog-cards"] = function(){
   const usable=p=>p&&p.title&&B.validSlug(B.slug(p));
   const arrow='<span class="wb-arrow" aria-hidden="true"><svg class="ui-arrow-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M7 7h10v10"/></svg></span>';
   const polygons='0.1666667,0.0176737 0.3693135,0.4680000 -0.0359802,0.4680000|0.6166667,0.0176737 0.8193135,0.4680000 0.4140198,0.4680000|0.6390198,0.0000000 1.0443135,0.0000000 0.8416667,0.4503263|-0.0359802,0.5000000 0.3693135,0.5000000 0.1666667,0.9503263|0.4140198,0.5000000 0.8193135,0.5000000 0.6166667,0.9503263|0.3916667,0.5176737 0.5943135,0.9680000 0.1890198,0.9680000|-0.2609802,0.0000000 0.1443135,0.0000000 -0.0583333,0.4503263';
-  function select(data){
+  function matches(post,filters={}){
+    return (!filters.industry||(Array.isArray(post.industries)&&post.industries.includes(filters.industry)))&&
+      (!filters.service||(Array.isArray(post.services)&&post.services.includes(filters.service)));
+  }
+  function emptyMessage(filters={}){
+    return filters.industry||filters.service?'Articles for this area are on their way. Explore all blogs in Insights.':'New perspectives are on their way. Check back soon.';
+  }
+  function select(data,filters={}){
     const seen=new Set(),latest=(data.latest||[]).filter(p=>{
-      if(!usable(p)||seen.has(B.slug(p)))return false;
+      if(!usable(p)||!matches(p,filters)||seen.has(B.slug(p)))return false;
       seen.add(B.slug(p));return true;
     });
-    const featured=usable(data.featured)?data.featured:latest[0];
+    const featured=usable(data.featured)&&matches(data.featured,filters)?data.featured:latest[0];
     if(!featured)return [];
     const sides=latest.filter(p=>B.slug(p)!==B.slug(featured)).slice(0,2);
     return [...sides.slice(0,1).map(post=>({post,featured:false})),{post:featured,featured:true},...sides.slice(1).map(post=>({post,featured:false}))];
   }
-  function fromPosts(posts){
-    const latest=posts.filter(usable).slice().sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||'')||String(a._id).localeCompare(String(b._id)));
+  function fromPosts(posts,filters={}){
+    const latest=posts.filter(p=>usable(p)&&matches(p,filters)).slice().sort((a,b)=>(b.publishedAt||'').localeCompare(a.publishedAt||'')||String(a._id).localeCompare(String(b._id)));
     return {featured:latest.find(p=>p.featured)||null,latest:latest.slice(0,3)};
   }
   function photo(post){
@@ -1842,32 +1849,35 @@ modules["home-blog-cards"] = function(){
     return Number.isNaN(date.getTime())?'':`<time class="wb-home-date" datetime="${B.esc(post.publishedAt)}">${B.esc(date.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric',timeZone:'UTC'}))}</time>`;
   }
   function render(data,options={}){
-    return select(data).map(({post,featured})=>{
+    return select(data,options).map(({post,featured})=>{
       const slug=B.slug(post),href=B.articleHref(post,options);
       const category=`<span class="wb-category">${B.esc(post.categories?.[0]?.title||'Blog')}</span>`;
       const title=`<h3 id="home-blog-${slug}" data-wissen-type="card-title">${B.esc(post.title)}</h3>`;
       return `<a class="wb-card ${featured?'wb-feature':'wb-standard'}" data-home-blog-card data-blog-slug="${B.esc(slug)}" href="${B.esc(href)}" aria-labelledby="home-blog-${slug}">${featured?`<div class="wb-feature-photo"><svg class="wb-mask-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><clipPath id="wb-home-cms-mask" clipPathUnits="objectBoundingBox">${polygons.split('|').map(points=>`<polygon points="${points}"/>`).join('')}</clipPath></defs></svg><div class="wb-mask-photo">${photo(post)}</div></div><div class="wb-feature-copy">${category}${title}${published(post)}${arrow}</div>`:`<div class="wb-card-top">${category}${arrow}</div>${title}${published(post)}<div class="wb-photo-frame">${photo(post)}</div>`}</a>`;
     }).join('\n');
   }
-  function query(config){
-    const projection='{_id,title,slug,featured,"publishedAt":coalesce(publishedAt,_createdAt),mainImage{alt,crop,hotspot,asset->{url}},categories[]->{title}}';
-    const filter=`${B.filter} && defined(title) && count(body) > 0`;
+  function query(config,filters={}){
+    const projection='{_id,title,slug,featured,industries,services,"publishedAt":coalesce(publishedAt,_createdAt),mainImage{alt,crop,hotspot,asset->{url}},categories[]->{title}}';
+    const filter=`${B.filter} && defined(title) && count(body) > 0${filters.industry?' && $industry in industries':''}${filters.service?' && $service in services':''}`;
     const order=' | order(coalesce(publishedAt,_createdAt) desc, _id asc)';
     return {url:B.endpoint(config,true),params:{
       query:`{"featured":*[${filter} && featured == true]${order}[0]${projection},"latest":*[${filter}]${order}[0...3]${projection}}`,
-      perspective:'published','$type':JSON.stringify(config.documentType)
+      perspective:'published','$type':JSON.stringify(config.documentType),
+      ...(filters.industry?{'$industry':JSON.stringify(filters.industry)}:{}),
+      ...(filters.service?{'$service':JSON.stringify(filters.service)}:{})
     }};
   }
-  return {select,fromPosts,render:(...args)=>B.localHtml(render(...args)),query};
+  return {select,fromPosts,matches,emptyMessage,render:(...args)=>B.localHtml(render(...args)),query};
 });
 
 };
 modules["home-blog-cms"] = function(){
-/* Homepage only. Reuse the existing card design with public, published CMS data. */
+/* Shared blog sections, optionally restricted to the page's industry or service. */
 (() => {
   function init(){
     const section=document.querySelector('[data-home-blog]'),H=window.WissenHomeBlog;
     if(!section||!H)return;
+    const filters={industry:section.dataset?.blogIndustry||'',service:section.dataset?.blogService||''};
     const grid=section.querySelector('[data-home-blog-grid]'),status=section.querySelector('[data-home-blog-status]'),retry=section.querySelector('[data-home-blog-retry]');
     let config,busy=false,refreshedAt=0,signature='';
     async function load(){
@@ -1881,7 +1891,7 @@ modules["home-blog-cms"] = function(){
           if(!res.ok)throw new Error('Blog settings unavailable');
           config=await res.json();
         }
-        const q=H.query(config),url=new URL(q.url);
+        const q=H.query(config,filters),url=new URL(q.url);
         Object.entries(q.params).forEach(([key,value])=>url.searchParams.set(key,value));
         const res=await fetch(url,{method:'GET',credentials:'omit',redirect:'error',signal:AbortSignal.timeout(15000)});
         if(!res.ok)throw new Error('Blog articles unavailable');
@@ -1889,11 +1899,11 @@ modules["home-blog-cms"] = function(){
         if(!result||!Array.isArray(result.latest))throw new Error('Invalid blog response');
         const next=JSON.stringify(result);
         if(next!==signature){
-          grid.innerHTML=H.render(result,{articleSlugs:config.articleSlugs});
-          grid.dataset.cardCount=String(H.select(result).length);
+          grid.innerHTML=H.render(result,{...filters,articleSlugs:config.articleSlugs});
+          grid.dataset.cardCount=String(H.select(result,filters).length);
           signature=next;
         }
-        status.textContent=hasCards()?'':'New perspectives are on their way. Check back soon.';
+        status.textContent=hasCards()?'':H.emptyMessage(filters);
         refreshedAt=Date.now();
       } catch {
         status.textContent=hasCards()?'Showing available articles. Updates could not be loaded.':'Articles could not be loaded. Please try again.';
@@ -1912,7 +1922,7 @@ modules["home-blog-cms"] = function(){
 })();
 
 };
-const page = {"about-us":{"file":"About-Us.html","scripts":[{"key":"master","timing":"head"},{"key":"about-v2","timing":"defer"},{"key":"about-scroll","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"application-development":{"file":"services/Application-Development.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"autonomous-operations":{"file":"accelerators/Autonomous-Operations.html","scripts":[{"key":"master","timing":"head"},{"key":"autonomous-operations","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"capital-markets-technology":{"file":"industries/BFSI/Capital-Markets-Technology.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"career":{"file":"Career.html","scripts":[{"key":"master","timing":"defer"},{"key":"career","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"contact-us":{"file":"Contact-Us.html","scripts":[{"key":"master","timing":"defer"},{"key":"contact-us","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"index":{"file":"index.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-difference-centering","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}]},"industries-bfsi":{"file":"industries/BFSI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"insights":{"file":"Insights.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"defer"},{"key":"insights-page","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"insights-cms","timing":"defer"}]},"responsible-privacy-preserving-financial-ai":{"file":"industries/BFSI/Responsible-Privacy-Preserving-Financial-AI.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"risk-regulatory-compliance-engineering":{"file":"industries/BFSI/Risk-Regulatory-Compliance-Engineering.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"services-ai-ml":{"file":"services/AI & ML/AI applications.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"wealth-asset-management-data-infrastructure":{"file":"industries/BFSI/Wealth-Asset-Management-Data-Infrastructure.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"blog-v3":{"file":"insights/Blog.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"blog-page","timing":"defer"}]},"agentic-data-platforms":{"file":"services/Agentic-Data-Platforms.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"cloud":{"file":"services/Cloud.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"experience-design":{"file":"services/Experience-Design.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"intelligent-automation":{"file":"services/Intelligent-Automation.html","scripts":[{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"industries-energy-commodities":{"file":"industries/Energy-Commodities.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"industries-healthcare-life-sciences":{"file":"industries/Healthcare-Life-Sciences.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"industries-manufacturing":{"file":"industries/Manufacturing.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"industries-retail":{"file":"industries/Retail.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"industries-telecom":{"file":"industries/Telecom.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]},"web-applications":{"file":"services/Application-Development/Web applications.html","scripts":[{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"}]}};
+const page = {"about-us":{"file":"About-Us.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"about-v2","timing":"defer"},{"key":"about-scroll","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{}},"application-development":{"file":"services/Application-Development.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"service":"application-development"}},"autonomous-operations":{"file":"accelerators/Autonomous-Operations.html","scripts":[{"key":"master","timing":"head"},{"key":"autonomous-operations","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"capital-markets-technology":{"file":"industries/BFSI/Capital-Markets-Technology.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"bfsi-fintech"}},"career":{"file":"Career.html","scripts":[{"key":"master","timing":"defer"},{"key":"career","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"contact-us":{"file":"Contact-Us.html","scripts":[{"key":"master","timing":"defer"},{"key":"contact-us","timing":"defer"},{"key":"site-appearance","timing":"defer"}]},"index":{"file":"index.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-difference-centering","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{}},"industries-bfsi":{"file":"industries/BFSI.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"bfsi-fintech"}},"insights":{"file":"Insights.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"defer"},{"key":"insights-page","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"insights-cms","timing":"defer"}]},"responsible-privacy-preserving-financial-ai":{"file":"industries/BFSI/Responsible-Privacy-Preserving-Financial-AI.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"bfsi-fintech"}},"risk-regulatory-compliance-engineering":{"file":"industries/BFSI/Risk-Regulatory-Compliance-Engineering.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"bfsi-fintech"}},"services-ai-ml":{"file":"services/AI & ML/AI applications.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"service":"ai-ml"}},"wealth-asset-management-data-infrastructure":{"file":"industries/BFSI/Wealth-Asset-Management-Data-Infrastructure.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"bfsi-fintech"}},"blog-v3":{"file":"insights/Blog.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"blog-page","timing":"defer"}]},"agentic-data-platforms":{"file":"services/Agentic-Data-Platforms.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"service":"agentic-data-platforms"}},"cloud":{"file":"services/Cloud.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"service":"cloud"}},"experience-design":{"file":"services/Experience-Design.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"service":"experience-design"}},"intelligent-automation":{"file":"services/Intelligent-Automation.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"application-development","timing":"defer"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"service":"intelligent-automation"}},"industries-energy-commodities":{"file":"industries/Energy-Commodities.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"energy-commodities"}},"industries-healthcare-life-sciences":{"file":"industries/Healthcare-Life-Sciences.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"healthcare-life-sciences"}},"industries-manufacturing":{"file":"industries/Manufacturing.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"manufacturing"}},"industries-retail":{"file":"industries/Retail.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"retail"}},"industries-telecom":{"file":"industries/Telecom.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"industry":"telecom"}},"web-applications":{"file":"services/Application-Development/Web applications.html","scripts":[{"key":"blog-content","timing":"head"},{"key":"home-blog-cards","timing":"head"},{"key":"master","timing":"head"},{"key":"site-appearance","timing":"defer"},{"key":"home-blog-cms","timing":"defer"}],"blogSection":{"service":"application-development"}}};
 const config = page[document.documentElement.dataset.wissenPage];
 if(!config)return;
 const delayed=[];

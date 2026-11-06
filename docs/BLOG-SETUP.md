@@ -16,7 +16,7 @@ The newest published post marked Featured occupies the centre card. If none is f
 
 The shared adapter in `src/blog/home-cards.js` renders both the build-time snapshot and live CMS content. `src/scripts/home-blog-cms.js` refreshes published content on page load and when returning to the browser after one minute. Preview authentication is retained for same-site settings only; requests to Sanity omit credentials. Loading, empty and retry states are included. The build snapshot remains usable when a live request fails. Images without a cover use a decorative brand motif.
 
-This adapter is enabled only for `index.html`. Other webpages and homepage variants retain their existing sections until this layout is approved.
+This adapter is enabled on the homepage, About Us and all current industry and service pages. Industry and service sections filter by the matching CMS tags; see the page-tagging instructions below.
 
 ## Insights Blogs tab
 
@@ -88,3 +88,11 @@ The static generator uses the optional social sharing image, SEO title/descripti
 | `sanity/schemaTypes/blog.js` | Local Studio content model |
 
 Edit source modules, rebuild the shared bundles and regenerate the preview when changing the template. Keep the source and generated website together in the existing Git repository.
+# Blog sections across the website
+
+The homepage card section is shared by About Us and all current industry and service pages. Homepage and About Us show the full published collection. Industry pages match `industries`; service pages match `services`. Both fields are controlled multi-select tags in **Blog post → Publishing & discovery** in Sanity. Select the relevant names and publish the post to include it on those pages. A post can belong to several industries and services. General topic Tags and Categories do not control page placement.
+
+BFSI subpages use the BFSI & FinTech tag. Web applications uses Application Development; AI applications uses AI & ML. Untagged posts remain visible in general listings. Filtered sections show an empty message when no posts match; they never substitute unrelated posts.
+
+Page filters are recorded in `src/site-manifest.json` under each page's `blogSection` and on the section's `data-blog-industry` / `data-blog-service` attributes. Keep both in sync when adding pages. Both the static build and browser refresh apply those filters before choosing the featured centre card and two latest other posts. All cards link to the internal blog pages; View all blogs opens the Insights blog listing.
+

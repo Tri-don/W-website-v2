@@ -97,7 +97,7 @@ test('complete static export works offline with nested pages, archive and articl
     run(process.execPath,['-e',`const Blog=require('./build_blogs.cjs');
       const sample=require('./src/blog/layout-preview.json');
       Blog.config.privateToken='synthetic-private-marker';
-      Blog.fetchPublished=async()=>['first','second'].map(slug=>({...sample,_id:slug,title:'Offline '+slug,slug:{current:slug},publishedAt:'2020-01-01T00:00:00Z'}));
+      Blog.fetchPublished=async()=>['first','second'].map((slug,index)=>({...sample,_id:slug,title:'Offline '+slug,slug:{current:slug},publishedAt:'2020-01-01T00:00:00Z',industries:[index?'bfsi-fintech':'telecom'],services:[index?'application-development':'cloud']}));
       require('./scripts/build-static.cjs');`]);
     run(process.env.PYTHON||(process.platform==='win32'?'python':'python3'),['scripts/check-site.py','--dist']);
     const output=file=>fs.readFileSync(path.join(temp,'dist',file),'utf8');
@@ -111,6 +111,20 @@ test('complete static export works offline with nested pages, archive and articl
       assert.ok(!output('sitemap.xml').includes('https://example.test/site/'+legacy),legacy);
     }
     assert.ok(output('blogs/first/index.html').includes('href="../second/"'));
+    const section=file=>output(file).match(/<!-- SANITY_HOME_BLOGS_START -->[\s\S]*?<!-- SANITY_HOME_BLOGS_END -->/)[0];
+    assert.ok(section('services/Cloud.html').includes('href="../blogs/first/"'));
+    assert.ok(!section('services/Cloud.html').includes('blogs/second/'));
+    assert.ok(section('industries/BFSI/Capital-Markets-Technology.html').includes('href="../../blogs/second/"'));
+    assert.ok(!section('industries/BFSI/Capital-Markets-Technology.html').includes('blogs/first/'));
+    assert.ok(section('services/Experience-Design.html').includes('data-card-count="0"'));
+    assert.ok(!section('services/Experience-Design.html').includes('data-home-blog-card'));
+    for(const page of Object.values(JSON.parse(read('src/site-manifest.json')).pages).filter(p=>p.blogSection)){
+      const source=read(page.file);
+      assert.equal((source.match(/data-home-blog id=|data-home-blog data-blog-/g)||[]).length,1,page.file);
+      for(const [kind,value] of Object.entries(page.blogSection))assert.ok(source.includes(`data-blog-${kind}="${value}"`),page.file);
+      for(const key of ['blog-content','home-blog-cards','home-blog-cms'])assert.ok(page.scripts.some(s=>s.key===key),page.file);
+      assert.ok(source.match(/data-wissen-css="[^"]*\bhome-blog-cms\b/),page.file);
+    }
     assert.ok(output('sitemap.xml').includes('https://example.test/site/services/Application-Development.html'));
     assert.ok(!fs.existsSync(path.join(temp,'dist/docs')));
     assert.ok(!fs.existsSync(path.join(temp,'dist/Bin')));

@@ -332,11 +332,91 @@
         "description": "Specific topics, such as Generative AI, Cloud or Capital Markets."
       },
       {
+        "name": "industries",
+        "title": "Industry tags",
+        "type": "array",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "options": {
+          "list": [
+            {
+              "title": "BFSI & FinTech",
+              "value": "bfsi-fintech"
+            },
+            {
+              "title": "Telecom",
+              "value": "telecom"
+            },
+            {
+              "title": "Retail",
+              "value": "retail"
+            },
+            {
+              "title": "Manufacturing",
+              "value": "manufacturing"
+            },
+            {
+              "title": "Healthcare & Life Sciences",
+              "value": "healthcare-life-sciences"
+            },
+            {
+              "title": "Energy & Commodities",
+              "value": "energy-commodities"
+            }
+          ]
+        },
+        "description": "Select all relevant industries. Controls which website pages show this post. Leave empty to show only in general blog listings.",
+        "group": "publishing"
+      },
+      {
+        "name": "services",
+        "title": "Service tags",
+        "type": "array",
+        "of": [
+          {
+            "type": "string"
+          }
+        ],
+        "options": {
+          "list": [
+            {
+              "title": "Application Development",
+              "value": "application-development"
+            },
+            {
+              "title": "Agentic Data Platforms",
+              "value": "agentic-data-platforms"
+            },
+            {
+              "title": "Intelligent Automation",
+              "value": "intelligent-automation"
+            },
+            {
+              "title": "AI & ML",
+              "value": "ai-ml"
+            },
+            {
+              "title": "Cloud",
+              "value": "cloud"
+            },
+            {
+              "title": "Experience Design",
+              "value": "experience-design"
+            }
+          ]
+        },
+        "description": "Select all relevant services. Controls which website pages show this post. Leave empty to show only in general blog listings.",
+        "group": "publishing"
+      },
+      {
         "name": "featured",
         "title": "Featured article",
         "type": "boolean",
         "group": "publishing",
-        "description": "Marks the article for a future featured listing. The current Insights listing is not connected to this flag yet."
+        "description": "Prioritises this article in the centre card of matching blog sections on the homepage, About Us, industry and service pages."
       },
       {
         "name": "relatedArticles",
@@ -412,4 +492,3 @@
     ]
   }
 ]
-
