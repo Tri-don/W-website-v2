@@ -111,7 +111,7 @@ test('complete static export works offline with nested pages, archive and articl
       assert.ok(!output('sitemap.xml').includes('https://example.test/site/'+legacy),legacy);
     }
     assert.ok(output('blogs/first/index.html').includes('href="../second/"'));
-    const section=file=>output(file).match(/<!-- SANITY_HOME_BLOGS_START -->[\s\S]*?<!-- SANITY_HOME_BLOGS_END -->/)[0];
+    const section=file=>output(file).match(/<!-- CMS_HOME_BLOGS_START -->[\s\S]*?<!-- CMS_HOME_BLOGS_END -->/)[0];
     assert.ok(section('services/Cloud.html').includes('href="../blogs/first/"'));
     assert.ok(!section('services/Cloud.html').includes('blogs/second/'));
     assert.ok(section('industries/BFSI/Capital-Markets-Technology.html').includes('href="../../blogs/second/"'));

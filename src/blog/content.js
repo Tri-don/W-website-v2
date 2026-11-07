@@ -28,27 +28,27 @@
     if (/^(#|\/(?!\/)|assets\/)/.test(v)) return v;
     return '';
   }
-  function imageUrl(image, width = 1600) {
+  function imageUrl(image) {
     const raw = image?.asset?.url || image?.url || '';
     if (!safeUrl(raw)) return '';
-    // Local media and Sanity's image CDN are the only supported CMS image sources.
+    // Local media and the Wix image CDN are the only supported CMS image sources.
     if (/^\/?assets\/images\//.test(raw)) {
       try {
         const decoded=decodeURIComponent(raw);
         return /(?:^|\/)\.{1,2}(?:\/|$)|[\\\u0000-\u0020\u007f]/.test(decoded)?'':raw;
       } catch { return ''; }
     }
-    if (!raw.startsWith('https://cdn.sanity.io/images/')) return '';
-    const url = new URL(raw);
-    url.searchParams.set('w', String(width)); url.searchParams.set('auto', 'format');
-    url.searchParams.set('fit', 'max');
-    const c = image.crop;
-    const dims = /-(\d+)x(\d+)\.[a-z]+$/i.exec(url.pathname);
-    if (c && dims) {
-      const w = Number(dims[1]), h = Number(dims[2]);
-      url.searchParams.set('rect', [Math.round(w*(c.left||0)), Math.round(h*(c.top||0)), Math.max(1,Math.round(w*(1-(c.left||0)-(c.right||0)))), Math.max(1,Math.round(h*(1-(c.top||0)-(c.bottom||0))))].join(','));
-    }
-    return url.href;
+    const url = raw.startsWith('https://') ? new URL(raw) : null;
+    return url?.origin === 'https://static.wixstatic.com' && /^\/media\/[\w.~-]+(?:\/|$)/.test(url.pathname) ? url.href : '';
+  }
+  async function fetchIndex() {
+    const response = await fetch(sitePath('src/blog/index.json'), {
+      method:'GET', credentials:'same-origin', redirect:'error', signal:AbortSignal.timeout(15000)
+    });
+    if (!response.ok) throw new Error('Published blog index unavailable');
+    const posts = await response.json();
+    if (!Array.isArray(posts)) throw new Error('Invalid published blog index');
+    return posts;
   }
   const plain = blocks => (blocks || []).filter(b=>b._type==='block').map(b=>(b.children||[]).map(s=>s.text||'').join('')).join(' ');
   const slug = p => p?.slug?.current || '';
@@ -217,14 +217,6 @@
   function state(title, message, retry=false) {
     return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
   }
-  const imageProjection=`{alt,caption,credit,crop,hotspot,asset->{url}}`;
-  const cardProjection=`{_id,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
-  const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,industries,services,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
-  const filter=`_type == $type && defined(slug.current) && dateTime(coalesce(publishedAt,_createdAt)) <= dateTime(now())`;
-  function endpoint(config,cdn=false) {
-    if(!config||typeof config.projectId!=='string'||typeof config.dataset!=='string'||typeof config.apiVersion!=='string'||!/^[a-z0-9]+$/.test(config.projectId)||!/^[a-z0-9][a-z0-9_-]*$/.test(config.dataset)||!/^\d{4}-\d{2}-\d{2}$/.test(config.apiVersion))throw new Error('Invalid Sanity configuration');
-    return `https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`;
-  }
   function featuredInsights(posts, options={}) {
     const featured=posts.filter(p=>p.title&&validSlug(slug(p))).slice(0,3);
     if(!featured.length)return '<div class="ins-featured-empty"><p>New perspectives are on their way. Check back soon.</p></div>';
@@ -240,15 +232,5 @@
       return `<a class="ins-card ins-reveal" data-insights-blog-card data-blog-slug="${esc(slug(p))}" href="${esc(href)}">${cover?`<div class="ins-card-media"><img src="${esc(cover)}" alt="${esc(p.mainImage?.alt||'')}" loading="lazy" decoding="async"></div>`:''}<div class="ins-card-body"><span class="ins-card-meta">${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}${published?`<time class="ins-card-date" datetime="${esc(p.publishedAt)}">${published}</time>`:''}<div class="ins-card-bottom"><span class="ins-card-read">Read article</span><span class="ins-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div></div></a>`;
     }).join('\n');
   }
-  function insightsQuery(config, page=0) {
-    const start=Math.max(0,Math.floor(Number(page)||0))*12;
-    return {url:endpoint(config,true),params:{
-      query:`*[${filter} && defined(title) && count(body) > 0] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[${start}...${start+13}]${cardProjection}`,
-      perspective:'published','$type':JSON.stringify(config.documentType)
-    }};
-  }
-  function query(config, params={}, cdn=true) {
-    return { url:endpoint(config,cdn), params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
-  }
-  return {localHtml,sitePath,esc,safeUrl,imageUrl,plain,slug,validSlug,articleHref,bodyHtml,endpoint,render:(...args)=>localHtml(render(...args)),state:(...args)=>localHtml(state(...args)),query,projection,filter,shareLinks,selectRelated,insightCards:(...args)=>localHtml(insightCards(...args)),insightsQuery,featuredInsights:(...args)=>localHtml(featuredInsights(...args))};
+  return {localHtml,sitePath,esc,safeUrl,imageUrl,plain,slug,validSlug,articleHref,bodyHtml,fetchIndex,render:(...args)=>localHtml(render(...args)),state:(...args)=>localHtml(state(...args)),shareLinks,selectRelated,insightCards:(...args)=>localHtml(insightCards(...args)),featuredInsights:(...args)=>localHtml(featuredInsights(...args))};
 });

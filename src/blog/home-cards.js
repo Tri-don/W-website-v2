@@ -44,16 +44,5 @@
       return `<a class="wb-card ${featured?'wb-feature':'wb-standard'}" data-home-blog-card data-blog-slug="${B.esc(slug)}" href="${B.esc(href)}" aria-labelledby="home-blog-${slug}">${featured?`<div class="wb-feature-photo"><svg class="wb-mask-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><clipPath id="wb-home-cms-mask" clipPathUnits="objectBoundingBox">${polygons.split('|').map(points=>`<polygon points="${points}"/>`).join('')}</clipPath></defs></svg><div class="wb-mask-photo">${photo(post)}</div></div><div class="wb-feature-copy">${category}${title}${published(post)}${arrow}</div>`:`<div class="wb-card-top">${category}${arrow}</div>${title}${published(post)}<div class="wb-photo-frame">${photo(post)}</div>`}</a>`;
     }).join('\n');
   }
-  function query(config,filters={}){
-    const projection='{_id,title,slug,featured,industries,services,"publishedAt":coalesce(publishedAt,_createdAt),mainImage{alt,crop,hotspot,asset->{url}},categories[]->{title}}';
-    const filter=`${B.filter} && defined(title) && count(body) > 0${filters.industry?' && $industry in industries':''}${filters.service?' && $service in services':''}`;
-    const order=' | order(coalesce(publishedAt,_createdAt) desc, _id asc)';
-    return {url:B.endpoint(config,true),params:{
-      query:`{"featured":*[${filter} && featured == true]${order}[0]${projection},"latest":*[${filter}]${order}[0...3]${projection}}`,
-      perspective:'published','$type':JSON.stringify(config.documentType),
-      ...(filters.industry?{'$industry':JSON.stringify(filters.industry)}:{}),
-      ...(filters.service?{'$service':JSON.stringify(filters.service)}:{})
-    }};
-  }
-  return {select,fromPosts,matches,emptyMessage,render:(...args)=>B.localHtml(render(...args)),query};
+  return {select,fromPosts,matches,emptyMessage,render:(...args)=>B.localHtml(render(...args))};
 });

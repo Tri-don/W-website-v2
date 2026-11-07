@@ -1,4 +1,4 @@
-/* Generate complete HTML from Sanity, without changing the existing framework. */
+/* Generate complete HTML from Wix CMS, without changing the existing framework. */
 'use strict';
 const fs=require('node:fs'), path=require('node:path');
 const B=require('./src/blog/content.js');
@@ -39,19 +39,7 @@ function page(post,related,preview=false,variant=config.templateVariant||'v3'){
   }
   return html;
 }
-async function fetchPublished(){
-  const all=[];let after='';
-  for(;;){
-    const url=new URL(B.endpoint(config));
-    const query=`*[${B.filter} && _id > $after] | order(_id asc)[0...50]${B.projection}`;
-    Object.entries({query,perspective:'published','$type':JSON.stringify(config.documentType),'$after':JSON.stringify(after)}).forEach(([k,v])=>url.searchParams.set(k,v));
-    const res=await fetch(url,{redirect:'error',signal:AbortSignal.timeout(30000),...(process.env.SANITY_API_READ_TOKEN?{headers:{Authorization:'Bearer '+process.env.SANITY_API_READ_TOKEN}}:{})});
-    if(!res.ok)throw new Error(`Sanity HTTP ${res.status}: ${await res.text()}`);
-    const {result}=await res.json();if(!Array.isArray(result))throw new Error('Invalid Sanity response');
-    all.push(...result);if(result.length<50)break;after=result.at(-1)._id;
-  }
-  return all.sort((a,b)=>b.publishedAt.localeCompare(a.publishedAt)||a._id.localeCompare(b._id));
-}
+const {fetchPublished}=require('./src/blog/wix.cjs');
 async function run(){
   if(process.argv.includes('--preview-only')){
     const sample=JSON.parse(read('src/blog/layout-preview.json'));
@@ -72,7 +60,7 @@ async function run(){
     if(/^blogs\/[a-z0-9]+(?:-[a-z0-9]+)*\/index\.html$/.test(file)&&!output.some(p=>p.file===file)&&fs.existsSync(path.join(root,file)))fs.unlinkSync(path.join(root,file));
   }
   write('src/blog/generated-pages.json',JSON.stringify(output.map(p=>p.file),null,2)+'\n');
-  console.log(`Built ${output.length} published article(s) from Sanity. No draft or future-dated content exported.`);
+  console.log(`Built ${output.length} published article(s) from Wix CMS. No draft or future-dated content exported.`);
 }
 if(require.main===module)run().catch(e=>{console.error(e.message);process.exitCode=1;});
 module.exports={page,fetchPublished,config};

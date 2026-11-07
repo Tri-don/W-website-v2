@@ -1,6 +1,6 @@
 # Wissen Technology — Dark website
 
-Static website with 23 active HTML pages, shared CSS/JavaScript and Sanity blog integration. Open `index.html` for a local layout preview; use an HTTP server for CMS-powered features.
+Static website with 23 active HTML pages, shared CSS/JavaScript and Wix CMS blog integration. Open `index.html` for a local layout preview; use an HTTP server for CMS-powered features.
 
 ## Project structure
 
@@ -33,7 +33,7 @@ Static website with 23 active HTML pages, shared CSS/JavaScript and Sanity blog 
 | `src/site-manifest.json` | Active pages and their module selection |
 | `src/page-routes.json` | Old root filenames mapped to their current paths |
 | `css/site.css`, `js/site.js` | Generated global bundles loaded by pages |
-| `sanity/`, `src/blog/` | CMS schemas, configuration and article templates |
+| `sanity/`, `src/blog/` | Archived Sanity schemas, active Wix adapter and article templates |
 | `scripts/`, `tests/` | Production build and checks |
 | `Bin/cleanup-2026-11-05/` | Recoverable local archive; excluded from Git and deployment |
 
@@ -53,17 +53,17 @@ The existing shared bundle structure is retained. Page guards preserve component
 
 ## Validation and production build
 
-- `npm run check`: local references, Linux filename casing, JavaScript syntax, CMS card behavior, redirects and a complete static export with local fixture content. The fixture export runs in a temporary folder without contacting Sanity.
+- `npm run check`: local references, Linux filename casing, JavaScript syntax, CMS card behavior, redirects and a complete static export with local fixture content. The fixture export runs in a temporary folder without contacting Wix.
 - `npm run build:assets`: rebuild shared local assets without fetching CMS content.
-- `npm run build`: fetch published Sanity posts and build portable output in `dist/`; requires CMS network access and Python 3.
+- `npm run build`: fetch published Wix posts and build portable output in `dist/`; requires CMS network access and Python 3.
 
-Hosting can serve the generated `dist/` folder. See [BLOG-SETUP.md](docs/BLOG-SETUP.md), [SANITY-PUBLISHING.md](docs/SANITY-PUBLISHING.md) and [VERCEL-SETUP.md](docs/VERCEL-SETUP.md) for CMS and deployment configuration. The contact form retains its placeholder submission behavior.
+Hosting can serve the generated `dist/` folder. See [WIX-CMS.md](docs/WIX-CMS.md) for CMS setup, Vercel deployment and rollback. The contact form retains its placeholder submission behavior.
 
 See [PAGE-STRUCTURE.md](docs/PAGE-STRUCTURE.md) for all moved pages and old-URL redirects.
 
 See [SECURITY-REVIEW.md](docs/SECURITY-REVIEW.md) for security changes, the deployment header policy, automated coverage and checks that still require live access. The export rejects unexpected media files and symlinks; generated bundles are copied explicitly.
 
-The contact form is deliberately disabled until a protected backend is configured. See [FORM-INTEGRATION.md](docs/FORM-INTEGRATION.md) for the required server-to-server delivery boundary and release checks. Public browser CMS requests use credential-free CDN reads. The generated public configuration lists exported article slugs so live cards preserve their stable static article URLs.
+The contact form is deliberately disabled until a protected backend is configured. See [FORM-INTEGRATION.md](docs/FORM-INTEGRATION.md) for the required server-to-server delivery boundary and release checks. Vercel reads Wix during the build with a server-side key. Browsers use only the generated public site and its same-origin article index.
 
 ## Git and archive policy
 

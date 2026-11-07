@@ -53,24 +53,24 @@ async function build(){
     let html=normalize(read(file),file);
     const sectionConfig=Object.values(manifest.pages).find(page=>page.file===file)?.blogSection;
     if(sectionConfig){
-      const marker=/<!-- SANITY_HOME_BLOGS_START -->[\s\S]*?<!-- SANITY_HOME_BLOGS_END -->/;
+      const marker=/<!-- CMS_HOME_BLOGS_START -->[\s\S]*?<!-- CMS_HOME_BLOGS_END -->/;
       if(!marker.test(html))throw new Error('CMS blog section not found: '+file);
       const data=HomeBlog.fromPosts(posts,sectionConfig),count=HomeBlog.select(data,sectionConfig).length;
-      html=html.replace(marker,()=>`<!-- SANITY_HOME_BLOGS_START -->
+      html=html.replace(marker,()=>`<!-- CMS_HOME_BLOGS_START -->
         <div class="wb-grid" data-home-blog-grid data-card-count="${count}" aria-busy="false">${rebaseHtml(HomeBlog.render(data,{...sectionConfig,static:true}),'index.html',file)}</div>
         <div class="wb-home-controls"><p class="wb-home-status" data-home-blog-status role="status">${count?'':HomeBlog.emptyMessage(sectionConfig)}</p><button class="wb-home-retry" type="button" data-home-blog-retry hidden>Try again</button></div>
-        <!-- SANITY_HOME_BLOGS_END -->`);
+        <!-- CMS_HOME_BLOGS_END -->`);
     }
     if(file===INSIGHTS){
-      const featuredMarker=/<!-- SANITY_FEATURED_START -->[\s\S]*?<!-- SANITY_FEATURED_END -->/;
+      const featuredMarker=/<!-- CMS_FEATURED_START -->[\s\S]*?<!-- CMS_FEATURED_END -->/;
       if(!featuredMarker.test(html))throw new Error('Insights featured panel not found');
-      html=html.replace(featuredMarker,()=>`<!-- SANITY_FEATURED_START -->${rebaseHtml(B.featuredInsights(posts,{static:true}),'index.html',file)}<!-- SANITY_FEATURED_END -->`);
-      const marker=/<!-- SANITY_BLOGS_START -->[\s\S]*?<!-- SANITY_BLOGS_END -->/;
+      html=html.replace(featuredMarker,()=>`<!-- CMS_FEATURED_START -->${rebaseHtml(B.featuredInsights(posts,{static:true}),'index.html',file)}<!-- CMS_FEATURED_END -->`);
+      const marker=/<!-- CMS_BLOGS_START -->[\s\S]*?<!-- CMS_BLOGS_END -->/;
       if(!marker.test(html))throw new Error('Insights blog panel not found');
-      html=html.replace(marker,()=>`<!-- SANITY_BLOGS_START -->
+      html=html.replace(marker,()=>`<!-- CMS_BLOGS_START -->
           <div class="ins-grid" data-insights-blog-grid aria-busy="false">${rebaseHtml(B.insightCards(posts.slice(0,12),{static:true}),'index.html',file)}</div>
-          <div class="ins-blog-controls"><p class="ins-blog-status" data-insights-blog-status role="status">${posts.length?'':'New perspectives are on their way. Check back soon.'}</p><button class="ins-blog-button" type="button" data-insights-blog-retry hidden>Try again</button><button class="ins-blog-button" type="button" data-insights-blog-more hidden>Load more articles</button></div>
-          <!-- SANITY_BLOGS_END -->`);
+          <div class="ins-blog-controls"><p class="ins-blog-status" data-insights-blog-status role="status">${posts.length?'':'New perspectives are on their way. Check back soon.'}</p><button class="ins-blog-button" type="button" data-insights-blog-retry hidden>Try again</button><button class="ins-blog-button" type="button" data-insights-blog-more${posts.length>12?'':' hidden'}>Load more articles</button></div>
+          <!-- CMS_BLOGS_END -->`);
     }
     write(file,html);
   }
@@ -90,14 +90,16 @@ async function build(){
   for(const page of pages)write(page.file,page.html);
   // This is a strict allowlist. Tokens, schema sources and environment files are never copied.
   const cfg=Blog.config;
-  write('src/blog/config.json',JSON.stringify({projectId:cfg.projectId,dataset:cfg.dataset,apiVersion:cfg.apiVersion,documentType:cfg.documentType,templateVariant:cfg.templateVariant,siteUrl:cfg.siteUrl||'',articleSlugs:posts.map(B.slug)},null,2));
+  write('src/blog/config.json',JSON.stringify({templateVariant:cfg.templateVariant,siteUrl:cfg.siteUrl||'',articleSlugs:posts.map(B.slug)},null,2));
+  write('src/blog/index.json',JSON.stringify(posts.map(({_id,title,slug,publishedAt,excerpt,featured,industries,services,mainImage,categories}) =>
+    ({_id,title,slug,publishedAt,excerpt,featured,industries,services,mainImage,categories}))));
   const base=cfg.siteUrl;
   if(base){
     const paths=[...files.filter(f=>f!=='index.html'),'','blogs/',...posts.filter(p=>!p.seo?.noIndex).map(p=>'blogs/'+B.slug(p)+'/')];
     write('sitemap.xml','<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+paths.map(p=>`<url><loc>${B.esc(new URL(p,base).href)}</loc></url>`).join('')+'</urlset>');
   }
   write('robots.txt','User-agent: *\nAllow: /\n'+(base?'Sitemap: '+new URL('sitemap.xml',base).href+'\n':''));
-  console.log(`Built dist: ${files.length} website pages, a blog archive and ${pages.length} Sanity articles using ${cfg.templateVariant||'v3'}.`);
+  console.log(`Built dist: ${files.length} website pages, a blog archive and ${pages.length} Wix CMS articles using ${cfg.templateVariant||'v3'}.`);
   if(!base)console.log('Set SITE_URL when deploying to generate canonical URLs and the sitemap.');
 }
 build().catch(error=>{console.error(error.message);process.exitCode=1;});

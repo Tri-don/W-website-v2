@@ -32,27 +32,27 @@ modules["blog-content"] = function(){
     if (/^(#|\/(?!\/)|assets\/)/.test(v)) return v;
     return '';
   }
-  function imageUrl(image, width = 1600) {
+  function imageUrl(image) {
     const raw = image?.asset?.url || image?.url || '';
     if (!safeUrl(raw)) return '';
-    // Local media and Sanity's image CDN are the only supported CMS image sources.
+    // Local media and the Wix image CDN are the only supported CMS image sources.
     if (/^\/?assets\/images\//.test(raw)) {
       try {
         const decoded=decodeURIComponent(raw);
         return /(?:^|\/)\.{1,2}(?:\/|$)|[\\\u0000-\u0020\u007f]/.test(decoded)?'':raw;
       } catch { return ''; }
     }
-    if (!raw.startsWith('https://cdn.sanity.io/images/')) return '';
-    const url = new URL(raw);
-    url.searchParams.set('w', String(width)); url.searchParams.set('auto', 'format');
-    url.searchParams.set('fit', 'max');
-    const c = image.crop;
-    const dims = /-(\d+)x(\d+)\.[a-z]+$/i.exec(url.pathname);
-    if (c && dims) {
-      const w = Number(dims[1]), h = Number(dims[2]);
-      url.searchParams.set('rect', [Math.round(w*(c.left||0)), Math.round(h*(c.top||0)), Math.max(1,Math.round(w*(1-(c.left||0)-(c.right||0)))), Math.max(1,Math.round(h*(1-(c.top||0)-(c.bottom||0))))].join(','));
-    }
-    return url.href;
+    const url = raw.startsWith('https://') ? new URL(raw) : null;
+    return url?.origin === 'https://static.wixstatic.com' && /^\/media\/[\w.~-]+(?:\/|$)/.test(url.pathname) ? url.href : '';
+  }
+  async function fetchIndex() {
+    const response = await fetch(sitePath('src/blog/index.json'), {
+      method:'GET', credentials:'same-origin', redirect:'error', signal:AbortSignal.timeout(15000)
+    });
+    if (!response.ok) throw new Error('Published blog index unavailable');
+    const posts = await response.json();
+    if (!Array.isArray(posts)) throw new Error('Invalid published blog index');
+    return posts;
   }
   const plain = blocks => (blocks || []).filter(b=>b._type==='block').map(b=>(b.children||[]).map(s=>s.text||'').join('')).join(' ');
   const slug = p => p?.slug?.current || '';
@@ -221,14 +221,6 @@ modules["blog-content"] = function(){
   function state(title, message, retry=false) {
     return `<section class="wb-hero wb-state" data-wissen-hero="true"><div class="wrap"><a class="wb-back" href="Insights.html">&larr; All insights</a><h1 data-wissen-type="hero-title">${esc(title)}</h1><p>${esc(message)}</p>${retry?'<button type="button" class="button primary" data-blog-retry>Try again</button>':''}</div></section>`;
   }
-  const imageProjection=`{alt,caption,credit,crop,hotspot,asset->{url}}`;
-  const cardProjection=`{_id,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,mainImage${imageProjection},categories[]->{_id,title}}`;
-  const projection=`{_id,_updatedAt,title,slug,"publishedAt":coalesce(publishedAt,_createdAt),excerpt,tags,industries,services,featured,seo{title,description,noIndex,image${imageProjection}},mainImage${imageProjection},author->{name,role,bio,image${imageProjection}},categories[]->{_id,title,slug},relatedArticles[]->${cardProjection},body[]{..., _type == "image" => {asset->{url},alt,caption,credit,crop,hotspot}}}`;
-  const filter=`_type == $type && defined(slug.current) && dateTime(coalesce(publishedAt,_createdAt)) <= dateTime(now())`;
-  function endpoint(config,cdn=false) {
-    if(!config||typeof config.projectId!=='string'||typeof config.dataset!=='string'||typeof config.apiVersion!=='string'||!/^[a-z0-9]+$/.test(config.projectId)||!/^[a-z0-9][a-z0-9_-]*$/.test(config.dataset)||!/^\d{4}-\d{2}-\d{2}$/.test(config.apiVersion))throw new Error('Invalid Sanity configuration');
-    return `https://${config.projectId}.${cdn?'apicdn':'api'}.sanity.io/v${config.apiVersion}/data/query/${config.dataset}`;
-  }
   function featuredInsights(posts, options={}) {
     const featured=posts.filter(p=>p.title&&validSlug(slug(p))).slice(0,3);
     if(!featured.length)return '<div class="ins-featured-empty"><p>New perspectives are on their way. Check back soon.</p></div>';
@@ -244,17 +236,7 @@ modules["blog-content"] = function(){
       return `<a class="ins-card ins-reveal" data-insights-blog-card data-blog-slug="${esc(slug(p))}" href="${esc(href)}">${cover?`<div class="ins-card-media"><img src="${esc(cover)}" alt="${esc(p.mainImage?.alt||'')}" loading="lazy" decoding="async"></div>`:''}<div class="ins-card-body"><span class="ins-card-meta">${esc(p.categories?.[0]?.title||'Blog')}</span><h3 data-wissen-type="card-title">${esc(p.title)}</h3>${p.excerpt?`<p data-wissen-type="card-body">${esc(p.excerpt)}</p>`:''}${published?`<time class="ins-card-date" datetime="${esc(p.publishedAt)}">${published}</time>`:''}<div class="ins-card-bottom"><span class="ins-card-read">Read article</span><span class="ins-card-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg></span></div></div></a>`;
     }).join('\n');
   }
-  function insightsQuery(config, page=0) {
-    const start=Math.max(0,Math.floor(Number(page)||0))*12;
-    return {url:endpoint(config,true),params:{
-      query:`*[${filter} && defined(title) && count(body) > 0] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[${start}...${start+13}]${cardProjection}`,
-      perspective:'published','$type':JSON.stringify(config.documentType)
-    }};
-  }
-  function query(config, params={}, cdn=true) {
-    return { url:endpoint(config,cdn), params: {query:`*[${filter} ${params.slug?'&& slug.current == $slug':''} ${params.excludeSlug?'&& slug.current != $excludeSlug':''}] | order(coalesce(publishedAt,_createdAt) desc, _id asc)[0...${params.slug?1:params.excludeSlug?3:4}]${projection}`,perspective:'published','$type':JSON.stringify(config.documentType),...(params.slug?{'$slug':JSON.stringify(params.slug)}:{}),...(params.excludeSlug?{'$excludeSlug':JSON.stringify(params.excludeSlug)}:{})} };
-  }
-  return {localHtml,sitePath,esc,safeUrl,imageUrl,plain,slug,validSlug,articleHref,bodyHtml,endpoint,render:(...args)=>localHtml(render(...args)),state:(...args)=>localHtml(state(...args)),query,projection,filter,shareLinks,selectRelated,insightCards:(...args)=>localHtml(insightCards(...args)),insightsQuery,featuredInsights:(...args)=>localHtml(featuredInsights(...args))};
+  return {localHtml,sitePath,esc,safeUrl,imageUrl,plain,slug,validSlug,articleHref,bodyHtml,fetchIndex,render:(...args)=>localHtml(render(...args)),state:(...args)=>localHtml(state(...args)),shareLinks,selectRelated,insightCards:(...args)=>localHtml(insightCards(...args)),featuredInsights:(...args)=>localHtml(featuredInsights(...args))};
 });
 
 };
@@ -1624,25 +1606,18 @@ modules["home-difference-centering"] = function(){
 
 };
 modules["blog-page"] = function(){
-/* Public, read-only Sanity queries. Tokens are deliberately never sent by this page. */
+/* Article interactions and compatibility for old query-string links. */
 (async () => {
   const root=document.querySelector('[data-blog-root]'); if(!root)return;
   const B=window.WissenBlog;
-  const variant=document.documentElement.dataset.blogVariant||'v1';
-  function enhance(config) {
+  function enhance() {
     const hero=root.querySelector('[data-wissen-hero]');
     if(hero){
       const measure=()=>document.body.style.setProperty('--wissen-hero-height',Math.max(0,hero.getBoundingClientRect().bottom-document.body.getBoundingClientRect().top)+'px');
       measure();
       if('ResizeObserver' in window)new ResizeObserver(measure).observe(hero);
     }
-    let canonical=document.querySelector('link[rel="canonical"]');
-    const requestedSlug=new URLSearchParams(location.search).get('slug');
-    if(!canonical&&B.validSlug(requestedSlug)&&Array.isArray(config?.articleSlugs)&&config.articleSlugs.includes(requestedSlug)){
-      canonical=document.createElement('link');canonical.rel='canonical';
-      canonical.href=new URL(B.sitePath(B.articleHref({slug:{current:requestedSlug}},config)),location.href).href;
-      document.head.append(canonical);
-    }
+    const canonical=document.querySelector('link[rel="canonical"]');
     const shareLocation=new URL(canonical?.href||location.href);shareLocation.hash='';
     const shareUrl=shareLocation.href, title=root.querySelector('#blog-title')?.textContent||document.title;
     const linksForSharing=B.shareLinks(title,shareUrl);
@@ -1698,39 +1673,18 @@ modules["blog-page"] = function(){
   if(root.dataset.blogStatic==='true'){enhance();return;}
   const params=new URLSearchParams(location.search), slug=params.get('slug');
   if(slug && !B.validSlug(slug)){root.innerHTML=B.state('Article not found.','Explore our insights for more perspectives.');root.setAttribute('aria-busy','false');return;}
-  async function fetchPosts(config, options) {
-    const q=B.query(config,options,true), url=new URL(q.url);
-    Object.entries(q.params).forEach(([k,v])=>url.searchParams.set(k,v));
-    const res=await fetch(url,{method:'GET',redirect:'error',signal:AbortSignal.timeout(15000),credentials:'omit'});
-    if(!res.ok)throw new Error('Sanity returned '+res.status);
-    const payload=await res.json();
-    if(!Array.isArray(payload.result))throw new Error('Invalid Sanity response');
-    return payload.result;
-  }
   async function load() {
     root.setAttribute('aria-busy','true');
     try {
-      const cfgResponse=await fetch(window.WissenBlog.sitePath('src/blog/config.json')); if(!cfgResponse.ok)throw new Error('Blog configuration unavailable');
-      const config=await cfgResponse.json();
-      const posts=await fetchPosts(config,slug?{slug}:{});
-      if(!posts.length) { root.innerHTML=B.state(slug?'Article not found.':'Our next perspective is on its way.',slug?'This article may have moved or is no longer published.':'New articles will appear here once published. Explore our insights in the meantime.'); return; }
-      const post=posts[0]; root.innerHTML=B.render(post,posts.slice(1),{url:location.href,variant,articleSlugs:config.articleSlugs});
-      document.title=(post.seo?.title||post.title)+' | Wissen Technology';
-      document.querySelector('meta[name="description"]')?.setAttribute('content',post.seo?.description||post.excerpt||'');
-      const robots=document.querySelector('meta[name="robots"]'); if(robots)robots.content='noindex,follow';
-      enhance(config);
-      if(slug){
-        // A related-content failure should never hide a successfully loaded article.
-        fetchPosts(config,{excludeSlug:slug}).then(related=>{
-          const template=document.createElement('template');
-          template.innerHTML=B.render(post,related,{url:location.href,variant,articleSlugs:config.articleSlugs});
-          const section=template.content.querySelector('.wb-related');
-          if(section){
-            const current=root.querySelector('.wb-related');
-            if(current)current.replaceWith(section);else root.append(section);
-          }
-        }).catch(error=>console.warn('Related articles unavailable:',error));
-      }
+      const response=await fetch(B.sitePath('src/blog/config.json'),{
+        method:'GET',credentials:'same-origin',redirect:'error',signal:AbortSignal.timeout(15000)
+      });
+      if(!response.ok)throw new Error('Blog configuration unavailable');
+      const {articleSlugs}=await response.json();
+      if(!Array.isArray(articleSlugs))throw new Error('Invalid blog configuration');
+      if(!slug){location.replace(B.sitePath('blogs/'));return;}
+      if(articleSlugs.includes(slug)){location.replace(B.sitePath('blogs/'+slug+'/')+location.hash);return;}
+      root.innerHTML=B.state('Article not found.','This article may have moved or is no longer published.');
     } catch(error) {
       console.error('Blog loading failed:',error);
       root.innerHTML=B.state("This article couldn't load.",'Please try again in a moment.',true);
@@ -1751,42 +1705,31 @@ modules["insights-cms"] = function(){
     const status=panel.querySelector('[data-insights-blog-status]');
     const more=panel.querySelector('[data-insights-blog-more]');
     const retry=panel.querySelector('[data-insights-blog-retry]');
-    let config, page=0, busy=false, refreshedAt=0, failedPage=0;
+    let page=0, busy=false, refreshedAt=0, failedPage=0;
     async function load(nextPage=0) {
       if(busy)return;
       busy=true;failedPage=nextPage;
       grid.setAttribute('aria-busy','true');more.disabled=true;retry.hidden=true;
       status.textContent=grid.querySelector('[data-insights-blog-card]')?'Updating articles…':'Loading articles…';
       try {
-        if(!config){
-          // Preserve same-site preview authentication; Sanity requests below still omit credentials.
-          const response=await fetch(window.WissenBlog.sitePath('src/blog/config.json'),{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
-          if(!response.ok)throw new Error('Configuration unavailable');
-          config=await response.json();
-        }
-        const q=B.insightsQuery(config,nextPage), url=new URL(q.url);
-        Object.entries(q.params).forEach(([key,value])=>url.searchParams.set(key,value));
-        const response=await fetch(url,{method:'GET',credentials:'omit',redirect:'error',signal:AbortSignal.timeout(15000)});
-        if(!response.ok)throw new Error('Articles unavailable');
-        const payload=await response.json();
-        if(!Array.isArray(payload.result))throw new Error('Invalid articles');
-        let posts=payload.result.slice(0,12);
+        const allPosts=await B.fetchIndex();
+        let posts=allPosts.slice(nextPage*12,(nextPage+1)*12);
         if(nextPage){
           const existing=new Set([...grid.querySelectorAll('[data-blog-slug]')].map(card=>card.dataset.blogSlug));
           posts=posts.filter(post=>!existing.has(B.slug(post)));
         }
-        const html=B.insightCards(posts,{articleSlugs:config.articleSlugs});
+        const html=B.insightCards(posts,{static:true});
         if(nextPage)grid.insertAdjacentHTML('beforeend',html);
         else {
           grid.innerHTML=html;
           const featured=document.querySelector('[data-insights-featured]');
           if(featured){
-            featured.innerHTML=B.featuredInsights(posts,{articleSlugs:config.articleSlugs});
+            featured.innerHTML=B.featuredInsights(posts,{static:true});
             document.dispatchEvent(new CustomEvent('insights:featured-updated'));
           }
         }
         page=nextPage;refreshedAt=Date.now();
-        more.hidden=payload.result.length<=12;
+        more.hidden=allPosts.length<=(nextPage+1)*12;
         status.textContent=grid.querySelector('[data-insights-blog-card]')?'':'New perspectives are on their way. Check back soon.';
         document.dispatchEvent(new CustomEvent('insights:blogs-updated'));
       } catch {
@@ -1802,7 +1745,8 @@ modules["insights-cms"] = function(){
     document.addEventListener('insights:tabchange',refresh);
     document.addEventListener('visibilitychange',refresh);
     window.addEventListener('focus',refresh);
-    load();
+    if(grid.getAttribute('aria-busy')!=='false')load();
+    else refreshedAt=Date.now();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
   else init();
@@ -1856,18 +1800,7 @@ modules["home-blog-cards"] = function(){
       return `<a class="wb-card ${featured?'wb-feature':'wb-standard'}" data-home-blog-card data-blog-slug="${B.esc(slug)}" href="${B.esc(href)}" aria-labelledby="home-blog-${slug}">${featured?`<div class="wb-feature-photo"><svg class="wb-mask-defs" width="0" height="0" aria-hidden="true" focusable="false"><defs><clipPath id="wb-home-cms-mask" clipPathUnits="objectBoundingBox">${polygons.split('|').map(points=>`<polygon points="${points}"/>`).join('')}</clipPath></defs></svg><div class="wb-mask-photo">${photo(post)}</div></div><div class="wb-feature-copy">${category}${title}${published(post)}${arrow}</div>`:`<div class="wb-card-top">${category}${arrow}</div>${title}${published(post)}<div class="wb-photo-frame">${photo(post)}</div>`}</a>`;
     }).join('\n');
   }
-  function query(config,filters={}){
-    const projection='{_id,title,slug,featured,industries,services,"publishedAt":coalesce(publishedAt,_createdAt),mainImage{alt,crop,hotspot,asset->{url}},categories[]->{title}}';
-    const filter=`${B.filter} && defined(title) && count(body) > 0${filters.industry?' && $industry in industries':''}${filters.service?' && $service in services':''}`;
-    const order=' | order(coalesce(publishedAt,_createdAt) desc, _id asc)';
-    return {url:B.endpoint(config,true),params:{
-      query:`{"featured":*[${filter} && featured == true]${order}[0]${projection},"latest":*[${filter}]${order}[0...3]${projection}}`,
-      perspective:'published','$type':JSON.stringify(config.documentType),
-      ...(filters.industry?{'$industry':JSON.stringify(filters.industry)}:{}),
-      ...(filters.service?{'$service':JSON.stringify(filters.service)}:{})
-    }};
-  }
-  return {select,fromPosts,matches,emptyMessage,render:(...args)=>B.localHtml(render(...args)),query};
+  return {select,fromPosts,matches,emptyMessage,render:(...args)=>B.localHtml(render(...args))};
 });
 
 };
@@ -1879,27 +1812,18 @@ modules["home-blog-cms"] = function(){
     if(!section||!H)return;
     const filters={industry:section.dataset?.blogIndustry||'',service:section.dataset?.blogService||''};
     const grid=section.querySelector('[data-home-blog-grid]'),status=section.querySelector('[data-home-blog-status]'),retry=section.querySelector('[data-home-blog-retry]');
-    let config,busy=false,refreshedAt=0,signature='';
+    const B=window.WissenBlog;
+    let busy=false,refreshedAt=0,signature='';
     async function load(){
       if(busy)return;
       busy=true;retry.hidden=true;grid.setAttribute('aria-busy','true');
       const hasCards=()=>Boolean(grid.querySelector('[data-home-blog-card]'));
       status.textContent=hasCards()?'':'Loading articles...';
       try {
-        if(!config){
-          const res=await fetch(window.WissenBlog.sitePath('src/blog/config.json'),{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
-          if(!res.ok)throw new Error('Blog settings unavailable');
-          config=await res.json();
-        }
-        const q=H.query(config,filters),url=new URL(q.url);
-        Object.entries(q.params).forEach(([key,value])=>url.searchParams.set(key,value));
-        const res=await fetch(url,{method:'GET',credentials:'omit',redirect:'error',signal:AbortSignal.timeout(15000)});
-        if(!res.ok)throw new Error('Blog articles unavailable');
-        const {result}=await res.json();
-        if(!result||!Array.isArray(result.latest))throw new Error('Invalid blog response');
+        const result=H.fromPosts(await B.fetchIndex(),filters);
         const next=JSON.stringify(result);
         if(next!==signature){
-          grid.innerHTML=H.render(result,{...filters,articleSlugs:config.articleSlugs});
+          grid.innerHTML=H.render(result,{...filters,static:true});
           grid.dataset.cardCount=String(H.select(result,filters).length);
           signature=next;
         }
@@ -1916,7 +1840,8 @@ modules["home-blog-cms"] = function(){
     retry.addEventListener('click',load);
     document.addEventListener('visibilitychange',refresh);
     window.addEventListener('focus',refresh);
-    load();
+    if(grid.getAttribute('aria-busy')!=='false')load();
+    else refreshedAt=Date.now();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

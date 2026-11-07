@@ -7,42 +7,31 @@
     const status=panel.querySelector('[data-insights-blog-status]');
     const more=panel.querySelector('[data-insights-blog-more]');
     const retry=panel.querySelector('[data-insights-blog-retry]');
-    let config, page=0, busy=false, refreshedAt=0, failedPage=0;
+    let page=0, busy=false, refreshedAt=0, failedPage=0;
     async function load(nextPage=0) {
       if(busy)return;
       busy=true;failedPage=nextPage;
       grid.setAttribute('aria-busy','true');more.disabled=true;retry.hidden=true;
       status.textContent=grid.querySelector('[data-insights-blog-card]')?'Updating articles…':'Loading articles…';
       try {
-        if(!config){
-          // Preserve same-site preview authentication; Sanity requests below still omit credentials.
-          const response=await fetch(window.WissenBlog.sitePath('src/blog/config.json'),{credentials:'same-origin',signal:AbortSignal.timeout(15000)});
-          if(!response.ok)throw new Error('Configuration unavailable');
-          config=await response.json();
-        }
-        const q=B.insightsQuery(config,nextPage), url=new URL(q.url);
-        Object.entries(q.params).forEach(([key,value])=>url.searchParams.set(key,value));
-        const response=await fetch(url,{method:'GET',credentials:'omit',redirect:'error',signal:AbortSignal.timeout(15000)});
-        if(!response.ok)throw new Error('Articles unavailable');
-        const payload=await response.json();
-        if(!Array.isArray(payload.result))throw new Error('Invalid articles');
-        let posts=payload.result.slice(0,12);
+        const allPosts=await B.fetchIndex();
+        let posts=allPosts.slice(nextPage*12,(nextPage+1)*12);
         if(nextPage){
           const existing=new Set([...grid.querySelectorAll('[data-blog-slug]')].map(card=>card.dataset.blogSlug));
           posts=posts.filter(post=>!existing.has(B.slug(post)));
         }
-        const html=B.insightCards(posts,{articleSlugs:config.articleSlugs});
+        const html=B.insightCards(posts,{static:true});
         if(nextPage)grid.insertAdjacentHTML('beforeend',html);
         else {
           grid.innerHTML=html;
           const featured=document.querySelector('[data-insights-featured]');
           if(featured){
-            featured.innerHTML=B.featuredInsights(posts,{articleSlugs:config.articleSlugs});
+            featured.innerHTML=B.featuredInsights(posts,{static:true});
             document.dispatchEvent(new CustomEvent('insights:featured-updated'));
           }
         }
         page=nextPage;refreshedAt=Date.now();
-        more.hidden=payload.result.length<=12;
+        more.hidden=allPosts.length<=(nextPage+1)*12;
         status.textContent=grid.querySelector('[data-insights-blog-card]')?'':'New perspectives are on their way. Check back soon.';
         document.dispatchEvent(new CustomEvent('insights:blogs-updated'));
       } catch {
@@ -58,7 +47,8 @@
     document.addEventListener('insights:tabchange',refresh);
     document.addEventListener('visibilitychange',refresh);
     window.addEventListener('focus',refresh);
-    load();
+    if(grid.getAttribute('aria-busy')!=='false')load();
+    else refreshedAt=Date.now();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);
   else init();

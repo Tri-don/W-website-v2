@@ -24,9 +24,9 @@ test('CMS text, attributes, captions and code are escaped in all renderers',()=>
 test('unsafe links, invalid URLs and unapproved image origins are rejected',()=>{
   for(const value of ['javascript:alert(1)','JaVaScRiPt:alert(1)','java\nscript:alert(1)','data:text/html,<script>alert(1)</script>','//evil.test/path','https://trusted.test@evil.test/','https://','mailto:test@example.test?body=%0d%0aBcc:evil@example.test'])assert.equal(B.safeUrl(value),'',value);
   for(const value of ['https://example.test/path?topic=ai#part','mailto:hello@example.test','#part','/assets/images/photo.jpg'])assert.equal(B.safeUrl(value),value);
-  for(const value of ['https://tracker.example.test/photo.jpg','http://cdn.sanity.io/images/x','https://cdn.sanity.io.evil.test/images/x','assets/images/../../private.json','assets/images/%2e%2e/private.json','assets/images/%5csecret.jpg'])assert.equal(B.imageUrl({url:value}),'',value);
+  for(const value of ['https://tracker.example.test/photo.jpg','http://cdn.sanity.io/images/x','https://static.wixstatic.com.evil.test/media/x.jpg','https://cdn.sanity.io/images/old.jpg','assets/images/../../private.json','assets/images/%2e%2e/private.json','assets/images/%5csecret.jpg'])assert.equal(B.imageUrl({url:value}),'',value);
   assert.equal(B.imageUrl({url:'assets/images/home/brain-poster.jpg'}),'assets/images/home/brain-poster.jpg');
-  assert.ok(B.imageUrl({url:'https://cdn.sanity.io/images/example/production/image-20x20.jpg'}).startsWith('https://cdn.sanity.io/images/'));
+  assert.equal(B.imageUrl({url:'https://static.wixstatic.com/media/test~mv2.jpg'}),'https://static.wixstatic.com/media/test~mv2.jpg');
   const block={_type:'block',markDefs:[{_key:'link',_type:'link',href:'javascript:alert(1)'}],children:[{_type:'span',text:'Article',marks:['link']}]};
   assert.equal(B.bodyHtml([block]).html,'<p>Article</p>');
   block.markDefs[0].href='https://example.test/';block.markDefs[0].openInNewTab=true;
@@ -41,11 +41,7 @@ test('rich-text tag allowlists ignore inherited object keys',()=>{
 
 test('article query parameters cannot change the query or escape the generated path',()=>{
   for(const value of ['../private','%2e%2e/private','article/../../private',['article'],null])assert.equal(B.validSlug(value),false);
-  const evil='x"] | *[_type == "secret"';
-  const q=B.query(Blog.config,{slug:evil});
-  assert.ok(!q.params.query.includes(evil));
-  assert.equal(q.params.$slug,JSON.stringify(evil));
-  assert.throws(()=>B.endpoint({...Blog.config,projectId:'evil.test/?'}),/Invalid Sanity configuration/);
+  assert.equal(B.articleHref({slug:{current:'x\"] | *[_type == \"secret\"'}}),'#');
 });
 
 test('static metadata preserves literal dollar replacement text and contains inert JSON-LD',()=>{
@@ -83,26 +79,27 @@ test('deployment policy blocks scripts, frames and form posts outside the approv
   assert.ok(!policy.includes("'unsafe-eval'"));
   assert.ok(!policy.match(/script-src[^;]*unsafe-inline/));
   assert.equal(headers['X-Frame-Options'],'DENY');
-  assert.ok(!policy.includes(new URL(B.endpoint(Blog.config)).origin));
-  assert.ok(policy.includes(new URL(B.endpoint(Blog.config,true)).origin));
+  assert.ok(policy.split('; ').includes("connect-src 'self'"));
+  assert.ok(policy.split('; ').includes("img-src 'self' data: https://static.wixstatic.com"));
   const form=fs.readFileSync(path.join(__dirname,'../Contact-Us.html'),'utf8').match(/<form\b[^>]*>/)[0];
   assert.ok(form.includes('method="post"'));
 });
 
-test('public browser queries use credential-free CDN reads and never mutation endpoints',()=>{
-  for(const q of [B.query(Blog.config),B.insightsQuery(Blog.config),H.query(Blog.config)]){
-    const url=new URL(q.url);
-    assert.equal(url.hostname,Blog.config.projectId+'.apicdn.sanity.io');
-    assert.ok(url.pathname.includes('/data/query/'));
-    assert.equal(q.params.perspective,'published');
-  }
-  assert.equal(new URL(B.endpoint(Blog.config)).hostname,Blog.config.projectId+'.api.sanity.io');
-  for(const name of ['home-blog-cms.js','insights-cms.js','blog-page.js']){
-    const source=fs.readFileSync(path.join(__dirname,'../src/scripts',name),'utf8');
-    assert.ok(source.includes("method:'GET'"));
-    assert.ok(source.includes("credentials:'omit'"));
-    assert.ok(source.includes("redirect:'error'"));
-    assert.ok(!/Authorization|Bearer\s|\/data\/mutate\/|method\s*:\s*['"](?:POST|PUT|PATCH|DELETE)/i.test(source));
+test('browser reads only the same-origin published index without sending Wix credentials',async()=>{
+  const requests=[];
+  const context={document:{documentElement:{dataset:{wissenRoot:'../../'}}},AbortSignal,fetch:async(url,options)=>{
+    requests.push({url,options});
+    return {ok:true,json:async()=>[]};
+  }};
+  vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../src/blog/content.js'),'utf8'),context);
+  await context.WissenBlog.fetchIndex();
+  assert.equal(requests[0].url,'../../src/blog/index.json');
+  assert.equal(requests[0].options.method,'GET');
+  assert.equal(requests[0].options.credentials,'same-origin');
+  assert.equal(requests[0].options.redirect,'error');
+  assert.equal(requests[0].options.headers,undefined);
+  for(const file of ['src/blog/content.js','src/scripts/home-blog-cms.js','src/scripts/insights-cms.js','src/scripts/blog-page.js']){
+    assert.doesNotMatch(fs.readFileSync(path.join(__dirname,'..',file),'utf8'),/WIX_API_KEY|wixapis\.com|sanity\.io/);
   }
 });
 
