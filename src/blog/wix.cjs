@@ -88,13 +88,15 @@ function normalizePosts(items, authors, now = Date.now()) {
     if (Date.parse(publishedAt) > now) continue;
     const slug = text(data.slug).trim();
     if (!id || !validSlug(slug) || !text(data.title).trim() || !publishedAt) {
-      throw new Error(`Set title, a lowercase URL slug and publication date on Wix item ${id}.`);
+      console.warn(`Skipping Wix item ${id}. Set a title, lowercase URL slug and publication date.`);
+      continue;
     }
     let body;
     try { body = richBlocks(data.body); }
     catch (error) { throw new Error(`Wix article ${slug}: ${error.message}`); }
     if (!body.some(block => block.children?.some(child => child.text.trim()) || block.code?.trim() || block.url)) {
-      throw new Error(`Add article content before publishing Wix item ${slug}.`);
+      console.warn(`Skipping Wix article ${slug}. Add article content before publishing.`);
+      continue;
     }
     const author = authorsById.get(data.author);
     const categoryNames = strings(data.categoryIds?.map(category => category.title));

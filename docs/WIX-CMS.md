@@ -6,7 +6,7 @@ Wix is the editor for blog content on this branch. Vercel reads the private Wix 
 
 1. In Wix, create a key for **My Site** with **Read Data Items** permission.
 2. In Vercel project **wissen**, set `WIX_API_KEY` as a Preview Secret and `WIX_SITE_ID` to `0a708359-b4df-4cca-9791-0893019b85e3` as Preview Config.
-3. Deploy `vercel-wix-cms` to Preview and verify the homepage, Insights, article links, and filtered industry and service pages. A missing credential, failed Wix query or malformed publishable article fails the build.
+3. Deploy `vercel-wix-cms` to Preview and verify the homepage, Insights, article links, and filtered industry and service pages. A missing credential or failed Wix query fails the build. An article missing a valid title, slug, publication date or body is skipped and reported in the build log.
 
 ## Editing and publishing
 

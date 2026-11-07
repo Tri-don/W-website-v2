@@ -92,16 +92,22 @@ test('Wix publishes from the native live collection without the legacy checkbox'
     const dataItems=request.dataCollectionId==='WissenBlogs'?[{
       id:'live',data:{title:'Published in Wix',slug:'live-article',publishedAt:{$date:'2020-01-01T00:00:00Z'},
         body:{nodes:[{type:'PARAGRAPH',nodes:[{type:'TEXT',textData:{text:'Article body'}}]}]}}
+    },{
+      id:'missing-date',data:{title:'Incomplete post',slug:'missing-date'}
+    },{
+      id:'missing-body',data:{title:'Empty post',slug:'missing-body',publishedAt:{$date:'2020-01-01T00:00:00Z'}}
     }]:[];
     return {ok:true,json:async()=>({dataItems})};
   });
   const savedEnv=process.env;
+  const warnings=t.mock.method(console,'warn',()=>{});
   process.env=env;
   try{
     const posts=await fetchPublished();
     assert.deepEqual(requests.map(request=>request.dataCollectionId),['WissenBlogs','WissenBlogAuthors']);
     assert.equal(requests[0].query.filter,undefined);
     assert.deepEqual(posts.map(post=>post.slug.current),['live-article']);
+    assert.equal(warnings.mock.callCount(),2);
   }finally{process.env=savedEnv;}
 });
 
