@@ -16,12 +16,15 @@ test('manifest page paths match Git filename casing on Linux hosts',()=>{
   for(const page of Object.values(manifest.pages))if(trackedLower.has(page.file.toLowerCase()))assert.ok(tracked.has(page.file),`Filename casing differs from Git: ${page.file}`);
 });
 
-test('shared page script is deferred so navigation HTML can render during download',()=>{
+test('page navigation stays available while shared scripts load and initialize',()=>{
   const manifest=JSON.parse(read('src/site-manifest.json'));
   for(const page of Object.values(manifest.pages)){
-    const tag=read(page.file).match(/<script\b[^>]*src="[^"]*js\/site\.js"[^>]*>/)?.[0];
+    const html=read(page.file);
+    const tag=html.match(/<script\b[^>]*src="[^"]*js\/site\.js"[^>]*>/)?.[0];
     assert.ok(tag&&/\bdefer\b/.test(tag),page.file);
+    assert.doesNotMatch(html, /\bm3-loader\b|\bdata-m3-inert\b/, page.file);
   }
+  assert.doesNotMatch(read('js/site.js'), /\bintro-pending\b|\bdata-m3-inert\b/);
 });
 
 test('moved pages have matching permanent redirects and no root duplicates',()=>{

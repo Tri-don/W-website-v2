@@ -1,39 +1,28 @@
-/* One loader per browser-tab session, including direct entry to any page. */
-(()=>{
- let first=false;
- try{first=sessionStorage.getItem('wissen-site-visited')!=='1';sessionStorage.setItem('wissen-site-visited','1')}catch{first=!window.name.includes('wissen-site-visited');if(first)window.name+=' wissen-site-visited'}
- // Do not cover content with an intro after a slow script download.
- window.wissenFirstVisit=first&&performance.now()<1500;
- if(!window.wissenFirstVisit||matchMedia('(prefers-reduced-motion: reduce)').matches||location.hash){document.documentElement.classList.add('no-site-loader','intro-started');document.addEventListener('DOMContentLoaded',()=>document.querySelector('.m3-loader')?.remove(),{once:true})}
-})();
 (() => {
- const root=document.documentElement;
- const reduce=matchMedia('(prefers-reduced-motion: reduce)');
- if(!window.wissenFirstVisit || reduce.matches || location.hash) return;
- root.classList.add('intro-pending');
- let started=false, timer;
- const finish=()=>{
-  if(started)return;started=true;
-  clearTimeout(timer);
-  root.classList.remove('intro-pending');root.classList.add('intro-started');
-  document.querySelectorAll('[data-m3-inert]').forEach(e=>{e.inert=false;e.removeAttribute('data-m3-inert');});
-  setTimeout(()=>document.querySelector('.m3-loader')?.remove(),900);
- };
- timer=setTimeout(finish,3500);
- window.addEventListener('pageshow',event=>{if(event.persisted)finish();});
- document.addEventListener('DOMContentLoaded',()=>{
-  if(started)return;
-  const start=performance.now();
-  const loader=document.querySelector('.m3-loader');
-  document.querySelectorAll('body > header, body > main, body > footer').forEach(e=>{e.inert=true;e.dataset.m3Inert='';});
-  const logo=loader?.querySelector('img');
-  const ready=logo?.decode ? logo.decode().catch(()=>{}) : Promise.resolve();
-  Promise.race([ready,new Promise(r=>setTimeout(r,1200))]).then(()=>setTimeout(finish,Math.max(0,1150-(performance.now()-start))));
- },{once:true});
- document.addEventListener('keydown',e=>{if(e.key==='Escape')finish();});
- reduce.addEventListener('change',e=>{if(e.matches)finish();});
-})();
+ const root = document.documentElement;
+ let timeout;
 
+ function clearNavigationIndicator() {
+  clearTimeout(timeout);
+  root.removeAttribute('data-wissen-navigating');
+ }
+
+ document.addEventListener('click', event => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest?.('a[href]');
+  if (!link || link.hasAttribute('download') || (link.target && link.target.toLowerCase() !== '_self')) return;
+  if (link.origin !== location.origin || !/^https?:$/.test(link.protocol)) return;
+  const samePage = link.pathname === location.pathname && link.search === location.search;
+  if (samePage && (link.hash || link.getAttribute('href').startsWith('#'))) return;
+
+  // The browser follows the link immediately. This only paints feedback on the old page.
+  root.setAttribute('data-wissen-navigating', '');
+  clearTimeout(timeout);
+  timeout = setTimeout(clearNavigationIndicator, 10000);
+ });
+
+ window.addEventListener('pageshow', clearNavigationIndicator);
+})();
 
 (() => {
  function setupServiceHeight() {

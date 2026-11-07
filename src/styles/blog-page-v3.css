@@ -69,7 +69,7 @@
 @media(prefers-reduced-motion:reduce){.blog-page-v3 .wb-sharing-actions>a,.blog-page-v3 .wb-sharing-actions>button{transition:none}}
 @media print{
   html[data-wissen-global] body.blog-page-v3.wissen-global-type{background:#fff!important;color:#111!important}
-  .blog-page-v3 :is(.nv-header,.m3-loader,.cursor-glow,.wb-progress,.skip,footer,.wb-aside,.wb-related,.wb-sharing,.wb-v3-back-top,.wb-end,.wb-v3-topline,.wb-v3-image){display:none!important}
+  .blog-page-v3 :is(.nv-header,.cursor-glow,.wb-progress,.skip,footer,.wb-aside,.wb-related,.wb-sharing,.wb-v3-back-top,.wb-end,.wb-v3-topline,.wb-v3-image){display:none!important}
   html[data-wissen-global] body.blog-page-v3.wissen-global-type main>section{background:none!important;padding:0!important;margin:0 0 20pt!important}
   .blog-page-v3 .wrap{width:100%!important;max-width:none!important;padding:0!important}
   .blog-page-v3 .wb-v3-stage{display:block;min-height:0!important;padding:0;background:none!important;overflow:visible}
