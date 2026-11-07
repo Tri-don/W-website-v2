@@ -84,7 +84,6 @@ function normalizePosts(items, authors, now = Date.now()) {
   const authorsById = new Map(authors.map(item => [item.id, item.data]));
   const posts = [];
   for (const {id, data} of items) {
-    if (data.publishOnWebsite !== true) continue;
     const publishedAt = date(data.publishedAt);
     if (Date.parse(publishedAt) > now) continue;
     const slug = text(data.slug).trim();
@@ -122,11 +121,11 @@ async function fetchPublished() {
   const siteId = process.env.WIX_SITE_ID?.trim();
   if (!key || !siteId) throw new Error('Set the build environment variables WIX_API_KEY and WIX_SITE_ID to read Wix CMS.');
 
-  async function queryItems(dataCollectionId, filter, includeReferencedItems) {
+  async function queryItems(dataCollectionId, includeReferencedItems) {
     const all = [];
     const limit = 50;
     for (let offset = 0;; offset += limit) {
-      const query = {paging:{limit,offset}, sort:[{fieldName:'_id',order:'ASC'}], ...(filter ? {filter} : {})};
+      const query = {paging:{limit,offset}, sort:[{fieldName:'_id',order:'ASC'}]};
       const res = await fetch(queryUrl, {
         method:'POST', redirect:'error', signal:AbortSignal.timeout(30000),
         headers:{Authorization:key, 'wix-site-id':siteId, 'Content-Type':'application/json'},
@@ -143,7 +142,8 @@ async function fetchPublished() {
   }
 
   const data = await Promise.all([
-    queryItems(collection, {publishOnWebsite:true}, ['categoryIds']),
+    // Wix stores pending edits separately. Read the published collection only.
+    queryItems(collection, ['categoryIds']),
     queryItems('WissenBlogAuthors')
   ]);
   return normalizePosts(...data);

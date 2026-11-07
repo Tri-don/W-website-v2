@@ -82,6 +82,29 @@ test('exported articles retain stable links when live cards refresh',()=>{
   assert.equal(B.articleHref({slug:{current:'../bad'}},options),'#');
 });
 
+test('Wix publishes from the native live collection without the legacy checkbox',async t=>{
+  const {fetchPublished}=require('../src/blog/wix.cjs');
+  const requests=[];
+  const env={...process.env,WIX_API_KEY:'fixture',WIX_SITE_ID:'fixture-site'};
+  t.mock.method(globalThis,'fetch',async (url,options)=>{
+    const request=JSON.parse(options.body);
+    requests.push(request);
+    const dataItems=request.dataCollectionId==='WissenBlogs'?[{
+      id:'live',data:{title:'Published in Wix',slug:'live-article',publishedAt:{$date:'2020-01-01T00:00:00Z'},
+        body:{nodes:[{type:'PARAGRAPH',nodes:[{type:'TEXT',textData:{text:'Article body'}}]}]}}
+    }]:[];
+    return {ok:true,json:async()=>({dataItems})};
+  });
+  const savedEnv=process.env;
+  process.env=env;
+  try{
+    const posts=await fetchPublished();
+    assert.deepEqual(requests.map(request=>request.dataCollectionId),['WissenBlogs','WissenBlogAuthors']);
+    assert.equal(requests[0].query.filter,undefined);
+    assert.deepEqual(posts.map(post=>post.slug.current),['live-article']);
+  }finally{process.env=savedEnv;}
+});
+
 test('complete static export works offline with nested pages, archive and article links',()=>{
   const temp=fs.mkdtempSync(path.join(os.tmpdir(),'wissen-page-tree-'));
   const run=(command,args)=>{

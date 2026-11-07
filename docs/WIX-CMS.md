@@ -10,11 +10,11 @@ Wix is the editor for blog content on this branch. Vercel reads the private Wix 
 
 ## Editing and publishing
 
-- In **Wissen Blogs**, supply the title, lowercase URL slug, body, and publication date before enabling **Publish on website**. A future date stays hidden until a build runs after that date. Clear **Publish on website** to remove the article on the next successful build.
+- In **Wissen Blogs**, save edits as drafts, then use Wix's **Publish item** action when the title, lowercase URL slug, body, and publication date are ready. Unpublish to take an article offline and keep it as a draft. The site reads the published Wix collection. A future date stays hidden until a build runs after that date.
 - Set **Author** and **Blog categories** using the linked collections. Related posts use their URL slugs. Mark sample posts **Exclude from search engines**.
 - Industry tags are `bfsi-fintech`, `telecom`, `retail`, `manufacturing`, `healthcare-life-sciences` and `energy-commodities`. Service tags are `application-development`, `agentic-data-platforms`, `intelligent-automation`, `ai-ml`, `cloud` and `experience-design`.
 - News, Downloads and Case Studies have collections for content entry and review. Their website rendering remains separate from this blog migration.
-- To automate publishing, create a Vercel deploy hook for the branch that serves Wix. Use Wix CMS automations for add, update and delete on the Blogs collection and for relevant changes to Authors and Categories. Configure each action to send an HTTP `POST` to the deploy hook. Keep the hook URL private and verify publishing and unpublishing on Preview before using a production hook.
+- Wix CMS automations send an HTTP `POST` to the Vercel deploy hook for changes to the published Blogs collection. **Item added** covers first publication, **Item updated** covers publishing edits, and **Item deleted** covers unpublishing or deleting a live article. Keep the hook URL private and keep these triggers scoped to the published collection so draft saves do not start builds.
 
 ## Sanity rollback
 
